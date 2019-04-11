@@ -2,10 +2,51 @@
 
 <html>
 	<head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+	integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+	crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+	integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+	crossorigin=""></script>
+	
+	<style>
+		.column{
+			width: 48%;
+			float: left;
+			margin: 1%;
+		}
+	</style>
+	
 		<title>This is a test page</title>
 	</head>
 	<body>
-		<h2>Air Quality WebApp</h2>
+	<div id="mapid" class="column" style="height: 400px"></div>
+		<script>
+			var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+			
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				maxZoom: 18,
+				id: 'mapbox.streets',
+				accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
+			}).addTo(mymap);
+			
+			var marker = L.marker([51.5, -0.09]).addTo(mymap);
+		</script>
+		<div id="mapid2" class="column" style="height: 400px"></div>
+		 <script>
+			var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
+			
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				maxZoom: 18,
+				id: 'mapbox.streets',
+				accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
+			}).addTo(mymap2);
+			
+			var marker = L.marker([51.5, -0.09]).addTo(mymap2);
+		</script>
+	<h2>Air Quality WebApp</h2>
 		<div>
 			<h4> To Do: </h4>
 			<p>For this project, you will create a single page application about air quality. You will use at least 2 external APIs to retrieve data from (Leaflet (Links to an external site.)Links to an external site., and the Open AQ Platform (Links to an external site.)Links to an external site.). Your application should be interactive, responsive, and allow a user to investigate air quality from various geographical regions. This project will also incorporate Vue JS (Links to an external site.)Links to an external site. as a framework to make building the app simpler. You will also create a second web page - "About the project", which will document your team, your development process, and demo the final application with interesting findings. For this project, you are free to use other JavaScript or CSS libraries as you see fit.</p>
@@ -76,6 +117,7 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                     <li>Allow either map (along with the location input box) to go fullscreen</li>
                 </ul>
             </p>
-		</div>		
+		</div>
+		
 	</body>
 </html>
