@@ -2,24 +2,33 @@
 window.onload = function()
 {
     console.log("js working...");
-    var radius = 500000;
-    var parameter = "";
-    var coordinates = "44,-93";
-    var url = "https://api.openaq.org/v1/locations?coordinates="+coordinates+"&limit=10000&radius="+radius+"&parameter="+parameter;
     var app = new Vue(
     {
         el: "#vueApp", 
         data: 
         {
+            coordinates: "44,-93",
+            dateTo: "",
+            dateFrom: "",
+            radius: "",
+            parameter: "",
+            orderBy: "location",
+            //order_by, sort(desc), value_from, value_to
+            url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
             test: "Vue functional"
         },
         mounted() 
         {
             axios
-                .get(url)
+                .get(this.url)
                 .then(response => (this.test = response))
         }
     })
+    
+/*    function createUrl(appObj)
+    {
+        var final = appObj.url;
+        if (*/
 }
 
 

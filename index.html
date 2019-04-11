@@ -17,7 +17,7 @@
 		}
 	</style>
 	
-		<title>This is a test page</title>
+		<title>Air Quality WebApp</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -27,7 +27,12 @@
 	<body>
 		<h2>Air Quality WebApp</h2>
 		<div id="vueApp">
-		    {{ test }}
+		{{test.data.results}}
+		    <ul>
+		        <li v-for="item in test.data.results">
+		            {{item.location}}
+	            </li>
+		    </ul>
 		</div>
 	<div id="mapid" class="column" style="height: 400px"></div>
 		<script>
