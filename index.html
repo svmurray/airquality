@@ -3,9 +3,17 @@
 <html>
 	<head>
 		<title>This is a test page</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="home.js"></script>
 	</head>
 	<body>
 		<h2>Air Quality WebApp</h2>
+		<div id="vueApp">
+		    {{ test }}
+		</div>
 		<div>
 			<h4> To Do: </h4>
 			<p>For this project, you will create a single page application about air quality. You will use at least 2 external APIs to retrieve data from (Leaflet (Links to an external site.)Links to an external site., and the Open AQ Platform (Links to an external site.)Links to an external site.). Your application should be interactive, responsive, and allow a user to investigate air quality from various geographical regions. This project will also incorporate Vue JS (Links to an external site.)Links to an external site. as a framework to make building the app simpler. You will also create a second web page - "About the project", which will document your team, your development process, and demo the final application with interesting findings. For this project, you are free to use other JavaScript or CSS libraries as you see fit.</p>
