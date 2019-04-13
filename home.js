@@ -33,20 +33,17 @@ window.onload = function()
             longitude: "-0.09",
             latitude2: "51.505",
             longitude2: "-0.09",
-            city1: "London",
+            city: "London",
             city2: "London",
-            dateTo: "",
-            dateFrom: "",
-            radius: "",
-            parameter: "",
             map: mymap,
             map2: mymap2,
-            orderBy: "location",
-            //order_by, sort(desc), value_from, value_to
+            timeout: null,
+            //order_by, sort(desc), value_from, value_to, date_to, date_from, radius, parameter,order_by
             url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
             test: "Vue functional"
         },
-        methods: {
+        methods: 
+        {
             update: function(){
                 this.map.setView([this.latitude, this.longitude]);
             },
@@ -54,36 +51,30 @@ window.onload = function()
                 this.map2.setView([this.latitude, this.longitude]);
             },
             cityLookup: function() {
-	            var response;
-	            var addr = "https://nominatim.openstreetmap.org/search?q=" + this.city1 + "&format=json&accept-language=en";
-                console.log("getCity vue" + addr);
-	            var req = new XMLHttpRequest();
-	            req.onreadystatechange = function() {
-		                if(req.readyState ==4 && req.status ==200)
-			            {
-				            response = JSON.parse(this.responseText);
-				            //response works, I'm running into 'this' scope issues for resetting data and the maps
-			            }
-		            };
-	            req.open("GET", addr, true);
-	            req.send();
+                axios
+                    .get("https://nominatim.openstreetmap.org/search?q=" + this.city + "&format=json&accept-language=en")
+                    .then(response => {
+                        this.latitude = response.data[0].lat; 
+                        this.longitude = response.data[0].lon; 
+                        this.map.setView([response.data[0].lat, response.data[0].lon]);
+                    })
             },
             cityLookup2: function() {
-	            var response;
-	            var addr = "https://nominatim.openstreetmap.org/search?q=" + this.city2 + "&format=json&accept-language=en";
-                console.log("getCity2 vue" + addr);
-	            var req = new XMLHttpRequest();
-	            req.onreadystatechange = function() {
-		                if(req.readyState ==4 && req.status ==200)
-			            {
-				            response = JSON.parse(this.responseText)
-				            //response works, I'm running into 'this' scope issues for resetting data and the maps
-			            }
-		            };
-	            req.open("GET", addr, true);
-	            req.send();
+                axios
+                    .get("https://nominatim.openstreetmap.org/search?q=" + this.city2 + "&format=json&accept-language=en")
+                    .then(response => {
+                        this.latitude2 = response.data[0].lat; 
+                        this.longitude2 = response.data[0].lon; 
+                        this.map2.setView([response.data[0].lat, response.data[0].lon]);
+                    })
             }
-        }/*,
+        },
+        updated()
+        {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => (console.log("waiting for user input to stop...")), 500);
+        }
+        /*,
         mounted() 
         {
             axios
@@ -103,23 +94,45 @@ function updateLatLong(app)
     var vals = app.map.getCenter()
     app.latitude = vals.lat; 
     app.longitude = vals.lng;
+    var url ="https://nominatim.openstreetmap.org/reverse?lat=" + app.latitude + "&lon=" + app.longitude + "&format=json&accept-language=en";
+    axios
+        .get(url)
+        .then(response => {app.city = response.data.address.city;})
 }
 function updateLatLong2(app)
 {
     var vals = app.map2.getCenter()
     app.latitude2 = vals.lat; 
     app.longitude2 = vals.lng;
+    var url ="https://nominatim.openstreetmap.org/reverse?lat=" + app.latitude2 + "&lon=" + app.longitude2 + "&format=json&accept-language=en";
+    axios
+        .get(url)
+        .then(response => {app.city2 = response.data.address.city;})
 }
 function makeFullScreen(buttonId)
 {
     var button = document.getElementById(buttonId);
-    console.log("button is working");
+    console.log(buttonId + " is working");
+    var mapid = "mapid";
+    if (buttonId.indexOf("2") >= 0)
+    {
+        mapid = mapid + "2";
+    }
     if (button.innerHTML.indexOf("Full") >= 0)
     {
+        document.getElementById(mapid).style.width = "98%";
+        document.getElementById(mapid).style.height = "98vh";
+        
+        document.getElementById("mapid2").style.visibility = "hidden";
+        document.getElementById("inputBox2").style.visibility = "hidden";
+        document.getElementById("inputBox1").padding = "30vw";
+        
+        
         button.innerHTML = "Minimize";
     }
     else
     {
+        document.getElementById(mapid).style.width = "48%";
         button.innerHTML = "Make This Map Full-Screen";
     }
 }

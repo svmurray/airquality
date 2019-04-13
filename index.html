@@ -46,7 +46,7 @@
 		            {{item.location}}
 	            </li>
 		    </ul>-->
-		    <div id="inputBox2" class="inputBox">
+		    <div id="inputBox1" class="inputBox">
                 <span>Latitude: </span>
                 <input type="text" min="-90" max="90" v-model="latitude" v-on:change="update">
                 <br/>
@@ -54,10 +54,10 @@
                 <input type="text" min="-180" max="180" v-model="longitude" v-on:change="update">
                 <br/>
                 <span>Look Up City: </span> 
-                <input type="text" v-on:change="cityLookup" v-model="city1">
+                <input type="text" v-on:change="cityLookup" v-model="city">
                 <button id="FSButton1">Make This Map Full-Screen</button>
 	        </div>
-		    <div id="inputBox1" class="inputBox">
+		    <div id="inputBox2" class="inputBox">
                 <span>Latitude: </span>
                 <input type="text" min="-90" max="90" v-model="latitude2" v-on:change="update2">
                 <br/>
@@ -74,7 +74,6 @@
 	    <div id="mapid2" class="column" style="height: 500px"></div>
 		
 	    
-	    <h2>Air Quality WebApp</h2>
 		<div>
 			<h4> To Do: </h4>
 			<p>For this project, you will create a single page application about air quality. You will use at least 2 external APIs to retrieve data from (Leaflet and the Open AQ Platform). Your application should be interactive, responsive, and allow a user to investigate air quality from various geographical regions. This project will also incorporate Vue JS as a framework to make building the app simpler. You will also create a second web page - "About the project", which will document your team, your development process, and demo the final application with interesting findings. For this project, you are free to use other JavaScript or CSS libraries as you see fit.</p>
@@ -113,8 +112,8 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
             <ul><li>It is OK to display all results in the table even though the circle of retrieved data will not exactly match the rectangular map</li></ul>
             <li>Table should show all measurements, not just the averages</li>
         </ul>
-    </ul>
-        NOTE: it is best to trigger updates at the end of user interaction. Otherwise, continuous requests will be sent and could flood the Open AQ Platform servers, which would slow down your app. A good idea would be to trigger an update after a 200ms timeout with no user activity (pan / zoom).
+    </ul><s>
+        NOTE: it is best to trigger updates at the end of user interaction. Otherwise, continuous requests will be sent and could flood the Open AQ Platform servers, which would slow down your app. A good idea would be to trigger an update after a 200ms timeout with no user activity (pan / zoom).</s>
 </p>
 
             <p>4 additional points for each item completed on the list below
@@ -125,8 +124,8 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                         <li>Filter based on measurement values for each particle type (e.g. only show co > 1.3, ammonia > 72.9, ...)</li>
                         <li>Allow different historical data to be retrieved (select a date/time range within the last 90 days)</li>
                     </ul>
-                    <li>Use the Nominatim API (https://wiki.openstreetmap.org/wiki/Nominatim to search via place name in addition to lat/long coordinates</li>
-                    <ul><li>Also update search box location to location name when panning the map</li></ul>
+                    <li><s>Use the Nominatim API (https://wiki.openstreetmap.org/wiki/Nominatim to search via place name in addition to lat/long coordinates</li>
+                    <ul><li>Also update search box location to location name when panning the map</s></li></ul>
                     <li>Style the background color of particle values in the table so they match the Air Quality Index from the EPA</li>
                     <ul>
                         <li>https://airnowtest.epa.gov/sites/default/files/2018-09/aqi-technical-assistance-document-sept-2018_0.pdf (colors - page 2, values - page 4)</li>
