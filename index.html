@@ -52,14 +52,20 @@
                 <br/>
                 <span>Longitude: </span> 
                 <input type="text" min="-180" max="180" v-model="longitude" v-on:change="update">
+                <br/>
+                <span>Look Up City: </span> 
+                <input type="text" v-on:change="cityLookup" v-model="city1">
                 <button id="FSButton1">Make This Map Full-Screen</button>
 	        </div>
 		    <div id="inputBox1" class="inputBox">
                 <span>Latitude: </span>
-                <input type="text" min="-90" max="90" v-model="latitude2" v-on:change="update">
+                <input type="text" min="-90" max="90" v-model="latitude2" v-on:change="update2">
                 <br/>
                 <span>Longitude: </span> 
-                <input type="text" min="-180" max="180" v-model="longitude2" v-on:change="update">
+                <input type="text" min="-180" max="180" v-model="longitude2" v-on:change="update2">
+                <br/>
+                <span>Look Up City: </span> 
+                <input type="text" v-on:change="cityLookup2" v-model="city2">
                 <button id="FSButton2">Make This Map Full-Screen</button>
 	        </div>
 

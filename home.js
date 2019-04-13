@@ -33,7 +33,8 @@ window.onload = function()
             longitude: "-0.09",
             latitude2: "51.505",
             longitude2: "-0.09",
-            coordinates: "44,-93",
+            city1: "London",
+            city2: "London",
             dateTo: "",
             dateFrom: "",
             radius: "",
@@ -46,10 +47,41 @@ window.onload = function()
             test: "Vue functional"
         },
         methods: {
-            update: function(event){
-                console.log(event);
-                console.log(this.latitude + "&&" + this.longitude);
+            update: function(){
                 this.map.setView([this.latitude, this.longitude]);
+            },
+            update2: function(){
+                this.map2.setView([this.latitude, this.longitude]);
+            },
+            cityLookup: function() {
+	            var response;
+	            var addr = "https://nominatim.openstreetmap.org/search?q=" + this.city1 + "&format=json&accept-language=en";
+                console.log("getCity vue" + addr);
+	            var req = new XMLHttpRequest();
+	            req.onreadystatechange = function() {
+		                if(req.readyState ==4 && req.status ==200)
+			            {
+				            response = JSON.parse(this.responseText);
+				            //response works, I'm running into 'this' scope issues for resetting data and the maps
+			            }
+		            };
+	            req.open("GET", addr, true);
+	            req.send();
+            },
+            cityLookup2: function() {
+	            var response;
+	            var addr = "https://nominatim.openstreetmap.org/search?q=" + this.city2 + "&format=json&accept-language=en";
+                console.log("getCity2 vue" + addr);
+	            var req = new XMLHttpRequest();
+	            req.onreadystatechange = function() {
+		                if(req.readyState ==4 && req.status ==200)
+			            {
+				            response = JSON.parse(this.responseText)
+				            //response works, I'm running into 'this' scope issues for resetting data and the maps
+			            }
+		            };
+	            req.open("GET", addr, true);
+	            req.send();
             }
         }/*,
         mounted() 
@@ -92,3 +124,11 @@ function makeFullScreen(buttonId)
     }
 }
 
+function update1()
+{
+//    app.map.setView([this.latitude, this.longitude]);
+}
+function update2()
+{
+//    app.map.setView([this.latitude, this.longitude]);
+}
