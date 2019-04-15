@@ -13,26 +13,41 @@
         <style>
 		    .column
 		    {
-			    width: 48%;
-			    float: left;
 			    margin: 1%;
+			    height: 500px;
 		    }
             span
             {
+                float: left;
                 width: 11em;
                 display: block;
-                float: left;
-            }
-            .inputBox
-            {
-                width: 48%;
-                float: left;
-                padding: 0% 1%;
             }
             h2
             {
                 text-align: center;
                 font-size: 250%
+            }
+            #leftMap
+            {
+                float: left;
+            }
+            #rightMap
+            {
+                float:right;
+            }
+            .box
+            {
+                width: 48%;
+                padding: 0% 1%;            
+            }
+            .fullscreen
+            {
+                color: white;
+            }
+            .map
+            {
+                padding: 1%;
+                height: 80vh;
             }
         </style>
 		<title>AQ WebApp</title>
@@ -40,38 +55,35 @@
 	<body>
 		<h2>Air Quality WebApp</h2>
 		<div id="vueApp">
-		<!--{{test.data.results}}
-		    <ul>
-		        <li v-for="item in test.data.results">
-		            {{item.location}}
-	            </li>
-		    </ul>-->
-		    <div id="inputBox1" class="inputBox">
-                <span>Latitude: </span>
-                <input type="text" min="-90" max="90" v-model="latitude" v-on:change="update">
-                <br/>
-                <span>Longitude: </span> 
-                <input type="text" min="-180" max="180" v-model="longitude" v-on:change="update">
-                <br/>
-                <span>Look Up City: </span> 
-                <input type="text" v-on:change="cityLookup" v-model="city">
-                <button id="FSButton1">Make This Map Full-Screen</button>
-	        </div>
-		    <div id="inputBox2" class="inputBox">
-                <span>Latitude: </span>
-                <input type="text" min="-90" max="90" v-model="latitude2" v-on:change="update2">
-                <br/>
-                <span>Longitude: </span> 
-                <input type="text" min="-180" max="180" v-model="longitude2" v-on:change="update2">
-                <br/>
-                <span>Look Up City: </span> 
-                <input type="text" v-on:change="cityLookup2" v-model="city2">
-                <button id="FSButton2">Make This Map Full-Screen</button>
-	        </div>
-
+		    <div id="leftMap" class = "box">
+		        <div id="inputBox1" class="inputBox">
+                    <span>Latitude: </span>
+                    <input type="text" min="-90" max="90" v-model="latitude" v-on:change="update">
+                    <br/>
+                    <span>Longitude: </span> 
+                    <input type="text" min="-180" max="180" v-model="longitude" v-on:change="update">
+                    <br/>
+                    <span>Look Up City: </span> 
+                    <input type="text" v-on:change="cityLookup" v-model="city">
+                    <button id="FSButton1">Make This Map Full-Screen</button>
+	            </div>
+        	    <div id="mapid" class="column"></div>
+            </div>
+            <div id="rightMap" class = "box">
+		        <div id="inputBox2" class="inputBox">
+                    <span>Latitude: </span>
+                    <input type="text" min="-90" max="90" v-model="latitude2" v-on:change="update2">
+                    <br/>
+                    <span>Longitude: </span> 
+                    <input type="text" min="-180" max="180" v-model="longitude2" v-on:change="update2">
+                    <br/>
+                    <span>Look Up City: </span> 
+                    <input type="text" v-on:change="cityLookup2" v-model="city2">
+                    <button id="FSButton2">Make This Map Full-Screen</button>
+	            </div>
+        	    <div id="mapid2" class="column"></div>
+            </div>
 		</div>
-	    <div id="mapid" class="column" style="height: 500px"></div>
-	    <div id="mapid2" class="column" style="height: 500px"></div>
 		
 	    
 		<div>
@@ -139,10 +151,15 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                         <li>Do NOT use a rainbow color scale</li>
                         <li>See Leaflet plugin: https://github.com/Leaflet/Leaflet.heat</li>
                     </ul>
-                    <li>Allow either map (along with the location input box) to go fullscreen</li>
+                    <li><s>Allow either map (along with the location input box) to go fullscreen</s></li>
                 </ul>
             </p>
 		</div>
-		
+				<!--{{test.data.results}}
+		    <ul>
+		        <li v-for="item in test.data.results">
+		            {{item.location}}
+	            </li>
+		    </ul>-->
 	</body>
 </html>

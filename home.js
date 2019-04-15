@@ -2,26 +2,6 @@
 window.onload = function()
 {
     console.log("js working...");
-	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-	    maxZoom: 16,
-	    minZoom: 9,
-	    id: 'mapbox.streets',
-	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
-    }).addTo(mymap);
-    var marker = L.marker([51.5, -0.09]).addTo(mymap);
-    console.log("map1 done");
-    
-	var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-	    maxZoom: 16,
-	    minZoom: 9,
-	    id: 'mapbox.streets',
-	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
-    }).addTo(mymap2);
-    var marker = L.marker([51.5, -0.09]).addTo(mymap2);
     
 
     var app = new Vue(
@@ -83,6 +63,31 @@ window.onload = function()
         }*/
     })
     console.log("vue created");
+	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	    maxZoom: 16,
+	    minZoom: 9,
+	    id: 'mapbox.streets',
+	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
+    }).addTo(mymap);
+    var marker = L.marker([51.5, -0.09]).addTo(mymap);
+    console.log("map1 done");
+    
+	var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	    maxZoom: 16,
+	    minZoom: 9,
+	    id: 'mapbox.streets',
+	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
+    }).addTo(mymap2);
+    var marker = L.marker([51.5, -0.09]).addTo(mymap2);
+    
+    app.map = mymap;
+    app.map2 = mymap2;
+    
+    
     mymap.on("moveend", ()=>(updateLatLong(app)))
     mymap2.on("moveend", ()=>(updateLatLong2(app)))
     document.getElementById("FSButton1").onclick = () => (makeFullScreen("FSButton1"));
@@ -113,35 +118,32 @@ function makeFullScreen(buttonId)
 {
     var button = document.getElementById(buttonId);
     console.log(buttonId + " is working");
-    var mapid = "mapid";
-    if (buttonId.indexOf("2") >= 0)
+    var divId = "Map";
+    var mapid = "mapid"
+    if (buttonId.indexOf("2") >= 0) 
     {
+        divId = "right" + divId;
         mapid = mapid + "2";
     }
+    else {divId = "left" + divId;}
+    
+    var map = document.getElementById(mapid);
+    var el = document.getElementById(divId);
     if (button.innerHTML.indexOf("Full") >= 0)
     {
-        document.getElementById(mapid).style.width = "98%";
-        document.getElementById(mapid).style.height = "98vh";
-        
-        document.getElementById("mapid2").style.visibility = "hidden";
-        document.getElementById("inputBox2").style.visibility = "hidden";
-        document.getElementById("inputBox1").padding = "30vw";
-        
-        
         button.innerHTML = "Minimize";
+        el.requestFullscreen();
+        el.classList.add("fullscreen");
+        map.classList.add("map");
+        map.classList.remove("column");
+        console.log(map.classList);
     }
     else
     {
-        document.getElementById(mapid).style.width = "48%";
+        document.exitFullscreen();
         button.innerHTML = "Make This Map Full-Screen";
-    }
-}
-
-function update1()
-{
-//    app.map.setView([this.latitude, this.longitude]);
-}
-function update2()
-{
-//    app.map.setView([this.latitude, this.longitude]);
+        el.classList.remove("fullscreen");
+        map.classList.remove("map");
+        map.classList.add("column");
+   }
 }
