@@ -1,7 +1,20 @@
 "use strict";
 window.onload = function()
 {
-    console.log("js working...");
+    /*Haversine
+        //values need to be as radians --> lat*pi/180
+    
+	    var a = Math.pow(Math.sin((dataVar[1][0]-dataVar[0][0])/2),2) + Math.cos(dataVar[1][0])*Math.cos(dataVar[0][0])*Math.pow(Math.sin((dataVar[1][1]-dataVar[0][1])/2),2);
+            a = sin[(lat1-lat2)/2]^2 + cos(lat1)*cos(lat2)*sin[(lon1-lon2)/2]^2
+        //not sure which is easier to read, but the two statements above are equivalent
+            
+        var c = 2*Math.asin(Math.sqrt(a));
+            c = 2*sin^-1(a^.5)
+        var dist = c*3959;
+    */
+
+    
+//    console.log("js working...");
     var app = new Vue(
     {
         el: "#vueApp", 
@@ -28,9 +41,11 @@ window.onload = function()
         {
             update: function(){
                 this.map.setView([this.latitude, this.longitude]);
+                updateAirData(this);
             },
             update2: function(){
                 this.map2.setView([this.latitude, this.longitude]);
+                updateAirData(this);
             },
             cityLookup: function() {
                 axios
@@ -39,6 +54,7 @@ window.onload = function()
                         this.latitude = response.data[0].lat; 
                         this.longitude = response.data[0].lon; 
                         this.map.setView([response.data[0].lat, response.data[0].lon]);
+                        updateAirData(this);
                     })
             },
             cityLookup2: function() {
@@ -48,6 +64,7 @@ window.onload = function()
                         this.latitude2 = response.data[0].lat; 
                         this.longitude2 = response.data[0].lon; 
                         this.map2.setView([response.data[0].lat, response.data[0].lon]);
+                        updateAirData(this);
                     })
             },
           
@@ -57,19 +74,20 @@ window.onload = function()
             clearTimeout(this.timeout);
             this.timeout = setTimeout(() => {
                 console.log("waiting for user input to stop...");
-                console.log(app);
+//                console.log(app);
 
 
 
 
 
 
-                }, 1000);
+                }, 200);
 
         },
-        computed:{
+/*        computed:{
 
             updateAirData: function(){
+                console.log("in computed.updateAirData");
                 axios
                     .get("https://api.openaq.org/v1/measurements?limit=5&order_by=location"+"&radius=5000&coordinates="+this.latitude+","+this.longitude)
                     .then(response => {
@@ -85,9 +103,9 @@ window.onload = function()
                        
                     }) 
                 }
-        }
+        }*/
     })
-    console.log("vue created");
+//    console.log("vue created");
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -97,7 +115,7 @@ window.onload = function()
 	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
     }).addTo(mymap);
     var marker = L.marker([51.5, -0.09]).addTo(mymap);
-    console.log("map1 done");
+//    console.log("map1 done");
     
 	var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -115,6 +133,37 @@ window.onload = function()
     mymap2.on("moveend", ()=>(updateLatLong2(app)))
     document.getElementById("FSButton1").onclick = () => (makeFullScreen("FSButton1"));
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
+    console.log("onload finished");
+}
+
+function updateAirData(app)
+{
+    console.log("in computed.updateAirData");
+    axios
+        .get("https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude)
+        .then(response => 
+        {
+//            console.log("inside response");
+//            console.log(response.data.results.length);
+            var length = response.data.results.length;
+            if (length > 0)
+            {
+                console.log(response.data.results);
+                app.air_qual = [];
+                for (var i =0; i< length;i++)
+                {
+                    app.air_qual.push({ measurement : response.data.results[i]});
+                }
+            }
+            else
+            {
+                console.log("no results");
+            }
+            
+           
+            
+           
+        }) ;
 }
 
 function updateLatLong(app)
@@ -125,7 +174,10 @@ function updateLatLong(app)
     var url ="https://nominatim.openstreetmap.org/reverse?lat=" + app.latitude + "&lon=" + app.longitude + "&format=json&accept-language=en";
     axios
         .get(url)
-        .then(response => {app.city = response.data.address.city;})
+        .then(response => {
+            app.city = response.data.address.city;
+            updateAirData(app);
+        })
 }
 function updateLatLong2(app)
 {
@@ -135,12 +187,16 @@ function updateLatLong2(app)
     var url ="https://nominatim.openstreetmap.org/reverse?lat=" + app.latitude2 + "&lon=" + app.longitude2 + "&format=json&accept-language=en";
     axios
         .get(url)
-        .then(response => {app.city2 = response.data.address.city;})
+        .then(response => 
+        {
+            app.city2 = response.data.address.city;
+            updateAirData(app);
+        })
 }
 function makeFullScreen(buttonId)
 {
     var button = document.getElementById(buttonId);
-    console.log(buttonId + " is working");
+//    console.log(buttonId + " is working");
     var divId = "Map";
     var mapid = "mapid"
     if (buttonId.indexOf("2") >= 0) 
@@ -159,7 +215,7 @@ function makeFullScreen(buttonId)
         el.classList.add("fullscreen");
         map.classList.add("map");
         map.classList.remove("column");
-        console.log(map.classList);
+//        console.log(map.classList);
     }
     else
     {
@@ -176,7 +232,4 @@ function addMarkers(app, length){
     var airData = app.air_qual;
     console.log(airData);
     console.log(length);
-    
-   
-
 }

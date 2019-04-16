@@ -83,13 +83,14 @@
 	            </div>
         	    <div id="mapid2" class="column"></div>
             </div>
-            <ul>
-                <li v-for="(Object, index) in air_qual">
-                        {{air_qual[index].measurement.value}}
-                        {{air_qual[index].measurement.date}}
-                        {{air_qual[index].measurement.location}}
-                </li>
-            </ul>
+            <div>
+                {{ air_qual }}
+<!--                <tr v-for="item in air_qual">
+                    <td>{{item.measurement.value}}</td>
+                    <td>{{item.measurement.date}}</td>
+                    <td>{{item.measurement.location}}</td>
+                </tr>
+-->            </div>
 		</div>
 		
 	    
