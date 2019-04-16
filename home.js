@@ -20,7 +20,11 @@ window.onload = function()
             timeout: null,
             //order_by, sort(desc), value_from, value_to, date_to, date_from, radius, parameter,order_by
             url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
-            test: "Vue functional"
+            test: "Vue functional",
+            air_qual: [
+                {measurement : ''}
+            ]
+
         },
         methods: 
         {
@@ -47,12 +51,42 @@ window.onload = function()
                         this.longitude2 = response.data[0].lon; 
                         this.map2.setView([response.data[0].lat, response.data[0].lon]);
                     })
-            }
+            },
+          
         },
         updated()
         {
             clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => (console.log("waiting for user input to stop...")), 500);
+            this.timeout = setTimeout(() => {
+                console.log("waiting for user input to stop...");
+                console.log(app);
+
+
+
+
+
+
+                }, 1000);
+
+        },
+        computed:{
+
+            updateAirData: function(){
+                axios
+                    .get("https://api.openaq.org/v1/measurements?limit=5&order_by=location"+"&radius=5000&coordinates="+this.latitude+","+this.longitude)
+                    .then(response => {
+                        console.log("inside response");
+                        console.log(response.data.results.length);
+                        var length = response.data.results.length;
+                        this.air_qual = [];
+                        app.air_qual.push({ measurement : response.data.results[0]});
+                        app.air_qual.push({ measurement : response.data.results[1]});
+                        
+                       
+                        
+                       
+                    }) 
+                }
         }
         /*,
         mounted() 
@@ -146,4 +180,14 @@ function makeFullScreen(buttonId)
         map.classList.remove("map");
         map.classList.add("column");
    }
+}
+
+function addMarkers(app, length){
+    console.log("inside function");
+    var airData = app.air_qual;
+    console.log(airData);
+    console.log(length);
+    
+   
+
 }

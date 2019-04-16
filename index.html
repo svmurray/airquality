@@ -67,7 +67,7 @@
                     <input type="text" v-on:change="cityLookup" v-model="city">
                     <button id="FSButton1">Make This Map Full-Screen</button>
 	            </div>
-        	    <div id="mapid" class="column"></div>
+        	    <div id="mapid" class="column" ></div>
             </div>
             <div id="rightMap" class = "box">
 		        <div id="inputBox2" class="inputBox">
@@ -83,6 +83,13 @@
 	            </div>
         	    <div id="mapid2" class="column"></div>
             </div>
+            <ul>
+                <li v-for="(Object, index) in air_qual">
+                        {{air_qual[index].measurement.value}}
+                        {{air_qual[index].measurement.date}}
+                        {{air_qual[index].measurement.location}}
+                </li>
+            </ul>
 		</div>
 		
 	    
