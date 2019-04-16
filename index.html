@@ -11,49 +11,49 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="home.js"></script>
         <style>
-		    .column
-		    {
-			    margin: 1%;
-			    height: 500px;
-		    }
+		    .column     {height: 500px;}
+            .fullscreen {color: white;}
+            #header     {background-color: rgba(158, 40, 229, .3);}
+            #leftMap    {float: left;}
+            #rightMap   {float:right;}
             span
             {
                 float: left;
                 width: 11em;
                 display: block;
+                padding-left: 1%;
             }
             h2
             {
                 text-align: center;
-                font-size: 250%
-            }
-            #leftMap
-            {
-                float: left;
-            }
-            #rightMap
-            {
-                float:right;
+                font-size: 250%;
+                margin: 0;
             }
             .box
             {
                 width: 48%;
                 padding: 0% 1%;            
             }
-            .fullscreen
-            {
-                color: white;
-            }
             .map
             {
                 padding: 1%;
                 height: 80vh;
             }
+            #about
+            {
+                display: block;
+                text-align: center;
+                margin-top: 2vh;
+                margin-bottom: 5vh;
+            }
         </style>
 		<title>AQ WebApp</title>
 	</head>
 	<body>
-		<h2>Air Quality WebApp</h2>
+	    <div id="header">
+		    <h2>Air Quality WebApp</h2>
+		    <a id="about" href="/about.html">About the Project</a>
+	    </div>
 		<div id="vueApp">
 		    <div id="leftMap" class = "box">
 		        <div id="inputBox1" class="inputBox">

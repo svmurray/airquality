@@ -2,8 +2,6 @@
 window.onload = function()
 {
     console.log("js working...");
-    
-
     var app = new Vue(
     {
         el: "#vueApp", 
@@ -18,7 +16,7 @@ window.onload = function()
             map: mymap,
             map2: mymap2,
             timeout: null,
-            //order_by, sort(desc), value_from, value_to, date_to, date_from, radius, parameter,order_by
+            //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
             url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
             test: "Vue functional",
             air_qual: [
@@ -88,13 +86,6 @@ window.onload = function()
                     }) 
                 }
         }
-        /*,
-        mounted() 
-        {
-            axios
-                .get(this.url)
-                .then(response => (this.test = response))
-        }*/
     })
     console.log("vue created");
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
@@ -119,9 +110,7 @@ window.onload = function()
     var marker = L.marker([51.5, -0.09]).addTo(mymap2);
     
     app.map = mymap;
-    app.map2 = mymap2;
-    
-    
+    app.map2 = mymap2;    
     mymap.on("moveend", ()=>(updateLatLong(app)))
     mymap2.on("moveend", ()=>(updateLatLong2(app)))
     document.getElementById("FSButton1").onclick = () => (makeFullScreen("FSButton1"));
