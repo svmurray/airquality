@@ -78,15 +78,28 @@
         	    <table align="center">
         	        <tr>
             	        <th>Location</th>
-            	        <th>Time</th>
+            	        <th>Parameter</th>
+            	        <th>Local Time</th>
+            	        <th>Value</th>
+            	        <th>Units</th>
         	        </tr>
         	        <tr>
-        	            <td>TestLoc</td>
-        	            <td>TestTime</td>
+            	        <td>TestLocation</td>
+            	        <td>TestParameter</td>
+            	        <td>TestLocal Time</td>
+            	        <td>TestValue</td>
+            	        <td>TestUnits</td>
         	        </tr>
+        	        <tr v-for="measure in measures">
+        	            <td>{{ measure.measurement.location }}</td>
+        	            <td>{{ measure.measurement.parameter }}</td>
+        	            <td>{{ measure.measurement.date.local }}</td>
+        	            <td>{{ measure.measurement.value }}</td>
+        	            <td>{{ measure.measurement.unit }}</td>
+    	            </tr>
         	    </table>
                 <div>
-                    {{ air_qual }}
+                    {{ measures }}
         	    </div>
             </div>
             <div id="rightMap" class = "box">
@@ -105,15 +118,28 @@
         	    <table align="center">
         	        <tr>
             	        <th>Location</th>
-            	        <th>Time</th>
+            	        <th>Parameter</th>
+            	        <th>Local Time</th>
+            	        <th>Value</th>
+            	        <th>Units</th>
         	        </tr>
         	        <tr>
-        	            <td>TestLoc</td>
-        	            <td>TestTime</td>
+            	        <td>TestLocation</td>
+            	        <td>TestParameter</td>
+            	        <td>TestLocal Time</td>
+            	        <td>TestValue</td>
+            	        <td>TestUnits</td>
         	        </tr>
+        	        <tr v-for="measure2 in measure2s">
+        	            <td>{{ measure2.measurement.location }}</td>
+        	            <td>{{ measure2.measurement.parameter }}</td>
+        	            <td>{{ measure2.measurement.date.local }}</td>
+        	            <td>{{ measure2.measurement.value }}</td>
+        	            <td>{{ measure2.measurement.unit }}</td>
+    	            </tr>
         	    </table>
                 <div>
-                    {{ air_qual2 }}
+                    {{ measure2s }}
         	    </div>
             </div>
 <!--                <tr v-for="item in air_qual">

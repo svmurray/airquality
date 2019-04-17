@@ -35,11 +35,61 @@ window.onload = function()
             //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
             url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
             test: "Vue functional",
-            air_qual: [
-                {measurement : ''}
+            measures: [
+                {
+                    measurement :
+                    {
+                        location: 'testVal',
+                        date:
+                        {
+                            local: "testDate"
+                        },
+                        parameter: 'testVal',
+                        value: 'testVal',
+                        unit: 'testVal'
+                    }
+                },
+                {
+                    measurement : 
+                    {
+                        location: 'testVal',
+                        date:
+                        {
+                            local: "testDate"
+                        },
+                        parameter: 'testVal',
+                        value: 'testVal',
+                        unit: 'testVal'
+                    }
+                }
             ], 
-            air_qual2: [
-                {measurement2 : ''}
+            measure2s: [
+                {
+                    measurement :
+                    {
+                        location: 'testVal',
+                        date:
+                        {
+                            local: "testDate"
+                        },
+                        parameter: 'testVal',
+                        value: 'testVal',
+                        unit: 'testVal'
+                    }
+                },
+                {
+                    measurement : 
+                    {
+                        location: 'testVal',
+                        date:
+                        {
+                            local: "testDate"
+                        },
+                        parameter: 'testVal',
+                        value: 'testVal',
+                        unit: 'testVal'
+                    }
+                }
             ], 
 
         },
@@ -165,18 +215,18 @@ function updateAirData(app, mapNum)
                 console.log(response.data.results);
                 if (mapNum == 1)
                 {
-                    app.air_qual = [];
+                    app.measures = [];
                     for (var i =0; i< length;i++)
                     {
-                        app.air_qual.push({ measurement : response.data.results[i]});
+                        app.measures.push({ measurement : response.data.results[i]});
                     }
                 }
                 else
                 {
-                    app.air_qual2 = [];
+                    app.measure2s = [];
                     for (var i =0; i< length;i++)
                     {
-                        app.air_qual2.push({ measurement : response.data.results[i]});
+                        app.measure2s.push({ measurement : response.data.results[i]});
                     }
                 }
             }
@@ -250,7 +300,7 @@ function makeFullScreen(buttonId)
 
 function addMarkers(app, length){
     console.log("inside function");
-    var airData = app.air_qual;
+    var airData = app.measures;
     console.log(airData);
     console.log(length);
 }
