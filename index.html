@@ -46,6 +46,10 @@
                 margin-top: 2vh;
                 margin-bottom: 5vh;
             }
+            th, td
+            {
+                border: 1px solid black;
+            }
         </style>
 		<title>AQ WebApp</title>
 	</head>
@@ -68,6 +72,16 @@
                     <button id="FSButton1">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid" class="column" ></div>
+        	    <table>
+        	        <tr>
+            	        <th>Location</th>
+            	        <th>Time</th>
+        	        </tr>
+        	        <tr>
+        	            <td>TestLoc</td>
+        	            <td>TestTime</td>
+        	        </tr>
+        	    </table>
             </div>
             <div id="rightMap" class = "box">
 		        <div id="inputBox2" class="inputBox">
@@ -82,6 +96,16 @@
                     <button id="FSButton2">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid2" class="column"></div>
+        	    <table>
+        	        <tr>
+            	        <th>Location</th>
+            	        <th>Time</th>
+        	        </tr>
+        	        <tr>
+        	            <td>TestLoc</td>
+        	            <td>TestTime</td>
+        	        </tr>
+        	    </table>
             </div>
             <div>
                 {{ air_qual }}
