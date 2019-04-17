@@ -125,11 +125,13 @@ window.onload = function()
             },
           
         },
-        updated()
+        updated(event)
         {
             clearTimeout(this.timeout);
+            console.log("waiting for user input to stop...");
             this.timeout = setTimeout(() => {
-                console.log("waiting for user input to stop...");
+            //update function would go here, we might need to modify how this works
+                console.log(event);
 //                console.log(app);
 
 

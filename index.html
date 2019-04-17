@@ -182,13 +182,14 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                 <ul><li>Create a popup with actual measurement averages when hovering over a marker</li></ul>
             </ul>
         </ul>
-        <li>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</li>
+        <li><s>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</s></li>
         <ul>
-            <li>Table should automatically update data based on location shown in map</li>
+            <li>Combine multiple measurements into single row? </li>
+            <li><s>Table should automatically update data based on location shown in map</li>
             <ul><li>It is OK to display all results in the table even though the circle of retrieved data will not exactly match the rectangular map</li></ul>
             <li>Table should show all measurements, not just the averages</li>
         </ul>
-    </ul><s>
+    </ul>
         NOTE: it is best to trigger updates at the end of user interaction. Otherwise, continuous requests will be sent and could flood the Open AQ Platform servers, which would slow down your app. A good idea would be to trigger an update after a 200ms timeout with no user activity (pan / zoom).</s>
 </p>
 
