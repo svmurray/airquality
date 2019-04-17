@@ -2,6 +2,9 @@
 window.onload = function()
 {
     /*Haversine
+    
+    Marrinan said that Leaflet might have a built in for the distance between two points, and if it doesn't to just email him and he could post it to canvas.
+    
         //values need to be as radians --> lat*pi/180
     
 	    var a = Math.pow(Math.sin((dataVar[1][0]-dataVar[0][0])/2),2) + Math.cos(dataVar[1][0])*Math.cos(dataVar[0][0])*Math.pow(Math.sin((dataVar[1][1]-dataVar[0][1])/2),2);
@@ -34,18 +37,21 @@ window.onload = function()
             test: "Vue functional",
             air_qual: [
                 {measurement : ''}
-            ]
+            ], 
+            air_qual2: [
+                {measurement2 : ''}
+            ], 
 
         },
         methods: 
         {
             update: function(){
                 this.map.setView([this.latitude, this.longitude]);
-                updateAirData(this);
+                updateAirData(this, 1);
             },
             update2: function(){
                 this.map2.setView([this.latitude, this.longitude]);
-                updateAirData(this);
+                updateAirData(this, 2);
             },
             cityLookup: function() {
                 axios
@@ -54,7 +60,7 @@ window.onload = function()
                         this.latitude = response.data[0].lat; 
                         this.longitude = response.data[0].lon; 
                         this.map.setView([response.data[0].lat, response.data[0].lon]);
-                        updateAirData(this);
+                        updateAirData(this, 1);
                     })
             },
             cityLookup2: function() {
@@ -64,7 +70,7 @@ window.onload = function()
                         this.latitude2 = response.data[0].lat; 
                         this.longitude2 = response.data[0].lon; 
                         this.map2.setView([response.data[0].lat, response.data[0].lon]);
-                        updateAirData(this);
+                        updateAirData(this, 2);
                     })
             },
           
@@ -136,33 +142,48 @@ window.onload = function()
     console.log("onload finished");
 }
 
-function updateAirData(app)
+function updateAirData(app, mapNum)
 {
     console.log("in computed.updateAirData");
+    var url;
+    if (mapNum == 1)
+    {
+        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude;
+    }
+    else
+    {
+        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude2+","+app.longitude2;
+    }
+
     axios
-        .get("https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude)
+        .get(url)
         .then(response => 
         {
-//            console.log("inside response");
-//            console.log(response.data.results.length);
             var length = response.data.results.length;
             if (length > 0)
             {
                 console.log(response.data.results);
-                app.air_qual = [];
-                for (var i =0; i< length;i++)
+                if (mapNum == 1)
                 {
-                    app.air_qual.push({ measurement : response.data.results[i]});
+                    app.air_qual = [];
+                    for (var i =0; i< length;i++)
+                    {
+                        app.air_qual.push({ measurement : response.data.results[i]});
+                    }
+                }
+                else
+                {
+                    app.air_qual2 = [];
+                    for (var i =0; i< length;i++)
+                    {
+                        app.air_qual2.push({ measurement : response.data.results[i]});
+                    }
                 }
             }
             else
             {
                 console.log("no results");
             }
-            
-           
-            
-           
         }) ;
 }
 
@@ -176,7 +197,7 @@ function updateLatLong(app)
         .get(url)
         .then(response => {
             app.city = response.data.address.city;
-            updateAirData(app);
+            updateAirData(app, 1);
         })
 }
 function updateLatLong2(app)
@@ -190,7 +211,7 @@ function updateLatLong2(app)
         .then(response => 
         {
             app.city2 = response.data.address.city;
-            updateAirData(app);
+            updateAirData(app, 2);
         })
 }
 function makeFullScreen(buttonId)
