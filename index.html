@@ -83,13 +83,6 @@
             	        <th>Value</th>
             	        <th>Units</th>
         	        </tr>
-        	        <tr>
-            	        <td>TestLocation</td>
-            	        <td>TestParameter</td>
-            	        <td>TestLocal Time</td>
-            	        <td>TestValue</td>
-            	        <td>TestUnits</td>
-        	        </tr>
         	        <tr v-for="measure in measures">
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
@@ -98,9 +91,9 @@
         	            <td>{{ measure.measurement.unit }}</td>
     	            </tr>
         	    </table>
-                <div>
+<!---                <div>
                     {{ measures }}
-        	    </div>
+        	    </div>-->
             </div>
             <div id="rightMap" class = "box">
 		        <div id="inputBox2" class="inputBox">
@@ -123,13 +116,6 @@
             	        <th>Value</th>
             	        <th>Units</th>
         	        </tr>
-        	        <tr>
-            	        <td>TestLocation</td>
-            	        <td>TestParameter</td>
-            	        <td>TestLocal Time</td>
-            	        <td>TestValue</td>
-            	        <td>TestUnits</td>
-        	        </tr>
         	        <tr v-for="measure2 in measure2s">
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.parameter }}</td>
@@ -138,15 +124,10 @@
         	            <td>{{ measure2.measurement.unit }}</td>
     	            </tr>
         	    </table>
-                <div>
-                    {{ measure2s }}
-        	    </div>
-            </div>
-<!--                <tr v-for="item in air_qual">
-                    <td>{{item.measurement.value}}</td>
-                    <td>{{item.measurement.date}}</td>
-                    <td>{{item.measurement.location}}</td>
-                </tr>-->            
+<!---                <div>
+                    {{ measures2 }}
+        	    </div>-->
+    	    </div>
 		</div>
 		
 	    

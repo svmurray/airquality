@@ -39,27 +39,14 @@ window.onload = function()
                 {
                     measurement :
                     {
-                        location: 'testVal',
+                        location: '',
                         date:
                         {
-                            local: "testDate"
+                            local: ''
                         },
-                        parameter: 'testVal',
-                        value: 'testVal',
-                        unit: 'testVal'
-                    }
-                },
-                {
-                    measurement : 
-                    {
-                        location: 'testVal',
-                        date:
-                        {
-                            local: "testDate"
-                        },
-                        parameter: 'testVal',
-                        value: 'testVal',
-                        unit: 'testVal'
+                        parameter: '',
+                        value: '',
+                        unit: ''
                     }
                 }
             ], 
@@ -67,27 +54,14 @@ window.onload = function()
                 {
                     measurement :
                     {
-                        location: 'testVal',
+                        location: '',
                         date:
                         {
-                            local: "testDate"
+                            local: ''
                         },
-                        parameter: 'testVal',
-                        value: 'testVal',
-                        unit: 'testVal'
-                    }
-                },
-                {
-                    measurement : 
-                    {
-                        location: 'testVal',
-                        date:
-                        {
-                            local: "testDate"
-                        },
-                        parameter: 'testVal',
-                        value: 'testVal',
-                        unit: 'testVal'
+                        parameter: '',
+                        value: '',
+                        unit: ''
                     }
                 }
             ], 
@@ -191,6 +165,8 @@ window.onload = function()
     mymap2.on("moveend", ()=>(updateLatLong2(app)))
     document.getElementById("FSButton1").onclick = () => (makeFullScreen("FSButton1"));
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
+    updateAirData(app, 1);
+    updateAirData(app, 2);
     console.log("onload finished");
 }
 
