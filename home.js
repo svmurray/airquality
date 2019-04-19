@@ -176,7 +176,7 @@ window.onload = function()
 	    id: 'mapbox.streets',
 	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
     }).addTo(mymap);
-    var marker = L.marker([51.5, -0.09]).addTo(mymap);
+//    var marker = L.marker([51.5, -0.09]).addTo(mymap);
 //    console.log("map1 done");
     
 	var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
@@ -187,7 +187,7 @@ window.onload = function()
 	    id: 'mapbox.streets',
 	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
     }).addTo(mymap2);
-    var marker = L.marker([51.5, -0.09]).addTo(mymap2);
+//    var marker = L.marker([51.5, -0.09]).addTo(mymap2);
     
     app.map = mymap;
     app.map2 = mymap2;    
@@ -206,11 +206,11 @@ function updateAirData(app, mapNum)
     var url;
     if (mapNum == 1)
     {
-        url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&"+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude;
+        url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&radius="+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude;
     }
     else
     {
-        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&"+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2;
+        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius="+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2;
     }
 
     axios
@@ -220,7 +220,7 @@ function updateAirData(app, mapNum)
             var length = response.data.results.length;
             if (length > 0)
             {
-                console.log(response.data.results);
+//                console.log(response.data.results);
                 if (mapNum == 1)
                 {
                     app.measures = [];
@@ -244,13 +244,13 @@ function updateAirData(app, mapNum)
             }
             else
             {
-                console.log("no results");
+//                console.log("no results");
                 if (mapNum == 1) {
                     app.measures = [];
                 }else if(mapNum == 2){
                     app.measure2s = [];
                 }else{
-
+                    console.log("something is very wrong");
                 }
 
             }
@@ -270,6 +270,7 @@ function sortData(app, mapNum)
         {
             curr = app.measures[i].measurement;
             dup = false;
+            var part = curr.parameter;
             for (var j=0; j<hold.length; j++)
             {
                 if (curr.date.local == app.measures[j].measurement.date.local && curr.location == app.measures[j].measurement.location)
@@ -280,22 +281,51 @@ function sortData(app, mapNum)
             }
             if (!dup)
             {
-                hold.push(curr)
-                console.log("new time/location");
+                hold.push({measurement: curr})
+                switch (part)
+                {
+                    case "pm10":
+                        hold[hold.length-1].measurement.pm10 = app.measures[i].measurement.value;
+                        break;
+                    case "so2":
+                        hold[hold.length-1].measurement.so2 = app.measures[i].measurement.value;
+                        break;
+                    case "o3":
+                        hold[hold.length-1].measurement.o3 = app.measures[i].measurement.value;
+                        break;
+                    case "pm25":
+                        hold[hold.length-1].measurement.pm25 = app.measures[i].measurement.value;
+                        break;
+                    case "no2":
+                        hold[hold.length-1].measurement.no2 = app.measures[i].measurement.value;                    
+                        break;
+                }
             }
             else
             {
-                //pm10 so2 o3 pm25 no2
-                
-                j[idx]
-                console.log(idx);
-                console.log(curr);
+                switch (part) 
+                {
+                    case "pm10":
+                        hold[idx].measurement.pm10 = app.measures[i].measurement.value;
+                        break;
+                    case "so2":
+                        hold[idx].measurement.so2 = app.measures[i].measurement.value;
+                        break;
+                    case "o3":
+                        hold[idx].measurement.o3 = app.measures[i].measurement.value;
+                        break;
+                    case "pm25":
+                        hold[idx].measurement.pm25 = app.measures[i].measurement.value;
+                        break;
+                    case "no2":
+                        hold[idx].measurement.no2 = app.measures[i].measurement.value;
+                        break;
+                    }
             }
             idx = -1;
         }
-        console.log(hold.length);
+        app.measures = hold;
     }
-    //app.measure2s[0].measurement.pm10 = "test";
 }
 
 function updateLatLong(app)
@@ -328,7 +358,6 @@ function updateLatLong2(app)
 function makeFullScreen(buttonId)
 {
     var button = document.getElementById(buttonId);
-//    console.log(buttonId + " is working");
     var divId = "Map";
     var mapid = "mapid"
     if (buttonId.indexOf("2") >= 0) 
@@ -347,7 +376,6 @@ function makeFullScreen(buttonId)
         el.classList.add("fullscreen");
         map.classList.add("map");
         map.classList.remove("column");
-//        console.log(map.classList);
     }
     else
     {
@@ -360,39 +388,46 @@ function makeFullScreen(buttonId)
 }
 
 function addMarkers(app, mapNum){
-    console.log("inside function");
-
-    var myMap = app.map;
+//    console.log("inside addMarkers");
+    var i=0;
+    var lat;
+    var lon;
+    var marker;
+    var myMap;
     
+    if (mapNum == 1)
+    {
+        myMap = app.map;
+        for(var i = 0; i<app.measures.length; i++)
+        {
+            lat = app.measures[i].measurement.coordinates.latitude;
+            lon = app.measures[i].measurement.coordinates.longitude;
+            marker = L.marker([lat, lon]).addTo(myMap);
+        }
+    }
+    else
+    {
+        myMap = app.map2;
+        for(i=0; i<app.measure2s.length; i++)
+        {
+            lat = app.measure2s[i].measurement.coordinates.latitude;
+            lon = app.measure2s[i].measurement.coordinates.longitude;
+            marker = L.marker([lat, lon]).addTo(myMap);
+        }
     
-        for(var i = 0; i<app.measures.length;i++)
-            {
-                var lat = app.measures[1].measurement.coordinates.latitude;
-                console.log(lat);
-                var lon = app.measures[1].measurement.coordinates.longitude;
-                console.log(lon);
-
-                var marker = L.marker([lat, lon]).addTo(myMap);
-                console.log("Added Marker");
-            }
-        
+    }
 }
 
 function getRadius(app, mapNum){
-    console.log("In getRaidus function");
-    if(mapNum == 2){
-        var myMap = app.map2;
-    }else{
-        var myMap = app.map;
-    }       
+///    console.log("In getRadius function");
+    if(mapNum == 2){var myMap = app.map2;}
+    else{var myMap = app.map;}
     var northEast = myMap.getBounds().getNorthEast();
-    var radius = northEast.distanceTo(myMap.getCenter());
-    //var marker = L.marker(northEast).addTo(myMap);
-    console.log(radius);
+    return northEast.distanceTo(myMap.getCenter());
 }
 
 function createAverage(app, mapNum){
-    var locations = [];
+/*    var locations = [];
     for(var i = 0; i<app.measures.length; i++){
 
         locations.push({"location" : app.measures[i].measurement.location, "parameter" : app.measures[i].measurement.parameter});
