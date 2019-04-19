@@ -50,6 +50,36 @@ window.onload = function()
                     }
                 }
             ], 
+            averages : [
+                {
+                    measurement :
+                    {
+                        location: '',
+                        date:
+                        {
+                            local: ''
+                        },
+                        parameter: '',
+                        value: '',
+                        unit: ''
+                    }
+                }
+            ], 
+            averages2 : [
+                {
+                    measurement :
+                    {
+                        location: '',
+                        date:
+                        {
+                            local: ''
+                        },
+                        parameter: '',
+                        value: '',
+                        unit: ''
+                    }
+                }
+            ], 
             measure2s: [
                 {
                     measurement :
@@ -176,11 +206,11 @@ function updateAirData(app, mapNum)
     var url;
     if (mapNum == 1)
     {
-        url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude;
+        url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&"+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude;
     }
     else
     {
-        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude2+","+app.longitude2;
+        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&"+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2;
     }
 
     axios
@@ -208,10 +238,21 @@ function updateAirData(app, mapNum)
                     }
                 }
                 sortData(app, mapNum);
+                getRadius(app, mapNum);
+                addMarkers(app, mapNum);
+                createAverage(app, mapNum);
             }
             else
             {
                 console.log("no results");
+                if (mapNum == 1) {
+                    app.measures = [];
+                }else if(mapNum == 2){
+                    app.measure2s = [];
+                }else{
+
+                }
+
             }
         }) ;
 }
@@ -254,7 +295,7 @@ function sortData(app, mapNum)
         }
         console.log(hold.length);
     }
-    app.measure2s[0].measurement.pm10 = "test";
+    //app.measure2s[0].measurement.pm10 = "test";
 }
 
 function updateLatLong(app)
@@ -318,9 +359,103 @@ function makeFullScreen(buttonId)
    }
 }
 
-function addMarkers(app, length){
+function addMarkers(app, mapNum){
     console.log("inside function");
-    var airData = app.measures;
-    console.log(airData);
-    console.log(length);
+
+    var myMap = app.map;
+    
+    
+        for(var i = 0; i<app.measures.length;i++)
+            {
+                var lat = app.measures[1].measurement.coordinates.latitude;
+                console.log(lat);
+                var lon = app.measures[1].measurement.coordinates.longitude;
+                console.log(lon);
+
+                var marker = L.marker([lat, lon]).addTo(myMap);
+                console.log("Added Marker");
+            }
+        
 }
+
+function getRadius(app, mapNum){
+    console.log("In getRaidus function");
+    if(mapNum == 2){
+        var myMap = app.map2;
+    }else{
+        var myMap = app.map;
+    }       
+    var northEast = myMap.getBounds().getNorthEast();
+    var radius = northEast.distanceTo(myMap.getCenter());
+    //var marker = L.marker(northEast).addTo(myMap);
+    console.log(radius);
+}
+
+function createAverage(app, mapNum){
+    var locations = [];
+    for(var i = 0; i<app.measures.length; i++){
+
+        locations.push({"location" : app.measures[i].measurement.location, "parameter" : app.measures[i].measurement.parameter});
+
+    }
+    console.log(locations[0].location);
+    var uniqueLocations = [];
+    uniqueLocations.push({"location" : locations[0].location, "parameter": locations[0].parameter});
+    locations.pop(0);
+  
+    console.log(locations);
+    console.log(uniqueLocations[0].location);
+    console.log(uniqueLocations[0].parameter);
+    
+    /**
+    for(var i = 0; i<locations.length; i++){
+        
+        
+       if(locations[i] == uniqueLocations[0].location && value[1] == uniqueLocations[0].parameter){
+        locations.pop(i);
+    }
+    }
+    console.log(locations);
+    
+     console.log(uniqueLocations.length);
+    
+     
+    for(var j = 0; j<uniqueLocations.length; j++){
+        console.log(locations.length);
+        for(var i = 0; i<locations.length; i++){
+           
+            if(locations[i].location === uniqueLocations[j].location && locations[i].parameter === uniqueLocations[j].parameter){
+                //uniqueLocations.push({"location" : locations[i].location, "parameter": locations[i].parameter});
+                locations.pop(i);
+            }else{
+                
+            }
+        }
+        if(locations.length > 0){
+
+            uniqueLocations.push({"location" : locations[0].location, "parameter": locations[0].parameter});
+            locations.pop(0);
+            console.log(uniqueLocations);
+            console.log(uniqueLocations.length);
+        }
+    }
+    console.log(uniqueLocations);
+    
+
+    for(var i = 0; i<uniqueLocations.length; i++){
+        var count = 0;
+        var totalValue = 0;
+        for(var j = 0; j<app.measures.length; j++){
+            if(app.measures[j].measurement.location==uniqueLocations[i][0] && app.measures[j].measurement.parameter ==uniqueLocations[i][1]){
+                //getting subtotals for each location and parameter.
+                totalValue = totalValue + app.measures[j].measurement.value;
+                count = count + 1;
+            }
+            totalValue = totalValue / count;
+            app.averages.push([uniqueLocations[i][0], uniqueLocations[i][1], totalValue]);
+        }
+    }
+    console.log(app.averages);
+    **/
+}
+
