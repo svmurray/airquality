@@ -176,7 +176,7 @@ function updateAirData(app, mapNum)
     var url;
     if (mapNum == 1)
     {
-        url = "https://api.openaq.org/v1/measurements?limit=5&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude;
+        url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&radius=5000&coordinates="+app.latitude+","+app.longitude;
     }
     else
     {
@@ -207,12 +207,54 @@ function updateAirData(app, mapNum)
                         app.measure2s.push({ measurement : response.data.results[i]});
                     }
                 }
+                sortData(app, mapNum);
             }
             else
             {
                 console.log("no results");
             }
         }) ;
+}
+
+function sortData(app, mapNum)
+{
+    var hold = [];
+    var dup = false;
+    var idx = -1;
+    if(mapNum==1)
+    {
+        var curr;
+        console.log("sorting map 1...");
+        for (var i=0; i< app.measures.length; i++)
+        {
+            curr = app.measures[i].measurement;
+            dup = false;
+            for (var j=0; j<hold.length; j++)
+            {
+                if (curr.date.local == app.measures[j].measurement.date.local && curr.location == app.measures[j].measurement.location)
+                {
+                    dup = true;
+                    idx = j;
+                }
+            }
+            if (!dup)
+            {
+                hold.push(curr)
+                console.log("new time/location");
+            }
+            else
+            {
+                //pm10 so2 o3 pm25 no2
+                
+                j[idx]
+                console.log(idx);
+                console.log(curr);
+            }
+            idx = -1;
+        }
+        console.log(hold.length);
+    }
+    app.measure2s[0].measurement.pm10 = "test";
 }
 
 function updateLatLong(app)

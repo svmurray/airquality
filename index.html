@@ -50,8 +50,9 @@
             {
                 border: 1px solid black;
             }
-            table
+            .labeling
             {
+                text-align: center;
             }
         </style>
 		<title>AQ WebApp</title>
@@ -108,20 +109,30 @@
                     <button id="FSButton2">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid2" class="column"></div>
+        	    <div class="labeling"> All units in µg/m³</div>
         	    <table align="center">
         	        <tr>
             	        <th>Location</th>
             	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th>Value</th>
-            	        <th>Units</th>
+            	        <th>pm10</th>
+            	        <th>so2</th>
+            	        <th>o3</th>
+            	        <th>pm25</th>
+            	        <th>no2</th>
         	        </tr>
         	        <tr v-for="measure2 in measure2s">
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
         	            <td>{{ measure2.measurement.value }}</td>
-        	            <td>{{ measure2.measurement.unit }}</td>
+        	            <td>{{ measure2.measurement.pm10 }}</td>
+        	            <td>{{ measure2.measurement.so2 }}</td>
+        	            <td>{{ measure2.measurement.o3 }}</td>
+        	            <td>{{ measure2.measurement.pm25 }}</td>
+        	            <td>{{ measure2.measurement.no2 }}</td>
+
     	            </tr>
         	    </table>
 <!---                <div>
