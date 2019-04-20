@@ -49,6 +49,7 @@
             table, th, td
             {
                 border: 1px solid black;
+                text-align: center;
             }
             .labeling
             {
@@ -76,10 +77,10 @@
                     <button id="FSButton1">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid" class="column" ></div>
+        	    <div class="labeling"> All units in µg/m³</div>
         	    <table>
         	        <tr>
             	        <th>Location</th>
-            	        <th>Local Time</th>
             	        <th>pm10</th>
             	        <th>so2</th>
             	        <th>o3</th>
@@ -88,12 +89,11 @@
         	        </tr>
         	        <tr v-for="average in averages">
         	            <td>{{ average.measurement.location }}</td>
-        	            <td>{{ average.measurement.date.local }}</td>
-        	            <td>{{ (average.measurement.pm10 / average.measurement.pm10Count) | round}}</td>
-        	            <td>{{ average.measurement.so2 / average.measurement.so2Count}}</td>
-        	            <td>{{ average.measurement.o3 / average.measurement.o3Count}}</td>
-        	            <td>{{ average.measurement.pm25 / average.measurement.pm25Count}}</td>
-        	            <td>{{ average.measurement.no2 / average.measurement.no2Count}}</td>
+        	            <td>{{ (100 * average.measurement.pm10 / average.measurement.pm10Count) | round2 }}</td>
+        	            <td>{{ (100 * average.measurement.so2 / average.measurement.so2Count) | round2 }}</td>
+        	            <td>{{ (100 * average.measurement.o3 / average.measurement.o3Count) | round2 }}</td>
+        	            <td>{{ (100 * average.measurement.pm25 / average.measurement.pm25Count) | round2 }}</td>
+        	            <td>{{ (100 * average.measurement.no2 / average.measurement.no2Count) | round2 }}</td>
     	            </tr>
         	    
         	    </table>
@@ -139,6 +139,25 @@
 	            </div>
         	    <div id="mapid2" class="column"></div>
         	    <div class="labeling"> All units in µg/m³</div>
+        	    <table>
+        	        <tr>
+            	        <th>Location</th>
+            	        <th>pm10</th>
+            	        <th>so2</th>
+            	        <th>o3</th>
+            	        <th>pm25</th>
+            	        <th>no2</th>
+        	        </tr>
+        	        <tr v-for="average2 in average2s">
+        	            <td>{{ average2.measurement.location }}</td>
+        	            <td>{{ (100 * average2.measurement.pm10 / average2.measurement.pm10Count) | round2 }}</td>
+        	            <td>{{ (100 * average2.measurement.so2 / average2.measurement.so2Count) | round2 }}</td>
+        	            <td>{{ (100 * average2.measurement.o3 / average2.measurement.o3Count) | round2 }}</td>
+        	            <td>{{ (100 * average2.measurement.pm25 / average2.measurement.pm25Count) | round2 }}</td>
+        	            <td>{{ (100 * average2.measurement.no2 / average2.measurement.no2Count) | round2 }}</td>
+    	            </tr>
+        	    
+        	    </table>
         	    <table align="center">
         	        <tr>
             	        <th>Location</th>
@@ -184,6 +203,14 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
 </p>
 
 <p>To earn 55/75 points (grade: C)</p>
+<ul>
+    <li> 30 day Functionality</li>
+    <li> OnHover for markers </li>
+    <li> UI Filtering </li>
+    <li> Heatmap </li>
+    <li> Colors & Legend </li>
+</ul>
+
 <p>
     <ul>
         <li>Show a 2 independent maps (side-by-side) using the Leaflet API</li>
@@ -196,16 +223,15 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
             </ul>       
             <li>Get air quality measurements from the Open AQ Platform for the past 30 days</li>
             <ul>
-                <li>Average measurements of the same particle taken at the same location</li>
+                <li><s>Average measurements of the same particle taken at the same location</li>
                 <li>Only retrieve data from locations shown on the map (account for both center and zoom level)</li>
                 <ul><li>Open AQ Platform accepts requests with a lat/long center and a radius. HINT: get lat/long coordinates for the NW and SE corners of the map, calculate the distance between them (haversine formula we did in class), and divide by 2 for the radius.</li></ul>
-                <li>Draw markers on the map for each location their is at least one measurement</li>
+                <li>Draw markers on the map for each location their is at least one measurement</s></li>
                 <ul><li>Create a popup with actual measurement averages when hovering over a marker</li></ul>
             </ul>
         </ul>
         <li><s>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</s></li>
         <ul>
-            <li>Combine multiple measurements into single row? </li>
             <li><s>Table should automatically update data based on location shown in map</li>
             <ul><li>It is OK to display all results in the table even though the circle of retrieved data will not exactly match the rectangular map</li></ul>
             <li>Table should show all measurements, not just the averages</li>
