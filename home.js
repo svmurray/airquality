@@ -386,7 +386,18 @@ function addMarkers(app, mapNum){
             lat = app.averages[i].measurement.coordinates.latitude;
             lon = app.averages[i].measurement.coordinates.longitude;
             marker = L.marker([lat, lon]).addTo(myMap)
-                .bindPopup("string");
+                .bindPopup(
+                    "<table>"+
+                    "<tr><th>"+app.averages[i].measurement.location+"</th>"+
+                    "<tr><td>pm10= "+(app.averages[i].measurement.pm10 / app.averages[i].measurement.pm10Count)+"</td></tr>"+
+                    "<tr><td>so2= "+(app.averages[i].measurement.so2 / app.averages[i].measurement.so2Count)+"</td></tr>"+
+                    "<tr><td>so3= "+(app.averages[i].measurement.o3 / app.averages[i].measurement.o3Count)+"</td></tr>"+
+                    "<tr><td>pm25= "+(app.averages[i].measurement.pm25 / app.averages[i].measurement.pm25Count)+"</td></tr>"+
+                    "<tr><td>no3= "+(app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
+                    "</table>"
+                    );
+                   
+
             marker.on("mouseover", function(){
                 marker.openPopup();
             });
