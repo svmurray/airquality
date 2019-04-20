@@ -262,6 +262,9 @@ function sortData(app, mapNum)
     var hold = [];
     var dup = false;
     var idx = -1;
+    var markDup = false;
+    var markIdx = -1;
+    var holdMark = [];
     if(mapNum==1)
     {
         var curr;
@@ -273,7 +276,12 @@ function sortData(app, mapNum)
             var part = curr.parameter;
             for (var j=0; j<hold.length; j++)
             {
-                if (curr.date.local == app.measures[j].measurement.date.local && curr.location == app.measures[j].measurement.location)
+                if (curr.location == hold[j].measurement.location && !markDup)
+                {
+                    markDup = true;
+                    markIdx = j;
+                }
+                if (curr.date.local == hold[j].measurement.date.local && markDup && !dup)
                 {
                     dup = true;
                     idx = j;
@@ -281,7 +289,13 @@ function sortData(app, mapNum)
             }
             if (!dup)
             {
-                hold.push({measurement: curr})
+                var holdCurr = iterationCopy(curr);
+                hold.push({measurement: holdCurr})
+                hold[hold.length-1].measurement.pm10 = '-';
+                hold[hold.length-1].measurement.so2 = '-';
+                hold[hold.length-1].measurement.o3 = '-';
+                hold[hold.length-1].measurement.pm25 = '-';
+                hold[hold.length-1].measurement.no2 = '-';
                 switch (part)
                 {
                     case "pm10":
@@ -322,10 +336,83 @@ function sortData(app, mapNum)
                         break;
                     }
             }
+            if(!markDup)
+            {
+                holdMark.push({measurement: curr})
+                holdMark[holdMark.length-1].measurement.pm10 = 0;
+                holdMark[holdMark.length-1].measurement.so2 = 0;
+                holdMark[holdMark.length-1].measurement.o3 = 0;
+                holdMark[holdMark.length-1].measurement.pm25 = 0;
+                holdMark[holdMark.length-1].measurement.no2 = 0;
+                holdMark[holdMark.length-1].measurement.pm10Count = 0;
+                holdMark[holdMark.length-1].measurement.so2Count = 0;
+                holdMark[holdMark.length-1].measurement.o3Count = 0;
+                holdMark[holdMark.length-1].measurement.pm25Count = 0;
+                holdMark[holdMark.length-1].measurement.no2Count = 0;
+                switch (part)
+                {
+                    case "pm10":
+                        holdMark[holdMark.length-1].measurement.pm10 = app.measures[i].measurement.value;
+                        break;
+                    case "so2":
+                        holdMark[holdMark.length-1].measurement.so2 = app.measures[i].measurement.value;
+                        break;
+                    case "o3":
+                        holdMark[holdMark.length-1].measurement.o3 = app.measures[i].measurement.value;
+                        break;
+                    case "pm25":
+                        holdMark[holdMark.length-1].measurement.pm25 = app.measures[i].measurement.value;
+                        break;
+                    case "no2":
+                        holdMark[holdMark.length-1].measurement.no2 = app.measures[i].measurement.value;                    
+                        break;
+                }
+            }
+            else
+            {
+                switch (part) 
+                {
+                    case "pm10":
+                        holdMark[markIdx].measurement.pm10 += app.measures[i].measurement.value;
+                        holdMark[holdMark.length-1].measurement.pm10Count++;
+                        break;
+                    case "so2":
+                        holdMark[markIdx].measurement.so2 += app.measures[i].measurement.value;
+                        holdMark[holdMark.length-1].measurement.so2Count++;
+                        break;
+                    case "o3":
+                        holdMark[markIdx].measurement.o3 += app.measures[i].measurement.value;
+                        holdMark[holdMark.length-1].measurement.o3Count++;
+                        break;
+                    case "pm25":
+                        holdMark[markIdx].measurement.pm25 += app.measures[i].measurement.value;
+                        holdMark[holdMark.length-1].measurement.pm25Count++;
+                        break;
+                    case "no2":
+                        holdMark[markIdx].measurement.no2 += app.measures[i].measurement.value;
+                        holdMark[holdMark.length-1].measurement.no2Count++;
+                        break;
+                    }
+            }
             idx = -1;
         }
+        app.averages = holdMark;
         app.measures = hold;
+        console.log(holdMark[0].measurement);
     }
+}
+
+function iterationCopy(src) 
+{
+    var target = {};
+    for (var prop in src) 
+    {
+        if (src.hasOwnProperty(prop)) 
+        {
+            target[prop] = src[prop];
+        }
+    }
+    return target;
 }
 
 function updateLatLong(app)
