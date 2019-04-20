@@ -385,7 +385,14 @@ function addMarkers(app, mapNum){
         {
             lat = app.averages[i].measurement.coordinates.latitude;
             lon = app.averages[i].measurement.coordinates.longitude;
-            marker = L.marker([lat, lon]).addTo(myMap);
+            marker = L.marker([lat, lon]).addTo(myMap)
+                .bindPopup("string");
+            marker.on("mouseover", function(){
+                marker.openPopup();
+            });
+            marker.on("mouseout", function(){
+                marker.closePopup();
+            });
         }
     }
     else
