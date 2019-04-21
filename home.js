@@ -120,12 +120,6 @@ window.onload = function()
             //update function would go here, we might need to modify how this works
                 console.log(event);
 //                console.log(app);
-
-
-
-
-
-
                 }, 200);
 
         },
@@ -134,10 +128,7 @@ window.onload = function()
             round2: function (value) 
             {
                 if (!value) {return '';}
-                else
-                {
-                    return Math.round(value)/100;
-                }
+                else {return Math.round(value)/100;}
             }
         }
     })
@@ -149,7 +140,6 @@ window.onload = function()
 	    id: 'mapbox.streets',
 	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
     }).addTo(mymap);
-//    var marker = L.marker([51.5, -0.09]).addTo(mymap);
     
 	var mymap2 = L.map('mapid2').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -159,7 +149,6 @@ window.onload = function()
 	    id: 'mapbox.streets',
 	    accessToken: 'pk.eyJ1IjoibnNhdWVyIiwiYSI6ImNqdWNzY3hrazBkaDg0MHBhazVjcGE0cjkifQ.38ZAD_BPbe9s5ziTqG6U1A'
     }).addTo(mymap2);
-//    var marker = L.marker([51.5, -0.09]).addTo(mymap2);
     
     app.map = mymap;
     app.map2 = mymap2;    
@@ -170,6 +159,12 @@ window.onload = function()
     updateAirData(app, 1);
     updateAirData(app, 2);
     console.log("onload finished");
+}
+
+function myRound(value) 
+{
+    if (!value) {return '';}
+    else {return Math.round(value)/100;}
 }
 
 function updateAirData(app, mapNum)
@@ -189,19 +184,13 @@ function updateAirData(app, mapNum)
                 if (mapNum == 1)
                 {
                     app.measures = [];
-                    for (var i =0; i< length;i++)
-                    {
-                        app.measures.push({ measurement : response.data.results[i]});
-                    }
+                    for (var i =0; i< length;i++) {app.measures.push({ measurement : response.data.results[i]});}
                     meas = app.measures;
                 }
                 else
                 {
                     app.measure2s = [];
-                    for (var i =0; i< length;i++)
-                    {
-                        app.measure2s.push({ measurement : response.data.results[i]});
-                    }
+                    for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
                     meas = app.measure2s;
                 }
                 sortData(app, mapNum, [], [], meas);
@@ -210,14 +199,9 @@ function updateAirData(app, mapNum)
             }
             else
             {
-                if (mapNum == 1) {
-                    app.measures = [];
-                }else if(mapNum == 2){
-                    app.measure2s = [];
-                }else{
-                    console.log("something is very wrong");
-                }
-
+                if (mapNum == 1) {app.measures = [];}
+                else if(mapNum == 2){app.measure2s = [];}
+                else{console.log("something is very wrong");}
             }
         }) ;
 }
@@ -389,11 +373,11 @@ function addMarkers(app, mapNum){
                 .bindPopup(
                     "<table>"+
                     "<tr><th>"+app.averages[i].measurement.location+"</th>"+
-                    "<tr><td>pm10= "+(app.averages[i].measurement.pm10 / app.averages[i].measurement.pm10Count)+"</td></tr>"+
-                    "<tr><td>so2= "+(app.averages[i].measurement.so2 / app.averages[i].measurement.so2Count)+"</td></tr>"+
-                    "<tr><td>so3= "+(app.averages[i].measurement.o3 / app.averages[i].measurement.o3Count)+"</td></tr>"+
-                    "<tr><td>pm25= "+(app.averages[i].measurement.pm25 / app.averages[i].measurement.pm25Count)+"</td></tr>"+
-                    "<tr><td>no3= "+(app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
+                    "<tr><td>pm10= "+myRound(100*app.averages[i].measurement.pm10 / app.averages[i].measurement.pm10Count)+"</td></tr>"+
+                    "<tr><td>so2= "+myRound(100*app.averages[i].measurement.so2 / app.averages[i].measurement.so2Count)+"</td></tr>"+
+                    "<tr><td>so3= "+myRound(100*app.averages[i].measurement.o3 / app.averages[i].measurement.o3Count)+"</td></tr>"+
+                    "<tr><td>pm25= "+myRound(100*app.averages[i].measurement.pm25 / app.averages[i].measurement.pm25Count)+"</td></tr>"+
+                    "<tr><td>no3= "+myRound(100*app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
                     "</table>"
                     );
                    
@@ -414,7 +398,25 @@ function addMarkers(app, mapNum){
         {
             lat = app.average2s[i].measurement.coordinates.latitude;
             lon = app.average2s[i].measurement.coordinates.longitude;
-            marker = L.marker([lat, lon]).addTo(myMap);
+            marker = L.marker([lat, lon]).addTo(myMap)
+                .bindPopup(
+                    "<table>"+
+                    "<tr><th>"+app.average2s[i].measurement.location+"</th>"+
+                    "<tr><td>pm10= "+myRound(100*app.average2s[i].measurement.pm10 / app.average2s[i].measurement.pm10Count)+"</td></tr>"+
+                    "<tr><td>so2= "+myRound(100*app.average2s[i].measurement.so2 / app.average2s[i].measurement.so2Count)+"</td></tr>"+
+                    "<tr><td>so3= "+myRound(100*app.average2s[i].measurement.o3 / app.average2s[i].measurement.o3Count)+"</td></tr>"+
+                    "<tr><td>pm25= "+myRound(100*app.average2s[i].measurement.pm25 / app.average2s[i].measurement.pm25Count)+"</td></tr>"+
+                    "<tr><td>no3= "+myRound(100*app.average2s[i].measurement.no2 / app.average2s[i].measurement.no2Count)+"</td></tr>"+
+                    "</table>"
+                    );
+                   
+
+            marker.on("mouseover", function(){
+                marker.openPopup();
+            });
+            marker.on("mouseout", function(){
+                marker.closePopup();
+            });
         }
     }
 }

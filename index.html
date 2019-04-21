@@ -77,7 +77,14 @@
                     <button id="FSButton1">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid" class="column" ></div>
-        	    <div class="labeling"> All units in µg/m³</div>
+        	    <div class="labeling"> 
+            	    <div>All units in µg/m³</div>
+            	    <div> Select Date Range </div>
+            	    <div>Starting Date</div>
+            	    <input type="date"></input>
+            	    <div>Ending Date</div>
+            	    <input type="date"></input>
+        	    </div>
         	    <table>
         	        <tr>
             	        <th>Location</th>
@@ -138,7 +145,14 @@
                     <button id="FSButton2">Make This Map Full-Screen</button>
 	            </div>
         	    <div id="mapid2" class="column"></div>
-        	    <div class="labeling"> All units in µg/m³</div>
+        	    <div class="labeling"> 
+            	    <div>All units in µg/m³</div>
+            	    <div> Select Date Range </div>
+            	    <div>Starting Date</div>
+            	    <input type="date"></input>
+            	    <div>Ending Date</div>
+            	    <input type="date"></input>
+        	    </div>
         	    <table>
         	        <tr>
             	        <th>Location</th>
@@ -171,7 +185,7 @@
             	        <th>no2</th>
         	        </tr>
         	        <tr v-for="measure2 in measure2s">
-        	            <td>{{ measure2.measurement.location }}</td>
+        	            <td>{{ measure2.measurement.unit }}</td>
         	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
         	            <td>{{ measure2.measurement.value }}</td>
@@ -192,6 +206,22 @@
 	    
 		<div>
 			<h4> To Do: </h4>
+<ul>
+    <li> 30 day Functionality</li>
+        <ul>
+            <li>Create field in the vueApp for startDate & endDate/startDate2 & endDate2 that are bound to the inputs.</li>
+            <li>Retrieve current date to populate the field.</li>
+            <li>Have restrictions for allowable dates up to 90 days back but also within 90 of each other</li>
+        </ul>
+    <li> UI Filtering </li>
+    <li> Heatmap </li>
+    <li> Colors & Legend </li> 
+        <ul>
+            <li>Convert all measurements in the table to micrograms</li>
+            <li>v-if entrys with the condition</li>
+        </ul>
+    <li> Change Limit to 10000 (from 25)</li>
+</ul>
 			<p>For this project, you will create a single page application about air quality. You will use at least 2 external APIs to retrieve data from (Leaflet and the Open AQ Platform). Your application should be interactive, responsive, and allow a user to investigate air quality from various geographical regions. This project will also incorporate Vue JS as a framework to make building the app simpler. You will also create a second web page - "About the project", which will document your team, your development process, and demo the final application with interesting findings. For this project, you are free to use other JavaScript or CSS libraries as you see fit.</p>
 <p>About the Data Sets
 Leaflet:
@@ -203,37 +233,29 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
 </p>
 
 <p>To earn 55/75 points (grade: C)</p>
-<ul>
-    <li> 30 day Functionality</li>
-    <li> OnHover for markers </li>
-    <li> UI Filtering </li>
-    <li> Heatmap </li>
-    <li> Colors & Legend </li>
-    <li> Change Limit to 10000 (from 25)</li>
-</ul>
 
 <p>
     <ul>
         <li>Show a 2 independent maps (side-by-side) using the Leaflet API</li>
         <ul>
-		<li><s>Pan and zoom available with mouse click-and-drag and scroll wheel interaction</s></li> 
-            <li><s>Have an input box for a user to type a location (lat/long coordinates)</s></li>
+		<li><s>Pan and zoom available with mouse click-and-drag and scroll wheel interaction</li> 
+            <li>Have an input box for a user to type a location (lat/long coordinates)</li>
             <ul>
-                <li><s>Map should update when location is entered</s></li>
-                <li><s>Input box text should update with new location (lat/long coordinates) when map is panned</s></li>
+                <li>Map should update when location is entered</li>
+                <li>Input box text should update with new location (lat/long coordinates) when map is panned</s></li>
             </ul>       
             <li>Get air quality measurements from the Open AQ Platform for the past 30 days</li>
             <ul>
                 <li><s>Average measurements of the same particle taken at the same location</li>
                 <li>Only retrieve data from locations shown on the map (account for both center and zoom level)</li>
                 <ul><li>Open AQ Platform accepts requests with a lat/long center and a radius. HINT: get lat/long coordinates for the NW and SE corners of the map, calculate the distance between them (haversine formula we did in class), and divide by 2 for the radius.</li></ul>
-                <li>Draw markers on the map for each location their is at least one measurement</s></li>
+                <li>Draw markers on the map for each location their is at least one measurement</li>
                 <ul><li>Create a popup with actual measurement averages when hovering over a marker</li></ul>
             </ul>
         </ul>
-        <li><s>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</s></li>
+        <li>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</li>
         <ul>
-            <li><s>Table should automatically update data based on location shown in map</li>
+            <li>Table should automatically update data based on location shown in map</li>
             <ul><li>It is OK to display all results in the table even though the circle of retrieved data will not exactly match the rectangular map</li></ul>
             <li>Table should show all measurements, not just the averages</li>
         </ul>
@@ -256,6 +278,62 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                         <li>https://airnowtest.epa.gov/sites/default/files/2018-09/aqi-technical-assistance-document-sept-2018_0.pdf (colors - page 2, values - page 4)</li>
                         <li>If levels of one or more particle are "Unhealthy for Sensitive Groups" (orange) or higher, add a banner with the AQI descriptor (page 2)</li>
                         <li>Also include a legend for the colors</li>
+                        <table>
+                            <tr>
+                                <th>Particle</th>
+                                <th>Green</th>
+                                <th>Yellow</th>
+                                <th>Orange</th>
+                                <th>Red</th>
+                                <th>Purple</th>
+                                <th>Maroon</th>
+                            </tr>
+                            <tr>
+                                <td>pm10 (μg/m3)</td>
+                                <td>54</td>
+                                <td>154</td>
+                                <td>254</td>
+                                <td>354</td>
+                                <td>424</td>
+                                <td>Greater</td>
+                            </tr>
+                            <tr>
+                                <td>so2 (ppb)</td>
+                                <td>35</td>
+                                <td>75</td>
+                                <td>185</td>
+                                <td>304</td>
+                                <td>604</td>
+                                <td>Greater</td>
+                            </tr>
+                            <tr>
+                                <td>o3 (ppm)</td>
+                                <td>.054</td>
+                                <td>.07</td>
+                                <td>.085</td>
+                                <td>.105</td>
+                                <td>.2</td>
+                                <td>Greater</td>
+                            </tr>
+                            <tr>
+                                <td>pm25 (μg/m3)</td>
+                                <td>12</td>
+                                <td>35.4</td>
+                                <td>55.4</td>
+                                <td>150.4</td>
+                                <td>250.4</td>
+                                <td>Greater</td>
+                            </tr>
+                            <tr>
+                                <td>no2 (ppb)</td>
+                                <td>53</td>
+                                <td>100</td>
+                                <td>360</td>
+                                <td>649</td>
+                                <td>1249</td>
+                                <td>Greater</td>
+                            </tr>
+                        </table>
                     </ul>
                     <li>Add option for showing a heatmap visualization overlay on the map when only one particle type selected</li>
                     <ul>
