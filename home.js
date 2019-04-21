@@ -1,6 +1,25 @@
 "use strict";
 window.onload = function()
 {
+    var date = new Date();
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0');
+    var yyyy = date.getFullYear();
+    date = yyyy + '-' + mm + '-' + dd;
+    var dateLimit = new Date();
+    dateLimit = new Date(new Date().setDate(dateLimit.getDate() - 90));
+    dd = String(dateLimit.getDate()).padStart(2, '0');
+    mm = String(dateLimit.getMonth() + 1).padStart(2, '0');
+    yyyy = dateLimit.getFullYear();
+    dateLimit = yyyy + '-' + mm + '-' + dd;
+    var firstEnd = new Date();
+    firstEnd = new Date(new Date().setDate(firstEnd.getDate() - 30));
+    dd = String(firstEnd.getDate()).padStart(2, '0');
+    mm = String(firstEnd.getMonth() + 1).padStart(2, '0');
+    yyyy = firstEnd.getFullYear();
+    firstEnd = yyyy + '-' + mm + '-' + dd;
+
+    console.log(dateLimit);
     var app = new Vue(
     {
         el: "#vueApp", 
@@ -15,9 +34,14 @@ window.onload = function()
             map: mymap,
             map2: mymap2,
             timeout: null,
+            startDate1: firstEnd,
+            startDate2: firstEnd,
+            endDate1: date,
+            endDate2: date,
+            earliestDate: dateLimit,
+            latestDate: date,
             //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
             url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
-            test: "Vue functional",
             measures: [
                 {
                     measurement :
@@ -109,7 +133,7 @@ window.onload = function()
                         this.map2.setView([response.data[0].lat, response.data[0].lon]);
                         updateAirData(this, 2);
                     })
-            },
+            }
           
         },
         updated(event)
@@ -132,6 +156,9 @@ window.onload = function()
             }
         }
     })
+    
+    console.log(date);
+    
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -227,7 +254,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 markDup = true;
                 markIdx = j;
             }
-            if (curr.date.local == hold[j].measurement.date.local && markDup && !dup)
+            if (markDup && curr.date.local == hold[j].measurement.date.local && !dup)
             {
                 dup = true;
                 idx = j;
@@ -280,7 +307,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 case "no2":
                     hold[idx].measurement.no2 = meas[i].measurement.value;
                     break;
-                }
+            }
         }
         if(!markDup)
         {
@@ -338,7 +365,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     holdMark[markIdx].measurement.no2 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.no2Count++;
                     break;
-                }
+            }
         }
         idx = -1;
     }
@@ -364,7 +391,6 @@ function addMarkers(app, mapNum){
     if (mapNum == 1)
     {
         myMap = app.map;
-        console.log("Average: " + app.averages.length);
         for(var i = 0; i<app.averages.length; i++)
         {
             lat = app.averages[i].measurement.coordinates.latitude;
@@ -379,21 +405,14 @@ function addMarkers(app, mapNum){
                     "<tr><td>pm25= "+myRound(100*app.averages[i].measurement.pm25 / app.averages[i].measurement.pm25Count)+"</td></tr>"+
                     "<tr><td>no3= "+myRound(100*app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
                     "</table>"
-                    );
-                   
-
-            marker.on("mouseover", function(){
-                marker.openPopup();
-            });
-            marker.on("mouseout", function(){
-                marker.closePopup();
-            });
+                );
+            marker.on("mouseover", function(){marker.openPopup();});
+            marker.on("mouseout", function(){marker.closePopup();});
         }
     }
     else
     {
         myMap = app.map2;
-        console.log("average2: " + app.average2s.length);
         for(i=0; i<app.average2s.length; i++)
         {
             lat = app.average2s[i].measurement.coordinates.latitude;
@@ -408,15 +427,9 @@ function addMarkers(app, mapNum){
                     "<tr><td>pm25= "+myRound(100*app.average2s[i].measurement.pm25 / app.average2s[i].measurement.pm25Count)+"</td></tr>"+
                     "<tr><td>no3= "+myRound(100*app.average2s[i].measurement.no2 / app.average2s[i].measurement.no2Count)+"</td></tr>"+
                     "</table>"
-                    );
-                   
-
-            marker.on("mouseover", function(){
-                marker.openPopup();
-            });
-            marker.on("mouseout", function(){
-                marker.closePopup();
-            });
+                );
+            marker.on("mouseover", function(){marker.openPopup();});
+            marker.on("mouseout", function(){marker.closePopup();});
         }
     }
 }
@@ -489,15 +502,9 @@ function updateLatLong2(app)
         })
 }
 
-function iterationCopy(src) 
+function iterationCopy(input) 
 {
     var target = {};
-    for (var prop in src) 
-    {
-        if (src.hasOwnProperty(prop)) 
-        {
-            target[prop] = src[prop];
-        }
-    }
+    for (var prop in input) {if (input.hasOwnProperty(prop)) {target[prop] = input[prop];}}
     return target;
 }
