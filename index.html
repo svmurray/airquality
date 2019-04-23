@@ -171,11 +171,17 @@
         	        <tr v-for="average in averages">
         	            <td>{{ average.measurement.location }}</td>
         	            <td>{{ (100 * average.measurement.pm10 / average.measurement.pm10Count) | round2 }}</td>
+        	            <td>{{ average.measurement.pm10Count }}</td>
         	            <td>{{ (100 * average.measurement.so2 / average.measurement.so2Count) | round2 }}</td>
+        	            <td>{{ average.measurement.so2Count }}</td>
         	            <td>{{ (100 * average.measurement.o3 / average.measurement.o3Count) | round2 }}</td>
+        	            <td>{{ average.measurement.o3Count }}</td>
         	            <td>{{ (100 * average.measurement.pm25 / average.measurement.pm25Count) | round2 }}</td>
+        	            <td>{{ average.measurement.pm25Count }}</td>
         	            <td>{{ (100 * average.measurement.no2 / average.measurement.no2Count) | round2 }}</td>
+        	            <td>{{ average.measurement.no2Count }}</td>
 <!-- NEW -->        	            <td>{{ (100 * average.measurement.co / average.measurement.coCount) | round2 }}</td>
+<!-- NEW -->        	            <td>{{ average.measurement.coCount }}</td>
     	            </tr>
         	    
         	    </table>

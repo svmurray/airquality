@@ -156,14 +156,9 @@ window.onload = function()
         },
         updated(event)
         {
-/*            clearTimeout(this.timeout);
+            clearTimeout(this.timeout);
             console.log("waiting for user input to stop...");
-            this.timeout = setTimeout(() => {
-            //update function would go here, we might need to modify how this works
-                console.log(event);
-//                console.log(app);
-                }, 200);*/
-
+            this.timeout = setTimeout(() => {console.log(event);}, 200);
         },
         filters: 
         {
@@ -219,35 +214,55 @@ function heatMap(app, part, mapNum)
     var pointArray = [];
     var avgs;
     var gradient;
+    var maximum;
     
     if (mapNum == 1)
     {
         map = app.map;
         maxes = app.map1Max;
-        avgs = app.measures;
+        avgs = app.averages;
     }
     else
     {
         map = app.map2;
         maxes = app.map2Max;
-        avgs = app.measure2s;
+        avgs = app.average2s;
     }
     switch (part)
     {
         case 'pm10':
-            gradient = {
+            /*gradient = {
                 54: "green",
                 124: "yellow",
                 254: "orange", 
                 354: "red", 
                 424: "purple", 
-                500: "maroon"
+                500: "black"
+            }*/
+            gradient = {
+                .1: 'green',
+                .2: 'yellow',
+                .4: 'orange',
+                .6: 'red',
+                .8: 'purple',
+                .9: 'maroon'
             }
-            relMax = gradient.maroon;
-            
-            for (var i=0; i<avgs.length; i++) {if (avgs[i].measurement.pm10 > relMax) {console.log("fuck");}if (avgs[i] != undefined){if (avgs[i].measurement.pm10 > 0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm10/relMax]);}}}
+
+            relMax = 700;            
+            for (var i=0; i<avgs.length; i++) 
+            {
+                if (avgs[i] != undefined)
+                {
+                    if (avgs[i].measurement.pm10 > 0)
+                    {
+                        console.log(avgs[i].measurement.location);
+                        
+                        pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm10)/500]);
+                    }                                                                                                                                                               	
+                }
+            }
             break;
-        case 'pm25':
+        case 'pm25':/*
             gradient = {
                 12: "green",
                 35.4: "yellow",
@@ -255,9 +270,9 @@ function heatMap(app, part, mapNum)
                 150.4: "red", 
                 250.4: "purple", 
                 300: "maroon"
-            }
-            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.pm25]);}}
+            }*/
+//            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.pm25]);}}
             break;
         case 'so2':
             gradient = {
@@ -268,8 +283,8 @@ function heatMap(app, part, mapNum)
                 1582.5: "purple", 
                 3000: "maroon"
             }        
-            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.so2]);}}
+//            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.so2]);}}
             break;
         case 'co':
             gradient = {
@@ -280,8 +295,8 @@ function heatMap(app, part, mapNum)
                 35.2: "purple", 
                 50: "maroon"
             }
-            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.co]);}}
+//            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.co]);}}
             break;
         case 'o3':
             gradient = {
@@ -292,8 +307,8 @@ function heatMap(app, part, mapNum)
                 400: "purple", 
                 600: "maroon"
             }
-            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.o3]);}}
+//            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.o3]);}}
             break;
         case 'no2':
             gradient = {
@@ -304,13 +319,13 @@ function heatMap(app, part, mapNum)
                 2348.12: "purple", 
                 3300: "maroon"
             }
-            relMax = gradient.maroon;
+//            relMax = gradient.maroon;
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.no2]);}}
             break;
     }
-    var heat = L.heatLayer(pointArray, {'gradient':gradient                                                                                                                                                                                                                                                                                                                                                ).addTo(map);
-    
-    console.log("create heatmap for " + part + " on " + mapNum + " && " + relMax);
+//    var heat = L.heatLayer(pointArray).addTo(map);
+    var heat = L.heatLayer(pointArray, {'gradient': gradient}).addTo(map);    
+//    console.log("create heatmap for " + part + " on " + mapNum + " && " + relMax);, 
     console.log(pointArray);
     console.log(map);
 }
@@ -486,26 +501,32 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 case "pm10":
                     holdMark[holdMark.length-1].measurement.pm10 = meas[i].measurement.value;
+                    holdMark[holdMark.length-1].measurement.pm10Count++;
                     if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     holdMark[holdMark.length-1].measurement.so2 = meas[i].measurement.value;
+                    holdMark[holdMark.length-1].measurement.so2Count++;
                     if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     holdMark[holdMark.length-1].measurement.o3 = meas[i].measurement.value;
+                    holdMark[holdMark.length-1].measurement.o3Count++;
                     if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     holdMark[holdMark.length-1].measurement.pm25 = meas[i].measurement.value;
+                    holdMark[holdMark.length-1].measurement.pm25Count++;
                     if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     holdMark[holdMark.length-1].measurement.no2 = meas[i].measurement.value;                    
+                    holdMark[holdMark.length-1].measurement.no2Count++;
                     if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     holdMark[holdMark.length-1].measurement.co = meas[i].measurement.value;                    
+                    holdMark[holdMark.length-1].measurement.coCount++;
                     if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
