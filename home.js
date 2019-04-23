@@ -505,7 +505,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 case "pm10":
                     holdMark[holdMark.length-1].measurement.pm10 = meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.pm10Count++;
-                    if (max                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     	es.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
+                    if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     holdMark[holdMark.length-1].measurement.so2 = meas[i].measurement.value;
