@@ -25,7 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 100,
+            limit: 10000,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -41,8 +41,23 @@ window.onload = function()
             endDate2: date,
             earliestDate: dateLimit,
             latestDate: date,
+            map1Max: {
+                pm10: 0,
+                pm25: 0,
+                co: 0,
+                no2: 0,
+                so2: 0,
+                o3: 0
+            },
+            map2Max: {
+                pm10: 0,
+                pm25: 0,
+                co: 0,
+                no2: 0,
+                so2: 0,
+                o3: 0
+            },
             //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
-            url: "https://api.openaq.org/v1/measurements?limit=10&order_by=location",
             measures: [
                 {
                     measurement :
@@ -136,18 +151,18 @@ window.onload = function()
                         this.map2.setView([response.data[0].lat, response.data[0].lon]);
                         updateAirData(this, 2);
                     })
-            }
-          
+            },
+            hm: function(part, num) {heatMap(this, part, num);}
         },
         updated(event)
         {
-            clearTimeout(this.timeout);
+/*            clearTimeout(this.timeout);
             console.log("waiting for user input to stop...");
             this.timeout = setTimeout(() => {
             //update function would go here, we might need to modify how this works
                 console.log(event);
 //                console.log(app);
-                }, 200);
+                }, 200);*/
 
         },
         filters: 
@@ -194,8 +209,64 @@ window.onload = function()
     document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
     document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
     document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
-    
+}
 
+function heatMap(app, part, mapNum)
+{
+    var map;
+    var maxes;
+    var relMax;
+    var pointArray = [];
+    var avgs;
+    
+    if (mapNum ==1)
+    {
+        map = app.map;
+        maxes = app.map1Max;
+        avgs = app.averages;
+    }
+    else
+    {
+        map = app.map2;
+        maxes = app.map2Max;
+        avgs = app.average2s;
+    }
+    switch (part)
+    {
+        case 'pm10':
+            relMax = maxes.pm10;
+            for (var i=0; i<avgs.length; i++)
+            {
+                if (avgs[i].measurement.pm10 > 0)
+                {
+                    pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm10]);
+                }
+            }
+            break;
+        case 'pm25':
+            relMax = maxes.pm25;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm25]);}}
+            break;
+        case 'so2':
+            relMax = maxes.so2;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.so2]);}}
+            break;
+        case 'co':
+            relMax = maxes.co;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.co]);}}
+            break;
+        case 'o3':
+            relMax = maxes.o3;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.o3]);}}
+            break;
+        case 'no2':
+            relMax = maxes.no2;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.no2]);}}
+            break;
+    }
+    var heat = L.heatLayer(pointArray).addTo(map);
+    
+    console.log("create heatmap for " + part + " on " + mapNum + " && " + relMax);
 }
 
 function myRound(value) 
@@ -252,6 +323,9 @@ function sortData(app, mapNum, hold, holdMark, meas)
     var markDup = false;
     var markIdx = -1;
     var curr;
+    var maxes = app.map1Max;
+    
+    if (mapNum ==2) {maxes = app.map2Max;}
     
     console.log("sorting map " + mapNum + "...");
     for (var i=0; i< meas.length; i++)
@@ -270,6 +344,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 dup = true;
                 idx = j;
+                j = hold.length + 1;
             }
         }
         if (!dup)
@@ -286,21 +361,27 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 case "pm10":
                     hold[hold.length-1].measurement.pm10 = meas[i].measurement.value;
+                    if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     hold[hold.length-1].measurement.so2 = meas[i].measurement.value;
+                    if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     hold[hold.length-1].measurement.o3 = meas[i].measurement.value;
+                    if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     hold[hold.length-1].measurement.pm25 = meas[i].measurement.value;
+                    if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     hold[hold.length-1].measurement.no2 = meas[i].measurement.value;                    
+                    if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     hold[hold.length-1].measurement.co = meas[i].measurement.value;                    
+                    if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
         }
@@ -310,21 +391,27 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 case "pm10":
                     hold[idx].measurement.pm10 = meas[i].measurement.value;
+                    if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     hold[idx].measurement.so2 = meas[i].measurement.value;
+                    if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     hold[idx].measurement.o3 = meas[i].measurement.value;
+                    if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     hold[idx].measurement.pm25 = meas[i].measurement.value;
+                    if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     hold[idx].measurement.no2 = meas[i].measurement.value;
+                    if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     hold[idx].measurement.co = meas[i].measurement.value;
+                    if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
 
             }
@@ -348,21 +435,27 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 case "pm10":
                     holdMark[holdMark.length-1].measurement.pm10 = meas[i].measurement.value;
+                    if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     holdMark[holdMark.length-1].measurement.so2 = meas[i].measurement.value;
+                    if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     holdMark[holdMark.length-1].measurement.o3 = meas[i].measurement.value;
+                    if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     holdMark[holdMark.length-1].measurement.pm25 = meas[i].measurement.value;
+                    if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     holdMark[holdMark.length-1].measurement.no2 = meas[i].measurement.value;                    
+                    if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     holdMark[holdMark.length-1].measurement.co = meas[i].measurement.value;                    
+                    if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
         }
@@ -373,26 +466,32 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 case "pm10":
                     holdMark[markIdx].measurement.pm10 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.pm10Count++;
+                    if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     holdMark[markIdx].measurement.so2 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.so2Count++;
+                    if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     holdMark[markIdx].measurement.o3 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.o3Count++;
+                    if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     holdMark[markIdx].measurement.pm25 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.pm25Count++;
+                    if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     holdMark[markIdx].measurement.no2 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.no2Count++;
+                    if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     holdMark[markIdx].measurement.co += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.coCount++;
+                    if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
         }
@@ -408,6 +507,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
         app.average2s = holdMark;
         app.measure2s = hold;
     }
+    console.log(holdMark);
 }
 
 function addMarkers(app, mapNum){

@@ -4,6 +4,7 @@
 	<head>
 	    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
 	    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+	    <script src="leaflet-heat.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -130,6 +131,7 @@
                     </tr>
                     <tr>
                         <th colspan="6">Logical Filters</th>
+                    </tr>
                     <tr>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
@@ -140,6 +142,18 @@
                     </tr>
                     <tr>
                         <td colspan="6"><button id="filterInput">Filter With Input</button></td>
+                    </tr>
+                    <tr>
+                        <th colspan="6">HeatMap</th>
+                    </tr>
+                    <tr>
+                        <td><button id="hmpm10" v-on:click="hm('pm10', 1)">PM10</td>
+                        <td><button id="hmso2" v-on:click="hm('so2', 1)">SO2</td>
+                        <td><button id="hmo3" v-on:click="hm('o3', 1)">O3</td>
+                        <td><button id="hmpm25" v-on:click="hm('pm25', 1)">PM25</button></td>
+                        <td><button id="hmno2" v-on:click="hm('no2', 1)">NO2</button></td>
+<!-- NEW -->                        <td><button id="filterco" v-on:click="hm('co', 1)">CO</button></td>
+
                     </tr>
 
                 </table>
@@ -167,6 +181,30 @@
     	            </tr>
         	    
         	    </table>
+        	    <table>
+        	        <tr>
+        	            <th colspan="6">Max</th>
+        	        </tr>
+        	        <tr>
+            	        <th>pm10</th>
+            	        <th>so2</th>
+            	        <th>o3</th>
+            	        <th>pm25</th>
+            	        <th>no2</th>
+<!-- NEW -->            	        <th>co</th>
+        	        </tr>
+        	        <tr>
+        	            <td>{{ map2Max.pm10 }}</td>
+        	            <td>{{ map2Max.so2 }}</td>
+        	            <td>{{ map2Max.o3 }}</td>
+        	            <td>{{ map2Max.pm25 }}</td>
+        	            <td>{{ map2Max.no2 }}</td>
+<!-- NEW -->        	            <td>{{ map2Max.co }}</td>
+
+    	            </tr>
+        	    
+        	    </table>
+
         	    <table align="center">
         	        <tr>
         	            <th colspan="10">Individual Measurements</th>
@@ -255,6 +293,29 @@
         	            <td>{{ (100 * average2.measurement.pm25 / average2.measurement.pm25Count) | round2 }}</td>
         	            <td>{{ (100 * average2.measurement.no2 / average2.measurement.no2Count) | round2 }}</td>
 <!-- NEW -->        	            <td>{{ (100 * average2.measurement.co / average2.measurement.coCount) | round2 }}</td>
+
+    	            </tr>
+        	    
+        	    </table>
+        	    <table>
+        	        <tr>
+        	            <th colspan="6">Max</th>
+        	        </tr>
+        	        <tr>
+            	        <th>pm10</th>
+            	        <th>so2</th>
+            	        <th>o3</th>
+            	        <th>pm25</th>
+            	        <th>no2</th>
+<!-- NEW -->            	        <th>co</th>
+        	        </tr>
+        	        <tr>
+        	            <td>{{ map2Max.pm10 }}</td>
+        	            <td>{{ map2Max.so2 }}</td>
+        	            <td>{{ map2Max.o3 }}</td>
+        	            <td>{{ map2Max.pm25 }}</td>
+        	            <td>{{ map2Max.no2 }}</td>
+<!-- NEW -->        	            <td>{{ map2Max.co }}</td>
 
     	            </tr>
         	    
