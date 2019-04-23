@@ -46,14 +46,46 @@
                 margin-top: 2vh;
                 margin-bottom: 5vh;
             }
+            table{
+               margin-top: 10px;
+               
+            }
             table, th, td, tr
             {
+
                 border: 1px solid black;
                 text-align: center;
+
             }
             .labeling
             {
                 text-align: center;
+            }
+            
+            td button
+            {
+                
+                border: none;
+                font-size: 1rem;  
+            }
+
+            .green{
+                background-color: rgb(3, 150, 30, .6);
+            }
+            .yellow{
+                background-color: rgb(219, 215, 0, .6);
+            }
+            .orange{
+                background-color: rgb(226, 113, 0, .6);
+            }
+            .red{
+                background-color: rgb(204, 4, 47, .6);
+            }
+            .purple{
+                background-color: rgb(96, 0, 214, .6);
+            }
+            .maroon{
+                background-color: rgb(124, 1, 1, .6);
             }
         </style>
 		<title>AQ WebApp</title>
@@ -84,7 +116,41 @@
             	    <input type="date" v-model="startDate1" :min="earliestDate" :max="latestDate"></input>
             	    <div>Ending Date</div>
             	    <input type="date" v-model="endDate1" :min="earliestDate" :max="latestDate"></input>
+                    <button id="filter1" onclick=>Filter</button>
         	    </div>
+                <table>
+                    <tr>
+                        <th colspan="5" align="center">Filters</th>
+                    </tr>
+                    <tr>
+                        <th>pm10</th>
+                        <th>so2</th>
+                        <th>o3</th>
+                        <th>pm25</th>
+                        <th>no2</th>
+                    </tr>
+                    <tr>
+                        <td><button id="filterpm10">Remove PM10</td>
+                        <td><button id="filterso2">Remove SO2</td>
+                        <td><button id="filtero3">Remove O3</td>
+                        <td><button id="filterpm25">Remove PM25</button></td>
+                        <td><button id="filterno2">Remove NO2</button></td>
+
+                    </tr>
+                    <tr>
+                        <th colspan="5">Logical Filters</th>
+                    <tr>
+                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><button id="filterInput">Filter With Input</button></td>
+                    </tr>
+
+                </table>
         	    <table>
         	        <tr>
             	        <th>Location</th>
@@ -110,22 +176,31 @@
             	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th>Value</th>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
+            	        <th id = "pm10">pm10</th>
+            	        <th id= "so2">so2</th>
+            	        <th id="o3">o3</th>
+            	        <th id="pm25">pm25</th>
+            	        <th id="no2">no2</th>
         	        </tr>
         	        <tr v-for="measure in measures">
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
-        	            <td>{{ measure.measurement.value }}</td>
-        	            <td>{{ measure.measurement.pm10 }}</td>
-        	            <td>{{ measure.measurement.so2 }}</td>
-        	            <td>{{ measure.measurement.o3 }}</td>
-        	            <td>{{ measure.measurement.pm25 }}</td>
-        	            <td>{{ measure.measurement.no2 }}</td>
+        	            <td v-bind:class="{
+                            green: measure.measurement.safety === 'green',
+                            yellow: measure.measurement.safety === 'yellow',
+                            orange: measure.measurement.safety === 'orange',
+                            red: measure.measurement.safety === 'red',
+                            purple: measure.measurement.safety  === 'purple',
+                            maroon: measure.measurement.safety === 'maroon'
+                        }">
+                        {{ measure.measurement.value }}</td>
+        	            <td id="pm10">
+                            {{ measure.measurement.pm10}}</td>
+        	            <td id="so2">{{ measure.measurement.so2 }}</td>
+        	            <td id="o3">{{ measure.measurement.o3 }}</td>
+        	            <td id ="pm25">{{ measure.measurement.pm25 }}</td>
+        	            <td id="no2">{{ measure.measurement.no2 }}</td>
     	            </tr>
         	    </table>
             </div>
@@ -185,7 +260,14 @@
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
-        	            <td>{{ measure2.measurement.value }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.value }}</td>
         	            <td>{{ measure2.measurement.pm10 }}</td>
         	            <td>{{ measure2.measurement.so2 }}</td>
         	            <td>{{ measure2.measurement.o3 }}</td>
@@ -272,12 +354,12 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                         <table>
                             <tr>
                                 <th>Particle</th>
-                                <th>Green</th>
-                                <th>Yellow</th>
-                                <th>Orange</th>
-                                <th>Red</th>
-                                <th>Purple</th>
-                                <th>Maroon</th>
+                                <th class="green">Green</th>
+                                <th class="yellow">Yellow</th>
+                                <th class ="orange">Orange</th>
+                                <th class ="red">Red</th>
+                                <th class = "purple">Purple</th>
+                                <th class = "maroon">Maroon</th>
                             </tr>
                             <tr>
                                 <td>pm10 (μg/m3)</td>
