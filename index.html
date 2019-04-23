@@ -69,24 +69,13 @@
                 font-size: 1rem;  
             }
 
-            .green{
-                background-color: rgb(0, 228, 0, .6);
-            }
-            .yellow{
-                background-color: rgb(255, 255, 0, .6);
-            }
-            .orange{
-                background-color: rgb(255, 126, 0, .6);
-            }
-            .red{
-                background-color: rgb(255, 0, 0, .6);
-            }
-            .purple{
-                background-color: rgb(143, 63, 151 .6);
-            }
-            .maroon{
-                background-color: rgb(126, 0, 35, .6);
-            }
+            .green  {background-color: rgb(0, 228, 0, .6);}
+            .maroon {background-color: rgb(126, 0, 35, .6);}
+            .orange {background-color: rgb(255, 126, 0, .6);}
+            .purple {background-color: rgb(143, 63, 151, .6);}
+            .red    {background-color: rgb(255, 0, 0, .6);}
+            .yellow {background-color: rgb(255, 255, 0, .6);}
+            ul {clear: left;}
         </style>
 		<title>AQ WebApp</title>
 	</head>
@@ -107,20 +96,20 @@
                     <span>Look Up City: </span> 
                     <input type="text" v-on:change="cityLookup" v-model="city">
                     <button id="FSButton1">Make This Map Full-Screen</button>
+            	    <div> Select Date Range </div>
+            	    <div style="display:inline">Starting Date</div>
+            	    <input type="date" v-model="startDate1" :min="earliestDate" :max="latestDate"></input>
+            	    <div style="display:inline">Ending Date</div>
+            	    <input type="date" v-model="endDate1" :min="earliestDate" :max="latestDate"></input>
+                    <button id="filter1" onclick=>Filter</button>
 	            </div>
         	    <div id="mapid" class="column" ></div>
         	    <div class="labeling"> 
             	    <div>All units in µg/m³</div>
-            	    <div> Select Date Range </div>
-            	    <div>Starting Date</div>
-            	    <input type="date" v-model="startDate1" :min="earliestDate" :max="latestDate"></input>
-            	    <div>Ending Date</div>
-            	    <input type="date" v-model="endDate1" :min="earliestDate" :max="latestDate"></input>
-                    <button id="filter1" onclick=>Filter</button>
         	    </div>
                 <table>
                     <tr>
-                        <th colspan="5" align="center">Filters</th>
+                        <th colspan="6" align="center">Filters</th>
                     </tr>
                     <tr>
                         <th>pm10</th>
@@ -128,6 +117,7 @@
                         <th>o3</th>
                         <th>pm25</th>
                         <th>no2</th>
+<!-- NEW -->                        <th>co</th>
                     </tr>
                     <tr>
                         <td><button id="filterpm10">Remove PM10</td>
@@ -135,23 +125,28 @@
                         <td><button id="filtero3">Remove O3</td>
                         <td><button id="filterpm25">Remove PM25</button></td>
                         <td><button id="filterno2">Remove NO2</button></td>
+<!-- NEW -->                        <td><button id="filterco">Remove CO</button></td>
 
                     </tr>
                     <tr>
-                        <th colspan="5">Logical Filters</th>
+                        <th colspan="6">Logical Filters</th>
                     <tr>
-                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+<!-- NEW -->                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                     </tr>
                     <tr>
-                        <td colspan="5"><button id="filterInput">Filter With Input</button></td>
+                        <td colspan="6"><button id="filterInput">Filter With Input</button></td>
                     </tr>
 
                 </table>
         	    <table>
+        	        <tr>
+        	            <th colspan="7">Averages</th>
+        	        </tr>
         	        <tr>
             	        <th>Location</th>
             	        <th>pm10</th>
@@ -159,6 +154,7 @@
             	        <th>o3</th>
             	        <th>pm25</th>
             	        <th>no2</th>
+<!-- NEW -->            	        <th>co</th>
         	        </tr>
         	        <tr v-for="average in averages">
         	            <td>{{ average.measurement.location }}</td>
@@ -167,10 +163,14 @@
         	            <td>{{ (100 * average.measurement.o3 / average.measurement.o3Count) | round2 }}</td>
         	            <td>{{ (100 * average.measurement.pm25 / average.measurement.pm25Count) | round2 }}</td>
         	            <td>{{ (100 * average.measurement.no2 / average.measurement.no2Count) | round2 }}</td>
+<!-- NEW -->        	            <td>{{ (100 * average.measurement.co / average.measurement.coCount) | round2 }}</td>
     	            </tr>
         	    
         	    </table>
         	    <table align="center">
+        	        <tr>
+        	            <th colspan="10">Individual Measurements</th>
+        	        </tr>
         	        <tr>
             	        <th>Location</th>
             	        <th>Parameter</th>
@@ -181,6 +181,7 @@
             	        <th id="o3">o3</th>
             	        <th id="pm25">pm25</th>
             	        <th id="no2">no2</th>
+<!-- NEW -->            	        <th id="co">co</th>
         	        </tr>
         	        <tr v-for="measure in measures"
                         v-bind:class="{
@@ -188,10 +189,11 @@
                             so2: measure.measurement.parameter === 'so2',
                             o3: measure.measurement.parameter === 'o3',
                             pm25: measure.measurement.parameter === 'pm25',
-                            no2: measure.measurement.parameter === 'no2'
+                            no2: measure.measurement.parameter === 'no2',
+                            co: measure.measurement.parameter === 'co'
                         }">
         	            <td>{{ measure.measurement.location }}</td>
-        	            <td>{{ measure.measurement.parameter }}</td>
+        	            <td>{{ measure.measurement.unit }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
         	            <td v-bind:class="{
                             green: measure.measurement.safety === 'green',
@@ -207,6 +209,7 @@
         	            <td>{{ measure.measurement.o3 }}</td>
         	            <td>{{ measure.measurement.pm25 }}</td>
         	            <td>{{ measure.measurement.no2 }}</td>
+<!-- NEW -->        	            <td>{{ measure.measurement.co }}</td>
     	            </tr>
         	    </table>
             </div>
@@ -221,17 +224,20 @@
                     <span>Look Up City: </span> 
                     <input type="text" v-on:change="cityLookup2" v-model="city2">
                     <button id="FSButton2">Make This Map Full-Screen</button>
+            	    <div> Select Date Range </div>
+            	    <div style="display:inline">Starting Date</div>
+            	    <input type="date" v-model="startDate2" :min="earliestDate" :max="latestDate"></input>
+            	    <div style="display:inline">Ending Date</div>
+            	    <input type="date" v-model="endDate2" :min="earliestDate" :max="latestDate"></input>
 	            </div>
         	    <div id="mapid2" class="column"></div>
         	    <div class="labeling"> 
             	    <div>All units in µg/m³</div>
-            	    <div> Select Date Range </div>
-            	    <div>Starting Date</div>
-            	    <input type="date" v-model="startDate2" :min="earliestDate" :max="latestDate"></input>
-            	    <div>Ending Date</div>
-            	    <input type="date" v-model="endDate2" :min="earliestDate" :max="latestDate"></input>
         	    </div>
         	    <table>
+        	        <tr>
+        	            <th colspan="7">Averages</th>
+        	        </tr>
         	        <tr>
             	        <th>Location</th>
             	        <th>pm10</th>
@@ -239,6 +245,7 @@
             	        <th>o3</th>
             	        <th>pm25</th>
             	        <th>no2</th>
+<!-- NEW -->            	        <th>co</th>
         	        </tr>
         	        <tr v-for="average2 in average2s">
         	            <td>{{ average2.measurement.location }}</td>
@@ -247,10 +254,15 @@
         	            <td>{{ (100 * average2.measurement.o3 / average2.measurement.o3Count) | round2 }}</td>
         	            <td>{{ (100 * average2.measurement.pm25 / average2.measurement.pm25Count) | round2 }}</td>
         	            <td>{{ (100 * average2.measurement.no2 / average2.measurement.no2Count) | round2 }}</td>
+<!-- NEW -->        	            <td>{{ (100 * average2.measurement.co / average2.measurement.coCount) | round2 }}</td>
+
     	            </tr>
         	    
         	    </table>
         	    <table align="center">
+        	        <tr>
+        	            <th colspan="10">Individual Measurements</th>
+        	        </tr>
         	        <tr>
             	        <th>Location</th>
             	        <th>Parameter</th>
@@ -261,6 +273,7 @@
             	        <th>o3</th>
             	        <th>pm25</th>
             	        <th>no2</th>
+<!-- NEW -->            	        <th>co</th>
         	        </tr>
         	        <tr v-for="measure2 in measure2s">
         	            <td>{{ measure2.measurement.location }}</td>
@@ -279,6 +292,8 @@
         	            <td>{{ measure2.measurement.o3 }}</td>
         	            <td>{{ measure2.measurement.pm25 }}</td>
         	            <td>{{ measure2.measurement.no2 }}</td>
+<!-- NEW -->        	            <td>{{ measure2.measurement.co }}</td>
+
     	            </tr>
         	    </table>
     	    </div>
@@ -288,70 +303,25 @@
 		<div>
 			<h4> To Do: </h4>
 <ul>
-    <li> Request URL Build out</li>
-        <ul>
-            <li> startDate </li>
-            <li> endDate </li>
-            <li> limit = 10000 </li>
-        </ul>
     <li> UI Filtering </li>
+        <ul>
+            <li>Does 'Filter With Input' Button do anything? </li>
+        </ul>
     <li> Heatmap </li>
     <li> Colors & Legend </li> 
         <ul>
-            <li>v-if entrys with the condition</li>
+            <li>CO</li>
+            <li>Move from compound condition on value col to individual conditions for each param column</li>
         </ul>
+    <li> Clean up </li>
+        <ul>
+            <li> Delete Project Description </li>
+            <li> Delete Value & Parameter Columns </li>
+        </ul>
+    <li>PPM/PPB to microgram </li>
 </ul>
-			<p>For this project, you will create a single page application about air quality. You will use at least 2 external APIs to retrieve data from (Leaflet and the Open AQ Platform). Your application should be interactive, responsive, and allow a user to investigate air quality from various geographical regions. This project will also incorporate Vue JS as a framework to make building the app simpler. You will also create a second web page - "About the project", which will document your team, your development process, and demo the final application with interesting findings. For this project, you are free to use other JavaScript or CSS libraries as you see fit.</p>
-<p>About the Data Sets
-Leaflet:
-The Leaflet API allows you to render interactive maps in your web page as well as overlay data on top of the map. The map can be modified either by user interaction or by JavaScript commands.
-</p>
-
-<p>Open AQ Platform:
-The Open AQ Platform maintains a rolling 90 day historical data set of air quality measures (i.e. everything from today back until 90 days ago). The data set includes information about locations where measurements exist (and how many measurements were taken), measurements of different particles in the air (carbon monoxide, sulfur dioxide, etc.), and timestamps for when measurements were taken.
-</p>
-
-<p>To earn 55/75 points (grade: C)</p>
-
-<p>
-    <ul>
-        <li>Show a 2 independent maps (side-by-side) using the Leaflet API</li>
-        <ul>
-		<li><s>Pan and zoom available with mouse click-and-drag and scroll wheel interaction</li> 
-            <li>Have an input box for a user to type a location (lat/long coordinates)</li>
-            <ul>
-                <li>Map should update when location is entered</li>
-                <li>Input box text should update with new location (lat/long coordinates) when map is panned</s></li>
-            </ul>       
-            <li>Get air quality measurements from the Open AQ Platform for the past 30 days</li>
-            <ul>
-                <li><s>Average measurements of the same particle taken at the same location</li>
-                <li>Only retrieve data from locations shown on the map (account for both center and zoom level)</li>
-                <ul><li>Open AQ Platform accepts requests with a lat/long center and a radius. HINT: get lat/long coordinates for the NW and SE corners of the map, calculate the distance between them (haversine formula we did in class), and divide by 2 for the radius.</li></ul>
-                <li>Draw markers on the map for each location their is at least one measurement</li>
-                <ul><li>Create a popup with actual measurement averages when hovering over a marker</li></ul>
-            </ul>
-        </ul>
-        <li>Populate a table for each map with air quality measurements (from the Open AQ Platform API)</li>
-        <ul>
-            <li>Table should automatically update data based on location shown in map</li>
-            <ul><li>It is OK to display all results in the table even though the circle of retrieved data will not exactly match the rectangular map</li></ul>
-            <li>Table should show all measurements, not just the averages</li>
-        </ul>
-    </ul>
-        NOTE: it is best to trigger updates at the end of user interaction. Otherwise, continuous requests will be sent and could flood the Open AQ Platform servers, which would slow down your app. A good idea would be to trigger an update after a 200ms timeout with no user activity (pan / zoom).</s>
-</p>
-
             <p>4 additional points for each item completed on the list below
                 <ul>
-                    <li>Create UI controls to filter data per map</li>
-                    <ul>
-                        <li>Filter based on particle type</li>
-                        <li>Filter based on measurement values for each particle type (e.g. only show co > 1.3, ammonia > 72.9, ...)</li>
-                        <li>Allow different historical data to be retrieved (select a date/time range within the last 90 days)</li>
-                    </ul>
-                    <li><s>Use the Nominatim API (https://wiki.openstreetmap.org/wiki/Nominatim to search via place name in addition to lat/long coordinates</li>
-                    <ul><li>Also update search box location to location name when panning the map</s></li></ul>
                     <li>Style the background color of particle values in the table so they match the Air Quality Index from the EPA</li>
                     <ul>
                         <li>https://airnowtest.epa.gov/sites/default/files/2018-09/aqi-technical-assistance-document-sept-2018_0.pdf (colors - page 2, values - page 4)</li>
@@ -362,10 +332,10 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                                 <th>Particle</th>
                                 <th class="green">Green</th>
                                 <th class="yellow">Yellow</th>
-                                <th class ="orange">Orange</th>
-                                <th class ="red">Red</th>
-                                <th class = "purple">Purple</th>
-                                <th class = "maroon">Maroon</th>
+                                <th class="orange">Orange</th>
+                                <th class="red">Red</th>
+                                <th class="purple">Purple</th>
+                                <th class="maroon">Maroon</th>
                             </tr>
                             <tr>
                                 <td>pm10 (μg/m3)</td>
@@ -411,6 +381,15 @@ The Open AQ Platform maintains a rolling 90 day historical data set of air quali
                                 <td>1220.12</td>
                                 <td>2348.12</td>
                                 <td>Greater</td>
+                            </tr>
+<!-- NEW -->                            <tr>
+                                <td>co (μg/m3)</td>
+                                <td>5.1</td>
+                                <td>10.9</td>
+                                <td>14.4</td>
+                                <td>17.8</td>
+                                <td>35.2</td>
+                                <td>Greater</td>                                
                             </tr>
                         </table>
                     </ul>

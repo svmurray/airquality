@@ -25,6 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
+            limit: 100,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -206,8 +207,8 @@ function myRound(value)
 function updateAirData(app, mapNum)
 {
     var url;
-    if (mapNum == 1) {url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&radius="+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude;}
-    else {url = "https://api.openaq.org/v1/measurements?limit=25&order_by=location&radius="+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2;}
+    if (mapNum == 1) {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude+"&date_from="+app.startDate1+"&date_to="+app.endDate1;}
+    else {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2+"&date_from="+app.startDate2+"&date_to="+app.endDate2;}
 
     axios
         .get(url)
@@ -280,6 +281,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
             hold[hold.length-1].measurement.o3 = '-';
             hold[hold.length-1].measurement.pm25 = '-';
             hold[hold.length-1].measurement.no2 = '-';
+            hold[hold.length-1].measurement.co = '-';
             switch (part)
             {
                 case "pm10":
@@ -296,6 +298,9 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     break;
                 case "no2":
                     hold[hold.length-1].measurement.no2 = meas[i].measurement.value;                    
+                    break;
+                case "co":
+                    hold[hold.length-1].measurement.co = meas[i].measurement.value;                    
                     break;
             }
         }
@@ -318,6 +323,10 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 case "no2":
                     hold[idx].measurement.no2 = meas[i].measurement.value;
                     break;
+                case "co":
+                    hold[idx].measurement.co = meas[i].measurement.value;
+                    break;
+
             }
         }
         if(!markDup)
@@ -328,11 +337,13 @@ function sortData(app, mapNum, hold, holdMark, meas)
             holdMark[holdMark.length-1].measurement.o3 = 0;
             holdMark[holdMark.length-1].measurement.pm25 = 0;
             holdMark[holdMark.length-1].measurement.no2 = 0;
+            holdMark[holdMark.length-1].measurement.co = 0;
             holdMark[holdMark.length-1].measurement.pm10Count = 0;
             holdMark[holdMark.length-1].measurement.so2Count = 0;
             holdMark[holdMark.length-1].measurement.o3Count = 0;
             holdMark[holdMark.length-1].measurement.pm25Count = 0;
             holdMark[holdMark.length-1].measurement.no2Count = 0;
+            holdMark[holdMark.length-1].measurement.coCount = 0;
             switch (part)
             {
                 case "pm10":
@@ -349,6 +360,9 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     break;
                 case "no2":
                     holdMark[holdMark.length-1].measurement.no2 = meas[i].measurement.value;                    
+                    break;
+                case "co":
+                    holdMark[holdMark.length-1].measurement.co = meas[i].measurement.value;                    
                     break;
             }
         }
@@ -375,6 +389,10 @@ function sortData(app, mapNum, hold, holdMark, meas)
                 case "no2":
                     holdMark[markIdx].measurement.no2 += meas[i].measurement.value;
                     holdMark[holdMark.length-1].measurement.no2Count++;
+                    break;
+                case "co":
+                    holdMark[markIdx].measurement.co += meas[i].measurement.value;
+                    holdMark[holdMark.length-1].measurement.coCount++;
                     break;
             }
         }
@@ -414,7 +432,8 @@ function addMarkers(app, mapNum){
                     "<tr><td>so2= "+myRound(100*app.averages[i].measurement.so2 / app.averages[i].measurement.so2Count)+"</td></tr>"+
                     "<tr><td>so3= "+myRound(100*app.averages[i].measurement.o3 / app.averages[i].measurement.o3Count)+"</td></tr>"+
                     "<tr><td>pm25= "+myRound(100*app.averages[i].measurement.pm25 / app.averages[i].measurement.pm25Count)+"</td></tr>"+
-                    "<tr><td>no3= "+myRound(100*app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
+                    "<tr><td>no2= "+myRound(100*app.averages[i].measurement.no2 / app.averages[i].measurement.no2Count)+"</td></tr>"+
+                    "<tr><td>co= "+myRound(100*app.averages[i].measurement.co / app.averages[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
             marker.on("mouseover", function(){marker.openPopup();});
@@ -436,7 +455,8 @@ function addMarkers(app, mapNum){
                     "<tr><td>so2= "+myRound(100*app.average2s[i].measurement.so2 / app.average2s[i].measurement.so2Count)+"</td></tr>"+
                     "<tr><td>so3= "+myRound(100*app.average2s[i].measurement.o3 / app.average2s[i].measurement.o3Count)+"</td></tr>"+
                     "<tr><td>pm25= "+myRound(100*app.average2s[i].measurement.pm25 / app.average2s[i].measurement.pm25Count)+"</td></tr>"+
-                    "<tr><td>no3= "+myRound(100*app.average2s[i].measurement.no2 / app.average2s[i].measurement.no2Count)+"</td></tr>"+
+                    "<tr><td>no2= "+myRound(100*app.average2s[i].measurement.no2 / app.average2s[i].measurement.no2Count)+"</td></tr>"+
+                    "<tr><td>co= "+myRound(100*app.average2s[i].measurement.co / app.average2s[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
             marker.on("mouseover", function(){marker.openPopup();});
@@ -506,8 +526,7 @@ function updateLatLong2(app)
     var url ="https://nominatim.openstreetmap.org/reverse?lat=" + app.latitude2 + "&lon=" + app.longitude2 + "&format=json&accept-language=en";
     axios
         .get(url)
-        .then(response => 
-        {
+        .then(response => {
             app.city2 = response.data.address.city;
             updateAirData(app, 2);
         })
@@ -531,24 +550,20 @@ function filterTable(logical, parameter, mapNum){
         console.log(parameter);
         $(document).ready(function(){
             $(parameter).hide();
-
         });
     }else{
-
     }
-
-
 }
 
 function setColor(app, mapNum){
     console.log("in set color");
+    
     if(mapNum ==2){
         var holder = app.measure2s;
     }else{
         var holder = app.measures;
     }
-        
-    for(var i = 0; i<app.measures.length;i++){
+    for(var i = 0; i<holder.length;i++){
     
         if(holder[i].measurement.parameter == "pm10"){
             
