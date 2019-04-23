@@ -524,9 +524,9 @@ function filterTable(logical, parameter, mapNum){
     if(logical === "no"){
         var parameter = parameter;
         if(mapNum == 2){
-            parameter = "#"+parameter+"2";
+            parameter = "."+parameter+"2";
         }else{
-            parameter = "#"+parameter;
+            parameter = "."+parameter;
         }
         console.log(parameter);
         $(document).ready(function(){

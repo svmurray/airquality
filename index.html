@@ -47,7 +47,7 @@
                 margin-bottom: 5vh;
             }
             table{
-               margin-top: 10px;
+               margin: 10px;
                
             }
             table, th, td, tr
@@ -70,22 +70,22 @@
             }
 
             .green{
-                background-color: rgb(3, 150, 30, .6);
+                background-color: rgb(0, 228, 0, .6);
             }
             .yellow{
-                background-color: rgb(219, 215, 0, .6);
+                background-color: rgb(255, 255, 0, .6);
             }
             .orange{
-                background-color: rgb(226, 113, 0, .6);
+                background-color: rgb(255, 126, 0, .6);
             }
             .red{
-                background-color: rgb(204, 4, 47, .6);
+                background-color: rgb(255, 0, 0, .6);
             }
             .purple{
-                background-color: rgb(96, 0, 214, .6);
+                background-color: rgb(143, 63, 151 .6);
             }
             .maroon{
-                background-color: rgb(124, 1, 1, .6);
+                background-color: rgb(126, 0, 35, .6);
             }
         </style>
 		<title>AQ WebApp</title>
@@ -140,11 +140,11 @@
                     <tr>
                         <th colspan="5">Logical Filters</th>
                     <tr>
-                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="15"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="10"></td>
                     </tr>
                     <tr>
                         <td colspan="5"><button id="filterInput">Filter With Input</button></td>
@@ -182,7 +182,14 @@
             	        <th id="pm25">pm25</th>
             	        <th id="no2">no2</th>
         	        </tr>
-        	        <tr v-for="measure in measures">
+        	        <tr v-for="measure in measures"
+                        v-bind:class="{
+                            pm10: measure.measurement.parameter === 'pm10',
+                            so2: measure.measurement.parameter === 'so2',
+                            o3: measure.measurement.parameter === 'o3',
+                            pm25: measure.measurement.parameter === 'pm25',
+                            no2: measure.measurement.parameter === 'no2'
+                        }">
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
@@ -195,12 +202,11 @@
                             maroon: measure.measurement.safety === 'maroon'
                         }">
                         {{ measure.measurement.value }}</td>
-        	            <td id="pm10">
-                            {{ measure.measurement.pm10}}</td>
-        	            <td id="so2">{{ measure.measurement.so2 }}</td>
-        	            <td id="o3">{{ measure.measurement.o3 }}</td>
-        	            <td id ="pm25">{{ measure.measurement.pm25 }}</td>
-        	            <td id="no2">{{ measure.measurement.no2 }}</td>
+        	            <td>{{ measure.measurement.pm10}}</td>
+        	            <td>{{ measure.measurement.so2 }}</td>
+        	            <td>{{ measure.measurement.o3 }}</td>
+        	            <td>{{ measure.measurement.pm25 }}</td>
+        	            <td>{{ measure.measurement.no2 }}</td>
     	            </tr>
         	    </table>
             </div>
