@@ -25,7 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 10000,
+            limit: 100,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -70,7 +70,7 @@ window.onload = function()
                         parameter: '',
                         value: '',
                         unit: '',
-                        saftey: ''
+                        safety: ''
                     }
                 }
             ], 
@@ -301,10 +301,13 @@ function updateAirData(app, mapNum)
                     for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
                     meas = app.measure2s;
                 }
+                convertData(app);
                 sortData(app, mapNum, [], [], meas);
                 getRadius(app, mapNum);
                 addMarkers(app, mapNum);
                 setColor(app, mapNum);
+                addBanner(app, mapNum);
+
 
             }
             else
@@ -655,6 +658,9 @@ function filterTable(logical, parameter, mapNum){
     }
 }
 
+function filterLogical(input, paramter, mapNum){
+
+}
 function setColor(app, mapNum){
     console.log("in set color");
     
@@ -740,8 +746,118 @@ function setColor(app, mapNum){
             }else{
                 holder[i].measurement.safety = "maroon";
             }
+        }else if(holder[i].measurement.parameter == "co"){
+            console.log("in co");
+            console.log(holder[i].measurement.value);
+        	if(holder[i].measurement.value <= 5.1){
+        		holder[i].measurement.safety = "green";
+        	}else if(holder[i].measurement.safety <= 10.9){
+        		holder[i].measurement.safety = "yellow";
+        	}
         }
     }
 }
 
+function addBanner(app, mapNum){
+	if(mapNum ==2){
+        var holder = app.measure2s;
+        var maxColor = '';
+    	for(var i=0; i<holder.length;i++){
+    		if(holder[i].measurement.safety=="maroon"){
+    			maxColor = "maroon";
+        	}else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){
+        		maxColor = "purple";
+        	}else if(holder[i].measurement.safety=="red" && maxColor != "purple"){
+        		maxColor = "red";
+        	}else if(holder[i].measurement.safety=="orange" && maxColor != "red"){
+        		maxColor = "orange";
+        	}else{
 
+        	}
+    
+    	if(maxColor != ''){
+    		var banner = "."+maxColor+"_"+"banner2";
+    		$(document).ready(function(){
+    		
+    		$(".maroon_banner2").hide();
+    		$(".purple_banner2").hide();
+    		$(".red_banner2").hide();
+    		$(".orange_banner2").hide();
+    		$(banner).show();
+    		});
+    	}else{
+    		$(".maroon_banner2").hide();
+    		$(".purple_banner2").hide();
+    		$(".red_banner2").hide();
+    		$(".orange_banner2").hide();
+    	}
+    	}
+    }else{
+    var holder = app.measures;
+    var maxColor = '';
+    console.log(app);
+    for(var i=0; i<holder.length;i++){
+    	if(holder[i].measurement.safety=="maroon"){
+    		maxColor = "maroon";
+        }else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){
+        	maxColor = "purple";
+        }else if(holder[i].measurement.safety=="red" && maxColor != "purple"){
+        	maxColor = "red";
+        }else if(holder[i].measurement.safety=="orange" && maxColor != "red"){
+        	maxColor = "orange";
+        }else{
+
+        }
+    
+    if(maxColor != ''){
+    	var banner = "."+maxColor+"_"+"banner";
+    	$(document).ready(function(){
+    		
+    		$(".maroon_banner").hide();
+    		$(".purple_banner").hide();
+    		$(".red_banner").hide();
+    		$(".orange_banner").hide();
+    		$(banner).show();
+
+    	})
+    }else{
+    	$(".maroon_banner").hide();
+    	$(".purple_banner").hide();
+    	$(".red_banner").hide();
+    	$(".orange_banner").hide();
+    }
+
+
+    }
+}
+}
+
+
+function convertData(app, mapNum){
+
+	if(mapNum == 2){
+		var holder = app.measure2s;
+	}else{
+		var holder = app.measures;
+	}
+
+	for(var i = 0; i<holder.length; i++){
+		console.log(holder[i].measurement.value);
+		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
+			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
+			holder[i].measurement.unit = "µg/m³";
+		
+		}else if(holder[i].measurement.parameter == "so2" && holder[i].measurement.unit == "ppm"){
+			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 64.06);
+			holder[i].measurement.unit = "µg/m³";
+		}else if(holder[i].measurement.parameter == "o3" && holder[i].measurement.unit == "ppm"){
+			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 48.00);
+			holder[i].measurement.unit = "µg/m³";
+		
+		}else if(holder[i].measurement.parameter == "no2" && holder[i].measurement.unit == "ppm"){
+			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 46.01);
+			holder[i].measurement.unit = "µg/m³";
+		}
+	}
+
+}
