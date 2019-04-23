@@ -218,55 +218,101 @@ function heatMap(app, part, mapNum)
     var relMax;
     var pointArray = [];
     var avgs;
+    var gradient;
     
-    if (mapNum ==1)
+    if (mapNum == 1)
     {
         map = app.map;
         maxes = app.map1Max;
-        avgs = app.averages;
+        avgs = app.measures;
     }
     else
     {
         map = app.map2;
         maxes = app.map2Max;
-        avgs = app.average2s;
+        avgs = app.measure2s;
     }
     switch (part)
     {
         case 'pm10':
-            relMax = maxes.pm10;
-            for (var i=0; i<avgs.length; i++)
-            {
-                if (avgs[i].measurement.pm10 > 0)
-                {
-                    pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm10]);
-                }
+            gradient = {
+                54: "green",
+                124: "yellow",
+                254: "orange", 
+                354: "red", 
+                424: "purple", 
+                500: "maroon"
             }
+            relMax = gradient.maroon;
+            
+            for (var i=0; i<avgs.length; i++) {if (avgs[i].measurement.pm10 > relMax) {console.log("fuck");}if (avgs[i] != undefined){if (avgs[i].measurement.pm10 > 0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm10/relMax]);}}}
             break;
         case 'pm25':
-            relMax = maxes.pm25;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.pm25]);}}
+            gradient = {
+                12: "green",
+                35.4: "yellow",
+                55.4: "orange", 
+                150.4: "red", 
+                250.4: "purple", 
+                300: "maroon"
+            }
+            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.pm25]);}}
             break;
         case 'so2':
-            relMax = maxes.so2;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.so2]);}}
+            gradient = {
+                91.7: "green",
+                196.5: "yellow",
+                484.7: "orange", 
+                796.5: "red", 
+                1582.5: "purple", 
+                3000: "maroon"
+            }        
+            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.so2]);}}
             break;
         case 'co':
-            relMax = maxes.co;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.co]);}}
+            gradient = {
+                5.1: "green",
+                10.9: "yellow",
+                14.4: "orange", 
+                17.8: "red", 
+                35.2: "purple", 
+                50: "maroon"
+            }
+            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.co]);}}
             break;
         case 'o3':
-            relMax = maxes.o3;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.o3]);}}
+            gradient = {
+                108: "green",
+                140: "yellow",
+                170: "orange", 
+                210: "red", 
+                400: "purple", 
+                600: "maroon"
+            }
+            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.o3]);}}
             break;
         case 'no2':
-            relMax = maxes.no2;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.latitude, avgs[i].measurement.no2]);}}
+            gradient = {
+                100: "green",
+                188: "yellow",
+                676.8: "orange", 
+                1220.12: "red", 
+                2348.12: "purple", 
+                3300: "maroon"
+            }
+            relMax = gradient.maroon;
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.no2]);}}
             break;
     }
-    var heat = L.heatLayer(pointArray).addTo(map);
+    var heat = L.heatLayer(pointArray, {'gradient':gradient                                                                                                                                                                                                                                                                                                                                                ).addTo(map);
     
     console.log("create heatmap for " + part + " on " + mapNum + " && " + relMax);
+    console.log(pointArray);
+    console.log(map);
 }
 
 function myRound(value) 
@@ -519,7 +565,6 @@ function addMarkers(app, mapNum){
     var i=0;
     var lat;
     var lon;
-    var marker[];
     var myMap;
     
     if (mapNum == 1)
@@ -527,9 +572,10 @@ function addMarkers(app, mapNum){
         myMap = app.map;
         for(var i = 0; i<app.averages.length; i++)
         {
+            var marker;
             lat = app.averages[i].measurement.coordinates.latitude;
             lon = app.averages[i].measurement.coordinates.longitude;
-            marker[i] = L.marker([lat, lon]).addTo(myMap)
+            marker = L.marker([lat, lon]).addTo(myMap)
                 .bindPopup(
                     "<table>"+
                     "<tr><th>"+app.averages[i].measurement.location+"</th>"+
@@ -541,8 +587,10 @@ function addMarkers(app, mapNum){
                     "<tr><td>co= "+myRound(100*app.averages[i].measurement.co / app.averages[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
-            marker[i].on("mouseover", function(){marker.openPopup();});
-            marker[i].on("mouseout", function(){marker.closePopup();});
+            marker.on("mouseover", function (e) { this.openPopup();});
+//            marker.on("mouseover", function(){marker.openPopup();});
+//            marker.on("mouseout", function(){marker.closePopup();});
+            marker.on("mouseout", function (e) { this.closePopup();});
         }
     }
     else
@@ -550,9 +598,10 @@ function addMarkers(app, mapNum){
         myMap = app.map2;
         for(i=0; i<app.average2s.length; i++)
         {
+            var marker;
             lat = app.average2s[i].measurement.coordinates.latitude;
             lon = app.average2s[i].measurement.coordinates.longitude;
-            marker[i] = L.marker([lat, lon]).addTo(myMap)
+            marker = L.marker([lat, lon]).addTo(myMap)
                 .bindPopup(
                     "<table>"+
                     "<tr><th>"+app.average2s[i].measurement.location+"</th>"+
@@ -564,8 +613,8 @@ function addMarkers(app, mapNum){
                     "<tr><td>co= "+myRound(100*app.average2s[i].measurement.co / app.average2s[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
-            marker[i].on("mouseover", function(){marker.openPopup();});
-            marker[i].on("mouseout", function(){marker.closePopup();});
+            marker.on("mouseover", function(){marker.openPopup();});
+            marker.on("mouseout", function(){marker.closePopup();});
         }
     }
 }
