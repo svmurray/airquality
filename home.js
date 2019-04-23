@@ -332,13 +332,17 @@ function sortData(app, mapNum, hold, holdMark, meas)
     {
         curr = meas[i].measurement;
         dup = false;
+        markDup = false;
         var part = curr.parameter;
         for (var j=0; j<hold.length; j++)
         {
-            if (curr.location == hold[j].measurement.location && !markDup)
+            if ( j<holdMark.length)
             {
-                markDup = true;
-                markIdx = j;
+                if (curr.location == holdMark[j].measurement.location && !markDup)
+                {
+                    markDup = true;
+                    markIdx = j;
+                }
             }
             if (markDup && curr.date.local == hold[j].measurement.date.local && !dup)
             {
@@ -418,6 +422,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
         }
         if(!markDup)
         {
+            console.log("new location");
             holdMark.push({measurement: curr})
             holdMark[holdMark.length-1].measurement.pm10 = 0;
             holdMark[holdMark.length-1].measurement.so2 = 0;
@@ -465,32 +470,32 @@ function sortData(app, mapNum, hold, holdMark, meas)
             {
                 case "pm10":
                     holdMark[markIdx].measurement.pm10 += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.pm10Count++;
+                    holdMark[markIdx].measurement.pm10Count++;
                     if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
                     holdMark[markIdx].measurement.so2 += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.so2Count++;
+                    holdMark[markIdx].measurement.so2Count++;
                     if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
                     holdMark[markIdx].measurement.o3 += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.o3Count++;
+                    holdMark[markIdx].measurement.o3Count++;
                     if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
                     holdMark[markIdx].measurement.pm25 += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.pm25Count++;
+                    holdMark[markIdx].measurement.pm25Count++;
                     if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
                     holdMark[markIdx].measurement.no2 += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.no2Count++;
+                    holdMark[markIdx].measurement.no2Count++;
                     if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
                     holdMark[markIdx].measurement.co += meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.coCount++;
+                    holdMark[markIdx].measurement.coCount++;
                     if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
@@ -514,7 +519,7 @@ function addMarkers(app, mapNum){
     var i=0;
     var lat;
     var lon;
-    var marker;
+    var marker[];
     var myMap;
     
     if (mapNum == 1)
@@ -524,7 +529,7 @@ function addMarkers(app, mapNum){
         {
             lat = app.averages[i].measurement.coordinates.latitude;
             lon = app.averages[i].measurement.coordinates.longitude;
-            marker = L.marker([lat, lon]).addTo(myMap)
+            marker[i] = L.marker([lat, lon]).addTo(myMap)
                 .bindPopup(
                     "<table>"+
                     "<tr><th>"+app.averages[i].measurement.location+"</th>"+
@@ -536,8 +541,8 @@ function addMarkers(app, mapNum){
                     "<tr><td>co= "+myRound(100*app.averages[i].measurement.co / app.averages[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
-            marker.on("mouseover", function(){marker.openPopup();});
-            marker.on("mouseout", function(){marker.closePopup();});
+            marker[i].on("mouseover", function(){marker.openPopup();});
+            marker[i].on("mouseout", function(){marker.closePopup();});
         }
     }
     else
@@ -547,7 +552,7 @@ function addMarkers(app, mapNum){
         {
             lat = app.average2s[i].measurement.coordinates.latitude;
             lon = app.average2s[i].measurement.coordinates.longitude;
-            marker = L.marker([lat, lon]).addTo(myMap)
+            marker[i] = L.marker([lat, lon]).addTo(myMap)
                 .bindPopup(
                     "<table>"+
                     "<tr><th>"+app.average2s[i].measurement.location+"</th>"+
@@ -559,8 +564,8 @@ function addMarkers(app, mapNum){
                     "<tr><td>co= "+myRound(100*app.average2s[i].measurement.co / app.average2s[i].measurement.coCount)+"</td></tr>"+
                     "</table>"
                 );
-            marker.on("mouseover", function(){marker.openPopup();});
-            marker.on("mouseout", function(){marker.closePopup();});
+            marker[i].on("mouseover", function(){marker.openPopup();});
+            marker[i].on("mouseout", function(){marker.closePopup();});
         }
     }
 }
