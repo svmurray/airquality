@@ -226,7 +226,7 @@ window.onload = function()
     console.log("onload finished");
     document.getElementById("filterInput").onclick = () => (getParams(app, 1));
     document.getElementById("filterInput2").onclick = () => (getParams(app, 2));
-	
+    document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1", app));
     document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1", app));
     document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1", app));
     document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1", app));
