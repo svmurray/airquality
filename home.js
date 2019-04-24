@@ -19,13 +19,17 @@ window.onload = function()
     yyyy = firstEnd.getFullYear();
     firstEnd = yyyy + '-' + mm + '-' + dd;
 
-    console.log(dateLimit);
+//    console.log(dateLimit);
     var app = new Vue(
     {
         el: "#vueApp", 
         data: 
         {
+<<<<<<< HEAD
             limit: 10000,
+=======
+            limit: 1000,
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -181,12 +185,12 @@ window.onload = function()
             },
             hm: function(part, num) {heatMap(this, part, num);}
         },
-        updated(event)
-        {
-            clearTimeout(this.timeout);
-            console.log("waiting for user input to stop...");
-            this.timeout = setTimeout(() => {console.log(event);}, 200);
-        },
+//        updated(event)
+//        {
+//            clearTimeout(this.timeout);
+//            console.log("waiting for user input to stop...");
+//              this.timeout = setTimeout(() => {console.log(event);}, 200);
+//        },
         filters: 
         {
             round2: function (value) 
@@ -196,9 +200,7 @@ window.onload = function()
             }
         }
     })
-    
     console.log(date);
-    
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -245,13 +247,26 @@ window.onload = function()
 
 function heatMap(app, part, mapNum)
 {
+    var avgs;
     var map;
     var maxes;
-    var relMax;
     var pointArray = [];
-    var avgs;
-    var gradient;
-    var maximum;
+    var relMax = {
+        pm10: 700,
+        pm25: 300,
+        so2: 3000,
+        co: 50,
+        o3: 600,
+        no2: 3300
+    };
+    var gradient = {
+        .01: 'green',
+        .15: 'yellow',
+        .3: 'orange',
+        .6: 'red',
+        .8: 'purple',
+        .95: 'maroon'
+    }
     
     if (mapNum == 1)
     {
@@ -268,103 +283,26 @@ function heatMap(app, part, mapNum)
     switch (part)
     {
         case 'pm10':
-            /*gradient = {
-                54: "green",
-                124: "yellow",
-                254: "orange", 
-                354: "red", 
-                424: "purple", 
-                500: "black"
-            }*/
-            gradient = {
-                .1: 'green',
-                .2: 'yellow',
-                .4: 'orange',
-                .6: 'red',
-                .8: 'purple',
-                .9: 'maroon'
-            }
-
-            relMax = 700;            
-            for (var i=0; i<avgs.length; i++) 
-            {
-                if (avgs[i] != undefined)
-                {
-                    if (avgs[i].measurement.pm10 > 0)
-                    {
-                        console.log(avgs[i].measurement.location);
-                        
-                        pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm10)/500]);
-                    }                                                                                                                                                               	
-                }
-            }
+            for (var i=0; i<avgs.length; i++) {{if (avgs[i].measurement.pm10 > 0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm10/avgs[i].measurement.pm10Count)/relMax.pm10]);}}}
             break;
-        case 'pm25':/*
-            gradient = {
-                12: "green",
-                35.4: "yellow",
-                55.4: "orange", 
-                150.4: "red", 
-                250.4: "purple", 
-                300: "maroon"
-            }*/
-//            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.pm25]);}}
+        case 'pm25':
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm25/avgs[i].measurement.pm25Count)/relMax.pm25]);}}
             break;
         case 'so2':
-            gradient = {
-                91.7: "green",
-                196.5: "yellow",
-                484.7: "orange", 
-                796.5: "red", 
-                1582.5: "purple", 
-                3000: "maroon"
-            }        
-//            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.so2]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.so2/avgs[i].measurement.so2Count)/relMax.so2]);}}
             break;
         case 'co':
-            gradient = {
-                5.1: "green",
-                10.9: "yellow",
-                14.4: "orange", 
-                17.8: "red", 
-                35.2: "purple", 
-                50: "maroon"
-            }
-//            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.co]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.coCount/avgs[i].measurement.coCount)/relMax.co]);}}
             break;
         case 'o3':
-            gradient = {
-                108: "green",
-                140: "yellow",
-                170: "orange", 
-                210: "red", 
-                400: "purple", 
-                600: "maroon"
-            }
-//            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.o3]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.o3/avgs[i].measurement.o3Count)/relMax.o3]);}}
             break;
         case 'no2':
-            gradient = {
-                100: "green",
-                188: "yellow",
-                676.8: "orange", 
-                1220.12: "red", 
-                2348.12: "purple", 
-                3300: "maroon"
-            }
-//            relMax = gradient.maroon;
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, avgs[i].measurement.no2]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
             break;
     }
-//    var heat = L.heatLayer(pointArray).addTo(map);
-    var heat = L.heatLayer(pointArray, {'gradient': gradient}).addTo(map);    
-//    console.log("create heatmap for " + part + " on " + mapNum + " && " + relMax);, 
-    console.log(pointArray);
-    console.log(map);
+    console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }).addTo(map);
 }
 
 function myRound(value) 
@@ -411,47 +349,45 @@ function updateAirData(app, mapNum)
                 addMarkers(app, mapNum);
                 setColor(app, mapNum);
                 addBanner(app, mapNum);
-
-
             }
             else
             {
                 if (mapNum == 1) {app.measures = [];}
                 else if(mapNum == 2){app.measure2s = [];}
-                else{console.log("something is very wrong");}
             }
         }) ;
 }
 
 function sortData(app, mapNum, hold, holdMark, meas)
 {
+    var curr;
     var dup = false;
     var idx = -1;
     var markDup = false;
     var markIdx = -1;
-    var curr;
     var maxes = app.map1Max;
-    
+
     if (mapNum ==2) {maxes = app.map2Max;}
-    
     console.log("sorting map " + mapNum + "...");
     for (var i=0; i< meas.length; i++)
     {
+        if (i%1000 == 0) {console.log(i);}
         curr = meas[i].measurement;
         dup = false;
         markDup = false;
         var part = curr.parameter;
         for (var j=0; j<hold.length; j++)
         {
-            if ( j<holdMark.length)
+            for (var k = 0; k<holdMark.length; k++)
             {
-                if (curr.location == holdMark[j].measurement.location && !markDup)
+                if (curr.location == holdMark[k].measurement.location && !markDup)
                 {
                     markDup = true;
-                    markIdx = j;
+                    markIdx = k;
+                    k = 10000;
                 }
             }
-            if (markDup && curr.date.local == hold[j].measurement.date.local && !dup)
+            if (!markDup && curr.location == hold[j].measurement.location && curr.date.local == hold[j].measurement.date.local && !dup)
             {
                 dup = true;
                 idx = j;
@@ -529,50 +465,50 @@ function sortData(app, mapNum, hold, holdMark, meas)
         }
         if(!markDup)
         {
-            console.log("new location");
+            var plsWorkIdx = holdMark.length;
             holdMark.push({measurement: curr})
-            holdMark[holdMark.length-1].measurement.pm10 = 0;
-            holdMark[holdMark.length-1].measurement.so2 = 0;
-            holdMark[holdMark.length-1].measurement.o3 = 0;
-            holdMark[holdMark.length-1].measurement.pm25 = 0;
-            holdMark[holdMark.length-1].measurement.no2 = 0;
-            holdMark[holdMark.length-1].measurement.co = 0;
-            holdMark[holdMark.length-1].measurement.pm10Count = 0;
-            holdMark[holdMark.length-1].measurement.so2Count = 0;
-            holdMark[holdMark.length-1].measurement.o3Count = 0;
-            holdMark[holdMark.length-1].measurement.pm25Count = 0;
-            holdMark[holdMark.length-1].measurement.no2Count = 0;
-            holdMark[holdMark.length-1].measurement.coCount = 0;
+            holdMark[plsWorkIdx].measurement.pm10 = 0;
+            holdMark[plsWorkIdx].measurement.so2 = 0;
+            holdMark[plsWorkIdx].measurement.o3 = 0;
+            holdMark[plsWorkIdx].measurement.pm25 = 0;
+            holdMark[plsWorkIdx].measurement.no2 = 0;
+            holdMark[plsWorkIdx].measurement.co = 0;
+            holdMark[plsWorkIdx].measurement.pm10Count = 0;
+            holdMark[plsWorkIdx].measurement.so2Count = 0;
+            holdMark[plsWorkIdx].measurement.o3Count = 0;
+            holdMark[plsWorkIdx].measurement.pm25Count = 0;
+            holdMark[plsWorkIdx].measurement.no2Count = 0;
+            holdMark[plsWorkIdx].measurement.coCount = 0;
             switch (part)
             {
                 case "pm10":
-                    holdMark[holdMark.length-1].measurement.pm10 = meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.pm10Count++;
+                    holdMark[plsWorkIdx].measurement.pm10 = meas[i].measurement.value;
+                    holdMark[plsWorkIdx].measurement.pm10Count++;
                     if (maxes.pm10 < meas[i].measurement.value) {maxes.pm10 = meas[i].measurement.value;}
                     break;
                 case "so2":
-                    holdMark[holdMark.length-1].measurement.so2 = meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.so2Count++;
+                    holdMark[plsWorkIdx].measurement.so2 = meas[i].measurement.value;
+                    holdMark[plsWorkIdx].measurement.so2Count++;
                     if (maxes.so2 < meas[i].measurement.value) {maxes.so2 = meas[i].measurement.value;}
                     break;
                 case "o3":
-                    holdMark[holdMark.length-1].measurement.o3 = meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.o3Count++;
+                    holdMark[plsWorkIdx].measurement.o3 = meas[i].measurement.value;
+                    holdMark[plsWorkIdx].measurement.o3Count++;
                     if (maxes.o3 < meas[i].measurement.value) {maxes.o3 = meas[i].measurement.value;}
                     break;
                 case "pm25":
-                    holdMark[holdMark.length-1].measurement.pm25 = meas[i].measurement.value;
-                    holdMark[holdMark.length-1].measurement.pm25Count++;
+                    holdMark[plsWorkIdx].measurement.pm25 = meas[i].measurement.value;
+                    holdMark[plsWorkIdx].measurement.pm25Count++;
                     if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
-                    holdMark[holdMark.length-1].measurement.no2 = meas[i].measurement.value;                    
-                    holdMark[holdMark.length-1].measurement.no2Count++;
+                    holdMark[plsWorkIdx].measurement.no2 = meas[i].measurement.value;                    
+                    holdMark[plsWorkIdx].measurement.no2Count++;
                     if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
                 case "co":
-                    holdMark[holdMark.length-1].measurement.co = meas[i].measurement.value;                    
-                    holdMark[holdMark.length-1].measurement.coCount++;
+                    holdMark[plsWorkIdx].measurement.co = meas[i].measurement.value;                    
+                    holdMark[plsWorkIdx].measurement.coCount++;
                     if (maxes.co < meas[i].measurement.value) {maxes.co = meas[i].measurement.value;}
                     break;
             }
@@ -625,7 +561,6 @@ function sortData(app, mapNum, hold, holdMark, meas)
         app.average2s = holdMark;
         app.measure2s = hold;
     }
-    console.log(holdMark);
 }
 
 function addMarkers(app, mapNum){
@@ -633,6 +568,8 @@ function addMarkers(app, mapNum){
     var lat;
     var lon;
     var myMap;
+    
+    console.log("adding markers...");
     
     if (mapNum == 1)
     {
@@ -655,8 +592,6 @@ function addMarkers(app, mapNum){
                     "</table>"
                 );
             marker.on("mouseover", function (e) { this.openPopup();});
-//            marker.on("mouseover", function(){marker.openPopup();});
-//            marker.on("mouseout", function(){marker.closePopup();});
             marker.on("mouseout", function (e) { this.closePopup();});
         }
     }
@@ -704,7 +639,6 @@ function makeFullScreen(buttonId)
         mapid = mapid + "2";
     }
     else {divId = "left" + divId;}
-    
     var map = document.getElementById(mapid);
     var el = document.getElementById(divId);
     if (button.innerHTML.indexOf("Full") >= 0)
@@ -763,6 +697,7 @@ function iterationCopy(input)
 function filterTable(logical, parameter, mapNum, app){
 
     if(logical === "no"){
+<<<<<<< HEAD
     	
     	
         if(mapNum == 2){
@@ -792,6 +727,16 @@ function filterLogical(input, paramter, mapNum){
         var parameter = "."+parameter;
         var holder = app.measures;
     }
+=======
+        var parameter = parameter;
+        if(mapNum == 2){parameter = "."+parameter+"2";}
+        else{parameter = "."+parameter;}
+//        console.log(parameter);
+        $(document).ready(function(){$(parameter).hide();});
+    }
+    else{}
+}
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
 
      try{
      	for(var i = 0; i<holder.length; i++){
@@ -820,8 +765,13 @@ function setColor(app, mapNum){
    
    
     for(var i = 0; i<holder.length;i++){
+<<<<<<< HEAD
    			var updates = {}; 	
        
+=======
+        if (i%100 == 0) {console.log(i);}           
+        if(holder[i].measurement.parameter == "pm10"){
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
             
             if(holder[i].measurement.pm10 <= 54){
                 updates.pm10 = "green";
@@ -893,6 +843,7 @@ function setColor(app, mapNum){
             }else if(holder[i].measurement.no2 > 2348.12){
                 updates.no2 = "maroon";
             }
+<<<<<<< HEAD
 
             if(holder[i].measurement.co <= 5.1){
                 updates.co  = "green";
@@ -917,11 +868,22 @@ function setColor(app, mapNum){
 
 
         colors.push({safety : updates})    
+=======
+        }else if(holder[i].measurement.parameter == "co"){
+//            console.log("in co");
+//            console.log(holder[i].measurement.value);
+        	if(holder[i].measurement.value <= 5.1){
+        		holder[i].measurement.safety = "green";
+        	}else if(holder[i].measurement.safety <= 10.9){
+        		holder[i].measurement.safety = "yellow";
+        	}
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
         }
     
     }
 
 
+<<<<<<< HEAD
 function addBanner(app, mapNum){
 	if(mapNum ==2){
         var holder = app.colors2;
@@ -990,36 +952,99 @@ function addBanner(app, mapNum){
     	$(".purple_banner").hide();
     	$(".red_banner").hide();
     	$(".orange_banner").hide();
+=======
+function addBanner(app, mapNum)
+{
+	if(mapNum ==2)
+	{
+        var holder = app.measure2s;
+        var maxColor = '';
+    	for(var i=0; i<holder.length;i++)
+    	{
+    		if(holder[i].measurement.safety=="maroon") {maxColor = "maroon";}
+        	else if(holder[i].measurement.safety=="purple" && maxColor != "maroon") {maxColor = "purple";}
+        	else if(holder[i].measurement.safety=="red" && maxColor != "purple"){maxColor = "red";}
+    		else if(holder[i].measurement.safety=="orange" && maxColor != "red"){maxColor = "orange";}
+    		else{}
+        	if(maxColor != '')
+        	{
+        		var banner = "."+maxColor+"_"+"banner2";
+        		$(document).ready(function()
+        		{    		
+            		$(".maroon_banner2").hide();
+            		$(".purple_banner2").hide();
+            		$(".red_banner2").hide();
+            		$(".orange_banner2").hide();
+            		$(banner).show();
+	        	});
+        	}
+        	else
+        	{
+        		$(".maroon_banner2").hide();
+        		$(".purple_banner2").hide();
+        		$(".red_banner2").hide();
+        		$(".orange_banner2").hide();
+        	}
+    	}
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
     }
-
-
+    else
+    {
+        var holder = app.measures;
+        var maxColor = '';
+//        console.log(app);
+        for(var i=0; i<holder.length;i++)
+        {
+        	if(holder[i].measurement.safety=="maroon"){maxColor = "maroon";}
+            else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){maxColor = "purple";}
+        	else if(holder[i].measurement.safety=="red" && maxColor != "purple"){maxColor = "red";}
+        	else if(holder[i].measurement.safety=="orange" && maxColor != "red"){maxColor = "orange";}
+        	else{}    
+            if(maxColor != '')
+            {
+            	var banner = "."+maxColor+"_"+"banner";
+            	$(document).ready(function()
+            	{	
+            		$(".maroon_banner").hide();
+            		$(".purple_banner").hide();
+            		$(".red_banner").hide();
+            		$(".orange_banner").hide();
+            		$(banner).show();
+            	})
+            }
+            else
+            {
+            	$(".maroon_banner").hide();
+            	$(".purple_banner").hide();
+            	$(".red_banner").hide();
+            	$(".orange_banner").hide();
+            }
+        }
     }
-}
 }
 
 
 function convertData(app, mapNum){
-
-	if(mapNum == 2){
-		var holder = app.measure2s;
-	}else{
-		var holder = app.measures;
-	}
-
+	if(mapNum == 2){var holder = app.measure2s;}
+	else{var holder = app.measures;}
 	for(var i = 0; i<holder.length; i++){
+<<<<<<< HEAD
 		
+=======
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
 		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
 			holder[i].measurement.unit = "µg/m³";
-		
-		}else if(holder[i].measurement.parameter == "so2" && holder[i].measurement.unit == "ppm"){
+		}
+		else if(holder[i].measurement.parameter == "so2" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 64.06);
 			holder[i].measurement.unit = "µg/m³";
-		}else if(holder[i].measurement.parameter == "o3" && holder[i].measurement.unit == "ppm"){
+		}
+		else if(holder[i].measurement.parameter == "o3" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 48.00);
 			holder[i].measurement.unit = "µg/m³";
-		
-		}else if(holder[i].measurement.parameter == "no2" && holder[i].measurement.unit == "ppm"){
+		}
+		else if(holder[i].measurement.parameter == "no2" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 46.01);
 			holder[i].measurement.unit = "µg/m³";
 		}

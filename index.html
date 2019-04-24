@@ -144,7 +144,7 @@
                         <th>o3</th>
                         <th>pm25</th>
                         <th>no2</th>
-<!-- NEW -->                        <th>co</th>
+                        <th>co</th>
                     </tr>
                     <tr>
                         <td><button id="filterpm10">Remove PM10</td>
@@ -152,8 +152,7 @@
                         <td><button id="filtero3">Remove O3</td>
                         <td><button id="filterpm25">Remove PM25</button></td>
                         <td><button id="filterno2">Remove NO2</button></td>
-<!-- NEW -->            <td><button id="filterco">Remove CO</button></td>
-
+                        <td><button id="filterco">Remove CO</button></td>
                     </tr>
                     <tr>
                         <th colspan="6">Logical Filters</th>
@@ -164,7 +163,7 @@
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-<!-- NEW -->            <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                     </tr>
                     <tr>
                         <td colspan="6"><button id="filterInput">Filter With Input</button></td>
@@ -178,7 +177,7 @@
                         <td><button id="hmo3" v-on:click="hm('o3', 1)">O3</td>
                         <td><button id="hmpm25" v-on:click="hm('pm25', 1)">PM25</button></td>
                         <td><button id="hmno2" v-on:click="hm('no2', 1)">NO2</button></td>
-<!-- NEW -->                        <td><button id="filterco" v-on:click="hm('co', 1)">CO</button></td>
+                        <td><button id="filterco" v-on:click="hm('co', 1)">CO</button></td>
 
                     </tr>
 
@@ -194,49 +193,18 @@
             	        <th>o3</th>
             	        <th>pm25</th>
             	        <th>no2</th>
-<!-- NEW -->            	        <th>co</th>
+            	        <th>co</th>
         	        </tr>
         	        <tr v-for="average in averages">
         	            <td>{{ average.measurement.location }}</td>
         	            <td>{{ (100 * average.measurement.pm10 / average.measurement.pm10Count) | round2 }}</td>
-        	            <td>{{ average.measurement.pm10Count }}</td>
         	            <td>{{ (100 * average.measurement.so2 / average.measurement.so2Count) | round2 }}</td>
-        	            <td>{{ average.measurement.so2Count }}</td>
         	            <td>{{ (100 * average.measurement.o3 / average.measurement.o3Count) | round2 }}</td>
-        	            <td>{{ average.measurement.o3Count }}</td>
         	            <td>{{ (100 * average.measurement.pm25 / average.measurement.pm25Count) | round2 }}</td>
-        	            <td>{{ average.measurement.pm25Count }}</td>
         	            <td>{{ (100 * average.measurement.no2 / average.measurement.no2Count) | round2 }}</td>
-        	            <td>{{ average.measurement.no2Count }}</td>
-<!-- NEW -->        	            <td>{{ (100 * average.measurement.co / average.measurement.coCount) | round2 }}</td>
-<!-- NEW -->        	            <td>{{ average.measurement.coCount }}</td>
-    	            </tr>
-        	    
+        	            <td>{{ (100 * average.measurement.co / average.measurement.coCount) | round2 }}</td>
+    	            </tr>        	    
         	    </table>
-        	    <table>
-        	        <tr>
-        	            <th colspan="6">Max</th>
-        	        </tr>
-        	        <tr>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-<!-- NEW -->            	        <th>co</th>
-        	        </tr>
-        	        <tr>
-        	            <td>{{ map2Max.pm10 }}</td>
-        	            <td>{{ map2Max.so2 }}</td>
-        	            <td>{{ map2Max.o3 }}</td>
-        	            <td>{{ map2Max.pm25 }}</td>
-        	            <td>{{ map2Max.no2 }}</td>
-<!-- NEW -->        	            <td>{{ map2Max.co }}</td>
-
-    	            </tr>
-        	    
-        	    </table>
-
         	    <table align="center">
         	        <tr>
         	            <th colspan="10">Individual Measurements</th>
@@ -245,13 +213,12 @@
             	        <th>Location</th>
             	        <th>Parameter</th>
             	        <th>Local Time</th>
-            	        <th>Value</th>
             	        <th class = "pm10">pm10</th>
             	        <th class = "so2">so2</th>
             	        <th class ="o3">o3</th>
             	        <th class ="pm25">pm25</th>
             	        <th class ="no2">no2</th>
-<!-- NEW -->            <th class ="co">co</th>
+                        <th class ="co">co</th>
         	        </tr>
         	        <tr v-for="(measure, index) in measures"
                         v-bind:class="{
@@ -265,7 +232,10 @@
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
+<<<<<<< HEAD
         	            <td>{{ measure.measurement.value }}</td>
+=======
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
         	            <td class="pm10" v-bind:class="{
                             green: colors1[index].safety.pm10 === 'green',
                             yellow: colors1[index].safety.pm10 === 'yellow',
@@ -306,6 +276,7 @@
                             purple: colors1[index].safety.no2 === 'purple',
                             maroon: colors1[index].safety.no2 === 'maroon'
                         }">{{ measure.measurement.no2 }}</td>
+<<<<<<< HEAD
 <!-- NEW -->        	<td class="co" v-bind:class="{
                             green: colors1[index].safety.co === 'green',
                             yellow: colors1[index].safety.co === 'yellow',
@@ -313,6 +284,15 @@
                             red: colors1[index].safety.co === 'red',
                             purple: colors1[index].safety.co === 'purple',
                             maroon: colors1[index].safety.co === 'maroon'
+=======
+                    	<td class="co" v-bind:class="{
+                            green: measure.measurement.safety === 'green',
+                            yellow: measure.measurement.safety === 'yellow',
+                            orange: measure.measurement.safety === 'orange',
+                            red: measure.measurement.safety === 'red',
+                            purple: measure.measurement.safety  === 'purple',
+                            maroon: measure.measurement.safety === 'maroon'
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
                         }">{{ measure.measurement.co }}</td>
     	            </tr>
         	    </table>
@@ -387,7 +367,7 @@
             	        <th>o3</th>
             	        <th>pm25</th>
             	        <th>no2</th>
-<!-- NEW -->            	        <th>co</th>
+            	        <th>co</th>
         	        </tr>
         	        <tr v-for="average2 in average2s">
         	            <td>{{ average2.measurement.location }}</td>
@@ -396,33 +376,8 @@
         	            <td>{{ (100 * average2.measurement.o3 / average2.measurement.o3Count) | round2 }}</td>
         	            <td>{{ (100 * average2.measurement.pm25 / average2.measurement.pm25Count) | round2 }}</td>
         	            <td>{{ (100 * average2.measurement.no2 / average2.measurement.no2Count) | round2 }}</td>
-<!-- NEW -->        	            <td>{{ (100 * average2.measurement.co / average2.measurement.coCount) | round2 }}</td>
-
+        	            <td>{{ (100 * average2.measurement.co / average2.measurement.coCount) | round2 }}</td>
     	            </tr>
-        	    
-        	    </table>
-        	    <table>
-        	        <tr>
-        	            <th colspan="6">Max</th>
-        	        </tr>
-        	        <tr>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-<!-- NEW -->            	        <th>co</th>
-        	        </tr>
-        	        <tr>
-        	            <td>{{ map2Max.pm10 }}</td>
-        	            <td>{{ map2Max.so2 }}</td>
-        	            <td>{{ map2Max.o3 }}</td>
-        	            <td>{{ map2Max.pm25 }}</td>
-        	            <td>{{ map2Max.no2 }}</td>
-<!-- NEW -->        	            <td>{{ map2Max.co }}</td>
-
-    	            </tr>
-        	    
         	    </table>
         	    <table align="center">
         	        <tr>
@@ -432,6 +387,7 @@
             	        <th>Location</th>
             	        <th>Parameter</th>
             	        <th>Local Time</th>
+<<<<<<< HEAD
             	        <th>Value</th>
             	        <th class = "pm102">pm10</th>
                         <th class = "so22">so2</th>
@@ -501,125 +457,138 @@
                             purple: colors2[index].safety.co === 'purple',
                             maroon: colors2[index].safety.co === 'maroon'
                         }">{{ measure2.measurement.co }}</td>
+=======
+            	        <th>pm10</th>
+            	        <th>so2</th>
+            	        <th>o3</th>
+            	        <th>pm25</th>
+            	        <th>no2</th>
+            	        <th>co</th>
+        	        </tr>
+        	        <tr v-for="measure2 in measure2s">
+        	            <td>{{ measure2.measurement.location }}</td>
+        	            <td>{{ measure2.measurement.parameter }}</td>
+        	            <td>{{ measure2.measurement.date.local }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.pm10 }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.so2 }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.o3 }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.pm25 }}</td>
+        	            <td v-bind:class="{
+                            green: measure2.measurement.safety === 'green',
+                            yellow: measure2.measurement.safety === 'yellow',
+                            orange: measure2.measurement.safety === 'orange',
+                            red: measure2.measurement.safety === 'red',
+                            purple: measure2.measurement.safety  === 'purple',
+                            maroon: measure2.measurement.safety === 'maroon'}">
+                        {{ measure2.measurement.no2 }}</td>
+        	            <td>{{ measure2.measurement.co }}</td>
+>>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
 
     	            </tr>
         	    </table>
     	    </div>
-		</div>
-		
-	    
-		<div>
-			<h4> To Do: </h4>
-<ul>
-    <li> UI Filtering </li>
-        <ul>
-            <li>Does 'Filter With Input' Button do anything? </li>
-        </ul>
-    <li> Heatmap </li>
-    <li> Colors & Legend </li> 
-        <ul>
-            <li>CO</li>
-            <li>Move from compound condition on value col to individual conditions for each param column</li>
-        </ul>
-    <li> Clean up </li>
-        <ul>
-            <li> Delete Project Description </li>
-            <li> Delete Value & Parameter Columns </li>
-        </ul>
-    <li>PPM/PPB to microgram </li>
-</ul>
-            <p>4 additional points for each item completed on the list below
-                <ul>
-                    <li>Style the background color of particle values in the table so they match the Air Quality Index from the EPA</li>
-                    <ul>
-                        <li>https://airnowtest.epa.gov/sites/default/files/2018-09/aqi-technical-assistance-document-sept-2018_0.pdf (colors - page 2, values - page 4)</li>
-                        <li>If levels of one or more particle are "Unhealthy for Sensitive Groups" (orange) or higher, add a banner with the AQI descriptor (page 2)</li>
-                        <li>Also include a legend for the colors</li>
-                        <table>
-                            <tr>
-                                <th>Particle</th>
-                                <th class="green">Green</th>
-                                <th class="yellow">Yellow</th>
-                                <th class="orange">Orange</th>
-                                <th class="red">Red</th>
-                                <th class="purple">Purple</th>
-                                <th class="maroon">Maroon</th>
-                            </tr>
-                            <tr>
-                                <td>pm10 (μg/m3)</td>
-                                <td>54</td>
-                                <td>154</td>
-                                <td>254</td>
-                                <td>354</td>
-                                <td>424</td>
-                                <td>Greater</td>
-                            </tr>
-                            <tr>
-                                <td>so2 (μg/m3)</td>
-                                <td>91.7</td>
-                                <td>196.5</td>
-                                <td>484.7</td>
-                                <td>796.48</td>
-                                <td>1582.48</td>
-                                <td>Greater</td>
-                            </tr>
-                            <tr>
-                                <td>o3 (μg/m3)</td>
-                                <td>108.</td>
-                                <td>140.</td>
-                                <td>170.</td>
-                                <td>210.</td>
-                                <td>400.</td>
-                                <td>Greater</td>
-                            </tr>
-                            <tr>
-                                <td>pm25 (μg/m3)</td>
-                                <td>12</td>
-                                <td>35.4</td>
-                                <td>55.4</td>
-                                <td>150.4</td>
-                                <td>250.4</td>
-                                <td>Greater</td>
-                            </tr>
-                            <tr>
-                                <td>no2 (μg/m3)</td>
-                                <td>99.64</td>
-                                <td>188</td>
-                                <td>676.8</td>
-                                <td>1220.12</td>
-                                <td>2348.12</td>
-                                <td>Greater</td>
-                            </tr>
-<!-- NEW -->                            <tr>
-                                <td>co (μg/m3)</td>
-                                <td>5.1</td>
-                                <td>10.9</td>
-                                <td>14.4</td>
-                                <td>17.8</td>
-                                <td>35.2</td>
-                                <td>Greater</td>                                
-                            </tr>
-                            <tr>
-                                <td>Descriptors</td>
-                                <td>Good</td>
-                                <td>Moderate</td>
-                                <td>Unhealthy for senstive groups</td>
-                                <td>Unhealthy</td>
-                                <td>Very Unhealthy</td>
-                                <td>Hazardous</td>
-                            </tr>
-                        </table>
-                    </ul>
-                    <li>Add option for showing a heatmap visualization overlay on the map when only one particle type selected</li>
-                    <ul>
-                        <li>Color should represent the measurement value</li>
-                        <li>Include an easy-to-read legend</li>
-                        <li>Do NOT use a rainbow color scale</li>
-                        <li>See Leaflet plugin: https://github.com/Leaflet/Leaflet.heat</li>
-                    </ul>
-                    <li><s>Allow either map (along with the location input box) to go fullscreen</s></li>
-                </ul>
-            </p>
+            <table>
+                <tr>
+                    <th>Particle</th>
+                    <th class="green">Green</th>
+                    <th class="yellow">Yellow</th>
+                    <th class="orange">Orange</th>
+                    <th class="red">Red</th>
+                    <th class="purple">Purple</th>
+                    <th class="maroon">Maroon</th>
+                </tr>
+                <tr>
+                    <td>pm10 (μg/m3)</td>
+                    <td>54</td>
+                    <td>154</td>
+                    <td>254</td>
+                    <td>354</td>
+                    <td>424</td>
+                    <td>Greater</td>
+                </tr>
+                <tr>
+                    <td>so2 (μg/m3)</td>
+                    <td>91.7</td>
+                    <td>196.5</td>
+                    <td>484.7</td>
+                    <td>796.48</td>
+                    <td>1582.48</td>
+                    <td>Greater</td>
+                </tr>
+                <tr>
+                    <td>o3 (μg/m3)</td>
+                    <td>108.</td>
+                    <td>140.</td>
+                    <td>170.</td>
+                    <td>210.</td>
+                    <td>400.</td>
+                    <td>Greater</td>
+                </tr>
+                <tr>
+                    <td>pm25 (μg/m3)</td>
+                    <td>12</td>
+                    <td>35.4</td>
+                    <td>55.4</td>
+                    <td>150.4</td>
+                    <td>250.4</td>
+                    <td>Greater</td>
+                </tr>
+                <tr>
+                    <td>no2 (μg/m3)</td>
+                    <td>99.64</td>
+                    <td>188</td>
+                    <td>676.8</td>
+                    <td>1220.12</td>
+                    <td>2348.12</td>
+                    <td>Greater</td>
+                </tr>
+                <tr>
+                    <td>co (μg/m3)</td>
+                    <td>5.1</td>
+                    <td>10.9</td>
+                    <td>14.4</td>
+                    <td>17.8</td>
+                    <td>35.2</td>
+                    <td>Greater</td>                                
+                </tr>
+                <tr>
+                    <td>Descriptors</td>
+                    <td>Good</td>
+                    <td>Moderate</td>
+                    <td>Unhealthy for senstive groups</td>
+                    <td>Unhealthy</td>
+                    <td>Very Unhealthy</td>
+                    <td>Hazardous</td>
+                </tr>
+            </table>
 		</div>
 	</body>
 </html>
