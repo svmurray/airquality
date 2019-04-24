@@ -26,7 +26,7 @@ window.onload = function()
         data: 
         {
 
-            limit: 10000,
+            limit: 1000,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -263,7 +263,7 @@ function heatMap(app, part, mapNum)
         .6: 'red',
         .8: 'purple',
         .95: 'maroon'
-    }
+    };
     
     if (mapNum == 1)
     {
@@ -299,7 +299,7 @@ function heatMap(app, part, mapNum)
             break;
     }
     //console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-    var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }).addTo(map);
+    var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   }).addTo(map);
 }
 
 function myRound(value) 
@@ -718,22 +718,7 @@ function filterTable(logical, parameter, mapNum, app){
 function filterLogical(input, paramter, mapNum){
 
 
-        var parameter = parameter;
-        if(mapNum == 2){parameter = "."+parameter+"2";}
-        else{parameter = "."+parameter;}
-//        console.log(parameter);
-        $(document).ready(function(){$(parameter).hide();});
-    
-  
-
-
-     try{
-     	for(var i = 0; i<holder.length; i++){
-     		console.log(holder[i].measurement.parameter+input);
-     	}
-     }catch(err){
-
-     }
+        
 
 }
 
@@ -879,6 +864,7 @@ function addBanner(app, mapNum){
         	}else{
 
         	}
+        }
     
     	if(maxColor != ''){
     		var banner = "."+maxColor+"_"+"banner2";
@@ -897,11 +883,11 @@ function addBanner(app, mapNum){
     		$(".red_banner2").hide();
     		$(".orange_banner2").hide();
     	}
-    	}
+    	
     }else{
-    var holder = app.colors1;
-    var maxColor = '';
-    console.log(app);
+        var holder = app.colors1;
+        var maxColor = '';
+    
     for(var i=0; i<holder.length;i++){
     	if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
     			maxColor = "maroon";
@@ -914,6 +900,7 @@ function addBanner(app, mapNum){
         	}else{
 
         	}
+    }
     
     if(maxColor != ''){
     	var banner = "."+maxColor+"_"+"banner";
@@ -936,7 +923,7 @@ function addBanner(app, mapNum){
 
     }
 }
-}
+
 
 function convertData(app, mapNum){
 	if(mapNum == 2){var holder = app.measure2s;}
