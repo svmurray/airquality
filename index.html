@@ -179,31 +179,7 @@
                         <td><button id="hmno2" v-on:click="hm('no2', 1)">NO2</button></td>
                         <td><button id="filterco" v-on:click="hm('co', 1)">CO</button></td>
 
-                    </tr>
-
-                </table>
-        	    <table>
-        	        <tr>
-        	            <th colspan="7">Averages</th>
-        	        </tr>
-        	        <tr>
-            	        <th>Location</th>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-            	        <th>co</th>
-        	        </tr>
-        	        <tr v-for="average in averages">
-        	            <td>{{ average.measurement.location }}</td>
-        	            <td>{{ (100 * average.measurement.pm10 / average.measurement.pm10Count) | round2 }}</td>
-        	            <td>{{ (100 * average.measurement.so2 / average.measurement.so2Count) | round2 }}</td>
-        	            <td>{{ (100 * average.measurement.o3 / average.measurement.o3Count) | round2 }}</td>
-        	            <td>{{ (100 * average.measurement.pm25 / average.measurement.pm25Count) | round2 }}</td>
-        	            <td>{{ (100 * average.measurement.no2 / average.measurement.no2Count) | round2 }}</td>
-        	            <td>{{ (100 * average.measurement.co / average.measurement.coCount) | round2 }}</td>
-    	            </tr>        	    
+                    </tr>       	    
         	    </table>
         	    <table align="center">
         	        <tr>
@@ -316,7 +292,7 @@
                         <th>o3</th>
                         <th>pm25</th>
                         <th>no2</th>
-<!-- NEW -->                        <th>co</th>
+                        <th>co</th>
                     </tr>
                     <tr>
                         <td><button id="filter2pm10">Remove PM10</button></td>
@@ -324,7 +300,7 @@
                         <td><button id="filter2o3">Remove O3</td>
                         <td><button id="filter2pm25">Remove PM25</button></td>
                         <td><button id="filter2no2">Remove NO2</button></td>
-<!-- NEW -->            <td><button id="filter2co">Remove CO</button></td>
+                        <td><button id="filter2co">Remove CO</button></td>
 
                     </tr>
                     <tr>
@@ -341,27 +317,6 @@
                     <tr>
                         <td colspan="6"><button id="filterInput2">Filter With Input</button></td>
                     </tr>
-        	        <tr>
-        	            <th colspan="7">Averages</th>
-        	        </tr>
-        	        <tr>
-            	        <th>Location</th>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-            	        <th>co</th>
-        	        </tr>
-        	        <tr v-for="average2 in average2s">
-        	            <td>{{ average2.measurement.location }}</td>
-        	            <td>{{ (100 * average2.measurement.pm10 / average2.measurement.pm10Count) | round2 }}</td>
-        	            <td>{{ (100 * average2.measurement.so2 / average2.measurement.so2Count) | round2 }}</td>
-        	            <td>{{ (100 * average2.measurement.o3 / average2.measurement.o3Count) | round2 }}</td>
-        	            <td>{{ (100 * average2.measurement.pm25 / average2.measurement.pm25Count) | round2 }}</td>
-        	            <td>{{ (100 * average2.measurement.no2 / average2.measurement.no2Count) | round2 }}</td>
-        	            <td>{{ (100 * average2.measurement.co / average2.measurement.coCount) | round2 }}</td>
-    	            </tr>
         	    </table>
         	    <table align="center">
         	        <tr>
@@ -377,7 +332,7 @@
                         <th class ="no22">no2</th>
                     <th class ="co2">co</th>
                     </tr>
-                    <tr v-for="(measure2, index) in measures" v-bind:class="{
+                    <tr v-for="(measure2, index) in measure2s" v-bind:class="{
                             pm102: measure2.measurement.parameter === 'pm10',
                             so22: measure2.measurement.parameter === 'so2',
                             o32: measure2.measurement.parameter === 'o3',
