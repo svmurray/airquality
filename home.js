@@ -25,11 +25,8 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-<<<<<<< HEAD
+
             limit: 10000,
-=======
-            limit: 1000,
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -200,7 +197,7 @@ window.onload = function()
             }
         }
     })
-    console.log(date);
+    //console.log(date);
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -227,7 +224,7 @@ window.onload = function()
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
     updateAirData(app, 1);
     updateAirData(app, 2);
-    console.log("onload finished");
+    //console.log("onload finished");
     document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
     document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
     document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
@@ -301,7 +298,7 @@ function heatMap(app, part, mapNum)
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
             break;
     }
-    console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    //console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }).addTo(map);
 }
 
@@ -697,7 +694,7 @@ function iterationCopy(input)
 function filterTable(logical, parameter, mapNum, app){
 
     if(logical === "no"){
-<<<<<<< HEAD
+
     	
     	
         if(mapNum == 2){
@@ -720,23 +717,15 @@ function filterTable(logical, parameter, mapNum, app){
 }
 function filterLogical(input, paramter, mapNum){
 
-	if(mapNum == 2){
-        var parameter = "."+parameter+"2";
-        var holder = app.measure2s;
-    }else{
-        var parameter = "."+parameter;
-        var holder = app.measures;
-    }
-=======
+
         var parameter = parameter;
         if(mapNum == 2){parameter = "."+parameter+"2";}
         else{parameter = "."+parameter;}
 //        console.log(parameter);
         $(document).ready(function(){$(parameter).hide();});
-    }
-    else{}
-}
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+    
+  
+
 
      try{
      	for(var i = 0; i<holder.length; i++){
@@ -765,13 +754,11 @@ function setColor(app, mapNum){
    
    
     for(var i = 0; i<holder.length;i++){
-<<<<<<< HEAD
+
    			var updates = {}; 	
        
-=======
-        if (i%100 == 0) {console.log(i);}           
-        if(holder[i].measurement.parameter == "pm10"){
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+         
+
             
             if(holder[i].measurement.pm10 <= 54){
                 updates.pm10 = "green";
@@ -843,7 +830,7 @@ function setColor(app, mapNum){
             }else if(holder[i].measurement.no2 > 2348.12){
                 updates.no2 = "maroon";
             }
-<<<<<<< HEAD
+
 
             if(holder[i].measurement.co <= 5.1){
                 updates.co  = "green";
@@ -868,22 +855,14 @@ function setColor(app, mapNum){
 
 
         colors.push({safety : updates})    
-=======
-        }else if(holder[i].measurement.parameter == "co"){
-//            console.log("in co");
-//            console.log(holder[i].measurement.value);
-        	if(holder[i].measurement.value <= 5.1){
-        		holder[i].measurement.safety = "green";
-        	}else if(holder[i].measurement.safety <= 10.9){
-        		holder[i].measurement.safety = "yellow";
-        	}
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+
+
         }
     
     }
 
 
-<<<<<<< HEAD
+
 function addBanner(app, mapNum){
 	if(mapNum ==2){
         var holder = app.colors2;
@@ -952,86 +931,18 @@ function addBanner(app, mapNum){
     	$(".purple_banner").hide();
     	$(".red_banner").hide();
     	$(".orange_banner").hide();
-=======
-function addBanner(app, mapNum)
-{
-	if(mapNum ==2)
-	{
-        var holder = app.measure2s;
-        var maxColor = '';
-    	for(var i=0; i<holder.length;i++)
-    	{
-    		if(holder[i].measurement.safety=="maroon") {maxColor = "maroon";}
-        	else if(holder[i].measurement.safety=="purple" && maxColor != "maroon") {maxColor = "purple";}
-        	else if(holder[i].measurement.safety=="red" && maxColor != "purple"){maxColor = "red";}
-    		else if(holder[i].measurement.safety=="orange" && maxColor != "red"){maxColor = "orange";}
-    		else{}
-        	if(maxColor != '')
-        	{
-        		var banner = "."+maxColor+"_"+"banner2";
-        		$(document).ready(function()
-        		{    		
-            		$(".maroon_banner2").hide();
-            		$(".purple_banner2").hide();
-            		$(".red_banner2").hide();
-            		$(".orange_banner2").hide();
-            		$(banner).show();
-	        	});
-        	}
-        	else
-        	{
-        		$(".maroon_banner2").hide();
-        		$(".purple_banner2").hide();
-        		$(".red_banner2").hide();
-        		$(".orange_banner2").hide();
-        	}
-    	}
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+
     }
-    else
-    {
-        var holder = app.measures;
-        var maxColor = '';
-//        console.log(app);
-        for(var i=0; i<holder.length;i++)
-        {
-        	if(holder[i].measurement.safety=="maroon"){maxColor = "maroon";}
-            else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){maxColor = "purple";}
-        	else if(holder[i].measurement.safety=="red" && maxColor != "purple"){maxColor = "red";}
-        	else if(holder[i].measurement.safety=="orange" && maxColor != "red"){maxColor = "orange";}
-        	else{}    
-            if(maxColor != '')
-            {
-            	var banner = "."+maxColor+"_"+"banner";
-            	$(document).ready(function()
-            	{	
-            		$(".maroon_banner").hide();
-            		$(".purple_banner").hide();
-            		$(".red_banner").hide();
-            		$(".orange_banner").hide();
-            		$(banner).show();
-            	})
-            }
-            else
-            {
-            	$(".maroon_banner").hide();
-            	$(".purple_banner").hide();
-            	$(".red_banner").hide();
-            	$(".orange_banner").hide();
-            }
-        }
+
     }
 }
-
+}
 
 function convertData(app, mapNum){
 	if(mapNum == 2){var holder = app.measure2s;}
 	else{var holder = app.measures;}
 	for(var i = 0; i<holder.length; i++){
-<<<<<<< HEAD
-		
-=======
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+
 		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
 			holder[i].measurement.unit = "µg/m³";

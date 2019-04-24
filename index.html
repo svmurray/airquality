@@ -232,10 +232,9 @@
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
-<<<<<<< HEAD
-        	            <td>{{ measure.measurement.value }}</td>
-=======
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+
+        	            
+
         	            <td class="pm10" v-bind:class="{
                             green: colors1[index].safety.pm10 === 'green',
                             yellow: colors1[index].safety.pm10 === 'yellow',
@@ -276,7 +275,7 @@
                             purple: colors1[index].safety.no2 === 'purple',
                             maroon: colors1[index].safety.no2 === 'maroon'
                         }">{{ measure.measurement.no2 }}</td>
-<<<<<<< HEAD
+
 <!-- NEW -->        	<td class="co" v-bind:class="{
                             green: colors1[index].safety.co === 'green',
                             yellow: colors1[index].safety.co === 'yellow',
@@ -284,15 +283,6 @@
                             red: colors1[index].safety.co === 'red',
                             purple: colors1[index].safety.co === 'purple',
                             maroon: colors1[index].safety.co === 'maroon'
-=======
-                    	<td class="co" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
                         }">{{ measure.measurement.co }}</td>
     	            </tr>
         	    </table>
@@ -387,8 +377,8 @@
             	        <th>Location</th>
             	        <th>Parameter</th>
             	        <th>Local Time</th>
-<<<<<<< HEAD
-            	        <th>Value</th>
+
+            	        
             	        <th class = "pm102">pm10</th>
                         <th class = "so22">so2</th>
                         <th class ="o32">o3</th>
@@ -457,60 +447,7 @@
                             purple: colors2[index].safety.co === 'purple',
                             maroon: colors2[index].safety.co === 'maroon'
                         }">{{ measure2.measurement.co }}</td>
-=======
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-            	        <th>co</th>
-        	        </tr>
-        	        <tr v-for="measure2 in measure2s">
-        	            <td>{{ measure2.measurement.location }}</td>
-        	            <td>{{ measure2.measurement.parameter }}</td>
-        	            <td>{{ measure2.measurement.date.local }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.pm10 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.so2 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.o3 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.pm25 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.no2 }}</td>
-        	            <td>{{ measure2.measurement.co }}</td>
->>>>>>> b0f3d56e334e3971085d0b56651b48d2eef5b67a
+
 
     	            </tr>
         	    </table>
