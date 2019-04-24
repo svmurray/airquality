@@ -25,7 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 10000,
+            limit: 1000,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -195,7 +195,7 @@ window.onload = function()
     document.getElementById("FSButton1").onclick = () => (makeFullScreen("FSButton1"));
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
     updateAirData(app, 1);
-//    updateAirData(app, 2);
+    updateAirData(app, 2);
     console.log("onload finished");
     document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
     document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
