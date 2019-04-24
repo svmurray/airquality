@@ -196,7 +196,6 @@ window.onload = function()
             }
         }
     })
-    //console.log(date);
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -224,20 +223,8 @@ window.onload = function()
     updateAirData(app, 1);
     updateAirData(app, 2);
     console.log("onload finished");
-//    document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
-//    document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
- //   document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
-//    document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
-//    document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
-//    document.getElementById("filterco").onclick = () => (filterTable("no", "co", "1"));
-//    document.getElementById("filter2pm10").onclick = () => (filterTable("no", "pm10", "2"));
-//    document.getElementById("filter2so2").onclick = () => (filterTable("no", "so2", "2"));
-//    document.getElementById("filter2o3").onclick = () => (filterTable("no", "o3", "2"));
-//    document.getElementById("filter2pm25").onclick = () => (filterTable("no", "pm25", "2"));
-//    document.getElementById("filter2no2").onclick = () => (filterTable("no", "no2", "2"));
-//    document.getElementById("filter2co").onclick = () => (filterTable("no", "co", "2"));
-//    document.getElementById("filterInput2").onclick = () => (filterLogical(document.getElementById("pm10Box2").value, "pm10", "1", app));
     document.getElementById("filterInput").onclick = () => (getParams(app, 1));
+    document.getElementById("filterInput2").onclick = () => (getParams(app, 2));
 }
 
 function getParams(app, mapNum)
@@ -329,8 +316,7 @@ function heatMap(app, part, mapNum)
         case 'no2':
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
             break;
-    }
-    //console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
     var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }).addTo(map);
 }
 
@@ -365,16 +351,16 @@ function updateAirData(app, mapNum, paramString)
                     app.measures = [];
                     for (var i =0; i< length;i++) {app.measures.push({ measurement : response.data.results[i]});}
                 	console.log(app);
-                    meas = app.measures;
+                convertData(app, mapNum);
+                sortData(app, mapNum, [], [], app.measures);
                 }
                 else
                 {
                     app.measure2s = [];
                     for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
-                    meas = app.measure2s;
-                }
                 convertData(app, mapNum);
-                sortData(app, mapNum, [], [], meas);
+                sortData(app, mapNum, [], [], app.measure2s);
+                }
                 getRadius(app, mapNum);
                 addMarkers(app, mapNum);
                 setColor(app, mapNum);
@@ -724,28 +710,6 @@ function iterationCopy(input)
     return target;
 }
 
-function filterTable(logical, parameter, mapNum, app){
-
-    if(logical === "no"){
-        if(mapNum == 2){
-            parameter = "."+parameter+"2";
-        }else{
-            parameter = "."+parameter;
-        }
-        
-    	if($(parameter).css('display') != "none"){
-    		$(document).ready(function(){
-            $(parameter).hide();
-        	});
-    	}else{
-    		$(document).ready(function(){
-            $(parameter).show();
-    		});
-		}
-	}
-
-}
-
 function setColor(app, mapNum){
     
     
@@ -854,41 +818,20 @@ function setColor(app, mapNum){
             }else if(holder[i].measurement.co > 35.2){
                 updates.co  = "maroon";
             }
-
-
-
-
-
-
-
-
-
         colors.push({safety : updates})    
-
-
-        }
-    
+        }    
     }
-
-
 
 function addBanner(app, mapNum){
 	if(mapNum ==2){
         var holder = app.colors2;
         var maxColor = '';
     	for(var i=0; i<holder.length;i++){
-    		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
-    			maxColor = "maroon";
-        	}else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){
-        		maxColor = "purple";
-        	}else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){
-        		maxColor = "red";
-        	}else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){
-        		maxColor = "orange";
-        	}else{
-
-        	}
-    
+    		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){maxColor = "maroon";}
+    		else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){maxColor = "purple";}
+    		else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){maxColor = "red";}
+    		else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){maxColor = "orange";}
+    		else{}
     	if(maxColor != ''){
     		var banner = "."+maxColor+"_"+"banner2";
     		console.log(banner);
