@@ -270,15 +270,7 @@
             	        <th class ="no2">no2</th>
                         <th class ="co">co</th>
         	        </tr>
-        	        <tr v-for="(measure, index) in measures"
-                        v-bind:class="{
-                            pm10: measure.measurement.parameter === 'pm10',
-                            so2: measure.measurement.parameter === 'so2',
-                            o3: measure.measurement.parameter === 'o3',
-                            pm25: measure.measurement.parameter === 'pm25',
-                            no2: measure.measurement.parameter === 'no2',
-                            co: measure.measurement.parameter === 'co'
-                        }">
+        	        <tr v-for="(measure, index) in measures">
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
         	            <td class="pm10" v-bind:class="{
@@ -421,14 +413,7 @@
                         <th class ="no22">no2</th>
                     <th class ="co2">co</th>
                     </tr>
-                    <tr v-for="(measure2, index) in measure2s" v-bind:class="{
-                            pm102: measure2.measurement.parameter === 'pm10',
-                            so22: measure2.measurement.parameter === 'so2',
-                            o32: measure2.measurement.parameter === 'o3',
-                            pm252: measure2.measurement.parameter === 'pm25',
-                            no22: measure2.measurement.parameter === 'no2',
-                            co2: measure2.measurement.parameter === 'co'
-                        }">
+                    <tr v-for="(measure2, index) in measure2s">
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
 
