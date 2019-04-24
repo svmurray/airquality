@@ -317,7 +317,21 @@
                     <tr>
                         <td colspan="6"><button id="filterInput2">Filter With Input</button></td>
                     </tr>
-        	    </table>
+
+                    <tr>
+                        <th colspan="6">HeatMap</th>
+                    </tr>
+                    <tr>
+                        <td><button id="hmpm10" v-on:click="hm('pm10', 2)">PM10</td>
+                        <td><button id="hmso2" v-on:click="hm('so2', 2)">SO2</td>
+                        <td><button id="hmo3" v-on:click="hm('o3', 2)">O3</td>
+                        <td><button id="hmpm25" v-on:click="hm('pm25', 2)">PM25</button></td>
+                        <td><button id="hmno2" v-on:click="hm('no2', 2)">NO2</button></td>
+                        <td><button id="filterco" v-on:click="hm('co', 2)">CO</button></td>
+
+                    </tr>
+                </table>
+
         	    <table align="center">
         	        <tr>
         	            <th colspan="10">Individual Measurements</th>
@@ -342,6 +356,7 @@
                         }">
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
+
         	            <td class="pm102" v-bind:class="{
                             green: colors2[index].safety.pm10 === 'green',
                             yellow: colors2[index].safety.pm10 === 'yellow',

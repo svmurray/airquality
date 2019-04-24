@@ -25,7 +25,9 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 100,
+
+
+            limit: 1000,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -57,7 +59,6 @@ window.onload = function()
                 so2: 0,
                 o3: 0
             },
-            //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
             colors1: [
             	{
             	safety : 
@@ -282,7 +283,7 @@ function heatMap(app, part, mapNum)
         .6: 'red',
         .8: 'purple',
         .95: 'maroon'
-    }
+    };
     
     if (mapNum == 1)
     {
@@ -316,8 +317,13 @@ function heatMap(app, part, mapNum)
         case 'no2':
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
             break;
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-    var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }).addTo(map);
+
+    }
+    //console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   }).addTo(map);
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+ 
 }
 
 function myRound(value) 
@@ -351,16 +357,16 @@ function updateAirData(app, mapNum, paramString)
                     app.measures = [];
                     for (var i =0; i< length;i++) {app.measures.push({ measurement : response.data.results[i]});}
                 	console.log(app);
-                convertData(app, mapNum);
-                sortData(app, mapNum, [], [], app.measures);
+                	var meas = app.measures;
                 }
                 else
                 {
                     app.measure2s = [];
                     for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
-                convertData(app, mapNum);
-                sortData(app, mapNum, [], [], app.measure2s);
+                	var meas = app.measure2s;
                 }
+                convertData(app, mapNum);
+                sortData(app, mapNum, [], [], meas);
                 getRadius(app, mapNum);
                 addMarkers(app, mapNum);
                 setColor(app, mapNum);
@@ -403,7 +409,8 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     k = 10000;
                 }
             }
-            if (!markDup && curr.location == hold[j].measurement.location && curr.date.local == hold[j].measurement.date.local && !dup)
+//            console.log(curr.location == hold[j].measurement.location && curr.date.local == hold[j].measurement.date.local && !dup);
+            if (curr.location == hold[j].measurement.location && curr.date.local == hold[j].measurement.date.local && !dup)
             {
                 dup = true;
                 idx = j;
@@ -710,6 +717,38 @@ function iterationCopy(input)
     return target;
 }
 
+function filterTable(logical, parameter, mapNum, app){
+
+    if(logical === "no"){
+
+    	
+    	
+        if(mapNum == 2){
+            parameter = "."+parameter+"2";
+        }else{
+            parameter = "."+parameter;
+        }
+        
+    	if($(parameter).css('display') != "none"){
+    		$(document).ready(function(){
+            $(parameter).hide();
+        	});
+    	}else{
+    		$(document).ready(function(){
+            $(parameter).show();
+    		});
+		}
+	}
+
+}
+function filterLogical(input, paramter, mapNum){
+
+
+        
+
+}
+
+
 function setColor(app, mapNum){
     
     
@@ -827,11 +866,21 @@ function addBanner(app, mapNum){
         var holder = app.colors2;
         var maxColor = '';
     	for(var i=0; i<holder.length;i++){
-    		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){maxColor = "maroon";}
-    		else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){maxColor = "purple";}
-    		else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){maxColor = "red";}
-    		else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){maxColor = "orange";}
-    		else{}
+
+    		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
+    			maxColor = "maroon";
+        	}else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){
+        		maxColor = "purple";
+        	}else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){
+        		maxColor = "red";
+        	}else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){
+        		maxColor = "orange";
+        	}else{}
+        }
+    
+
+    		
+
     	if(maxColor != ''){
     		var banner = "."+maxColor+"_"+"banner2";
     		console.log(banner);
@@ -849,11 +898,11 @@ function addBanner(app, mapNum){
     		$(".red_banner2").hide();
     		$(".orange_banner2").hide();
     	}
-    	}
+    	
     }else{
-    var holder = app.colors1;
-    var maxColor = '';
-    console.log(app);
+        var holder = app.colors1;
+        var maxColor = '';
+    
     for(var i=0; i<holder.length;i++){
     	if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
     			maxColor = "maroon";
@@ -866,6 +915,7 @@ function addBanner(app, mapNum){
         	}else{
 
         	}
+    }
     
     if(maxColor != ''){
     	var banner = "."+maxColor+"_"+"banner";
@@ -888,7 +938,7 @@ function addBanner(app, mapNum){
 
     }
 }
-}
+
 
 function convertData(app, mapNum){
 	if(mapNum == 2){var holder = app.measure2s;}
