@@ -130,7 +130,7 @@
         	    <div class="labeling"> 
             	    <div>All units in µg/m³</div>
         	    </div>
-                <div class="maroon_banner" style="display: none">Air quality is harazardous.</div>
+                <div class="maroon_banner" style="display: none">Air quality is hazardous.</div>
                 <div class="purple_banner" style="display: none">Air quality is very unhealthy.</div>
                 <div class="red_banner" style="display: none">Air quality is unhealthy.</div>
                 <div class="orange_banner" style="display: none">Air quality is unhealthy for sensitive groups.</div>
@@ -159,7 +159,7 @@
                         <th colspan="6">Logical Filters</th>
                     </tr>
                     <tr>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input id="pm10Box" type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
                         <td><input type="text"value="i.e PM10 < 30" size="8"></td>
@@ -253,7 +253,7 @@
             	        <th class ="no2">no2</th>
 <!-- NEW -->            <th class ="co">co</th>
         	        </tr>
-        	        <tr v-for="measure in measures"
+        	        <tr v-for="(measure, index) in measures"
                         v-bind:class="{
                             pm10: measure.measurement.parameter === 'pm10',
                             so2: measure.measurement.parameter === 'so2',
@@ -265,62 +265,54 @@
         	            <td>{{ measure.measurement.location }}</td>
         	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
-        	            <td v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
-                        }">
-                        {{ measure.measurement.value }}</td>
+        	            <td>{{ measure.measurement.value }}</td>
         	            <td class="pm10" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.pm10 === 'green',
+                            yellow: colors1[index].safety.pm10 === 'yellow',
+                            orange: colors1[index].safety.pm10 === 'orange',
+                            red: colors1[index].safety.pm10 === 'red',
+                            purple: colors1[index].safety.pm10 === 'purple',
+                            maroon: colors1[index].safety.pm10 === 'maroon'
                         }">{{ measure.measurement.pm10}}</td>
         	            <td class="so2" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.so2 === 'green',
+                            yellow: colors1[index].safety.so2 === 'yellow',
+                            orange: colors1[index].safety.so2 === 'orange',
+                            red: colors1[index].safety.so2 === 'red',
+                            purple: colors1[index].safety.so2 === 'purple',
+                            maroon: colors1[index].safety.so2 === 'maroon'
                         }">{{ measure.measurement.so2 }}</td>
         	            <td class= "o3" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.o3 === 'green',
+                            yellow: colors1[index].safety.o3 === 'yellow',
+                            orange: colors1[index].safety.o3 === 'orange',
+                            red: colors1[index].safety.o3 === 'red',
+                            purple: colors1[index].safety.o3 === 'purple',
+                            maroon: colors1[index].safety.o3 === 'maroon'
                         }">{{ measure.measurement.o3 }}</td>
         	            <td class = "pm25" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.pm25 === 'green',
+                            yellow: colors1[index].safety.pm25 === 'yellow',
+                            orange: colors1[index].safety.pm25 === 'orange',
+                            red: colors1[index].safety.pm25 === 'red',
+                            purple: colors1[index].safety.pm25 === 'purple',
+                            maroon: colors1[index].safety.pm25 === 'maroon'
                         }">{{ measure.measurement.pm25 }}</td>
         	            <td class = "no2" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.no2 === 'green',
+                            yellow: colors1[index].safety.no2 === 'yellow',
+                            orange: colors1[index].safety.no2 === 'orange',
+                            red: colors1[index].safety.no2 === 'red',
+                            purple: colors1[index].safety.no2 === 'purple',
+                            maroon: colors1[index].safety.no2 === 'maroon'
                         }">{{ measure.measurement.no2 }}</td>
 <!-- NEW -->        	<td class="co" v-bind:class="{
-                            green: measure.measurement.safety === 'green',
-                            yellow: measure.measurement.safety === 'yellow',
-                            orange: measure.measurement.safety === 'orange',
-                            red: measure.measurement.safety === 'red',
-                            purple: measure.measurement.safety  === 'purple',
-                            maroon: measure.measurement.safety === 'maroon'
+                            green: colors1[index].safety.co === 'green',
+                            yellow: colors1[index].safety.co === 'yellow',
+                            orange: colors1[index].safety.co === 'orange',
+                            red: colors1[index].safety.co === 'red',
+                            purple: colors1[index].safety.co === 'purple',
+                            maroon: colors1[index].safety.co === 'maroon'
                         }">{{ measure.measurement.co }}</td>
     	            </tr>
         	    </table>
@@ -351,6 +343,40 @@
                 <div class="red_banner2" style="display: none">Air quality is unhealthy.</div>
                 <div class="orange_banner2" style="display: none">Air quality is unhealthy for sensitive groups.</div>
         	    <table>
+                    <tr>
+                        <th colspan="6" align="center">Filters</th>
+                    </tr>
+                    <tr>
+                        <th>pm10</th>
+                        <th>so2</th>
+                        <th>o3</th>
+                        <th>pm25</th>
+                        <th>no2</th>
+<!-- NEW -->                        <th>co</th>
+                    </tr>
+                    <tr>
+                        <td><button id="filter2pm10">Remove PM10</button></td>
+                        <td><button id="filter2so2">Remove SO2</td>
+                        <td><button id="filter2o3">Remove O3</td>
+                        <td><button id="filter2pm25">Remove PM25</button></td>
+                        <td><button id="filter2no2">Remove NO2</button></td>
+<!-- NEW -->            <td><button id="filter2co">Remove CO</button></td>
+
+                    </tr>
+                    <tr>
+                        <th colspan="6">Logical Filters</th>
+                    </tr>
+                    <tr>
+                        <td><input id="pm10Box2" type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+<!-- NEW -->            <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"><button id="filterInput2">Filter With Input</button></td>
+                    </tr>
         	        <tr>
         	            <th colspan="7">Averages</th>
         	        </tr>
@@ -407,66 +433,74 @@
             	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th>Value</th>
-            	        <th>pm10</th>
-            	        <th>so2</th>
-            	        <th>o3</th>
-            	        <th>pm25</th>
-            	        <th>no2</th>
-<!-- NEW -->            	        <th>co</th>
-        	        </tr>
-        	        <tr v-for="measure2 in measure2s">
+            	        <th class = "pm102">pm10</th>
+                        <th class = "so22">so2</th>
+                        <th class ="o32">o3</th>
+                        <th class ="pm252">pm25</th>
+                        <th class ="no22">no2</th>
+<!-- NEW -->            <th class ="co2">co</th>
+                    </tr>
+                    <tr v-for="(measure2, index) in measures" v-bind:class="{
+                            pm102: measure2.measurement.parameter === 'pm10',
+                            so22: measure2.measurement.parameter === 'so2',
+                            o32: measure2.measurement.parameter === 'o3',
+                            pm252: measure2.measurement.parameter === 'pm25',
+                            no22: measure2.measurement.parameter === 'no2',
+                            co2: measure2.measurement.parameter === 'co'
+                        }">
         	            <td>{{ measure2.measurement.location }}</td>
         	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
+        	            <td>
                         {{ measure2.measurement.value }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.pm10 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.so2 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.o3 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.pm25 }}</td>
-        	            <td v-bind:class="{
-                            green: measure2.measurement.safety === 'green',
-                            yellow: measure2.measurement.safety === 'yellow',
-                            orange: measure2.measurement.safety === 'orange',
-                            red: measure2.measurement.safety === 'red',
-                            purple: measure2.measurement.safety  === 'purple',
-                            maroon: measure2.measurement.safety === 'maroon'}">
-                        {{ measure2.measurement.no2 }}</td>
-<!-- NEW -->        	            <td>{{ measure2.measurement.co }}</td>
+        	            <td class="pm102" v-bind:class="{
+                            green: colors2[index].safety.pm10 === 'green',
+                            yellow: colors2[index].safety.pm10 === 'yellow',
+                            orange: colors2[index].safety.pm10 === 'orange',
+                            red: colors2[index].safety.pm10 === 'red',
+                            purple: colors2[index].safety.pm10 === 'purple',
+                            maroon: colors2[index].safety.pm10 === 'maroon'
+                        }">{{ measure2.measurement.pm10}}</td>
+                        <td class="so22" v-bind:class="{
+                            green: colors2[index].safety.so2 === 'green',
+                            yellow: colors2[index].safety.so2 === 'yellow',
+                            orange: colors2[index].safety.so2 === 'orange',
+                            red: colors2[index].safety.so2 === 'red',
+                            purple: colors2[index].safety.so2 === 'purple',
+                            maroon: colors2[index].safety.so2 === 'maroon'
+                        }">{{ measure2.measurement.so2 }}</td>
+                        <td class= "o32" v-bind:class="{
+                            green: colors2[index].safety.o3 === 'green',
+                            yellow: colors2[index].safety.o3 === 'yellow',
+                            orange: colors2[index].safety.o3 === 'orange',
+                            red: colors2[index].safety.o3 === 'red',
+                            purple: colors2[index].safety.o3 === 'purple',
+                            maroon: colors2[index].safety.o3 === 'maroon'
+                        }">{{ measure2.measurement.o3 }}</td>
+                        <td class = "pm252" v-bind:class="{
+                            green: colors2[index].safety.pm25 === 'green',
+                            yellow: colors2[index].safety.pm25 === 'yellow',
+                            orange: colors2[index].safety.pm25 === 'orange',
+                            red: colors2[index].safety.pm25 === 'red',
+                            purple: colors2[index].safety.pm25 === 'purple',
+                            maroon: colors2[index].safety.pm25 === 'maroon'
+                        }">{{ measure2.measurement.pm25 }}</td>
+                        <td class = "no22" v-bind:class="{
+                            green: colors2[index].safety.no2 === 'green',
+                            yellow: colors2[index].safety.no2 === 'yellow',
+                            orange: colors2[index].safety.no2 === 'orange',
+                            red: colors2[index].safety.no2 === 'red',
+                            purple: colors2[index].safety.no2 === 'purple',
+                            maroon: colors2[index].safety.no2 === 'maroon'
+                        }">{{ measure2.measurement.no2 }}</td>
+<!-- NEW -->            <td class="co2" v-bind:class="{
+                            green: colors2[index].safety.co === 'green',
+                            yellow: colors2[index].safety.co === 'yellow',
+                            orange: colors2[index].safety.co === 'orange',
+                            red: colors2[index].safety.co === 'red',
+                            purple: colors2[index].safety.co === 'purple',
+                            maroon: colors2[index].safety.co === 'maroon'
+                        }">{{ measure2.measurement.co }}</td>
 
     	            </tr>
         	    </table>

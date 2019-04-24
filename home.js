@@ -25,7 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 100,
+            limit: 10000,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -58,6 +58,32 @@ window.onload = function()
                 o3: 0
             },
             //order_by -> Location (??), date_to, date_from, radius,    sort(desc), value_from, value_to, parameter,order_by
+            colors1: [
+            	{
+            	safety : 
+            	{
+            		pm10: '',
+            		so2: '',
+            		o3: '',
+            		pm25: '',
+            		no2: '',
+            		co: ''
+            	}
+            }
+            ],
+            colors2: [
+            	{
+            	safety : 
+            	{
+            		pm10: '',
+            		so2: '',
+            		o3: '',
+            		pm25: '',
+            		no2: '',
+            		co: ''
+            	}
+            }
+            ],
             measures: [
                 {
                     measurement :
@@ -69,10 +95,11 @@ window.onload = function()
                         },
                         parameter: '',
                         value: '',
-                        unit: '',
-                        safety: ''
+                        unit: ''
+                       
+                        }
                     }
-                }
+                
             ], 
             averages : [
                 {
@@ -204,6 +231,16 @@ window.onload = function()
     document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
     document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
     document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
+    document.getElementById("filterco").onclick = () => (filterTable("no", "co", "1"));
+    document.getElementById("filterInput").onclick = () => (filterLogical(document.getElementById("pm10Box").value, "pm10", "1", app));
+    document.getElementById("filter2pm10").onclick = () => (filterTable("no", "pm10", "2"));
+    document.getElementById("filter2so2").onclick = () => (filterTable("no", "so2", "2"));
+    document.getElementById("filter2o3").onclick = () => (filterTable("no", "o3", "2"));
+    document.getElementById("filter2pm25").onclick = () => (filterTable("no", "pm25", "2"));
+    document.getElementById("filter2no2").onclick = () => (filterTable("no", "no2", "2"));
+    document.getElementById("filter2co").onclick = () => (filterTable("no", "co", "2"));
+    document.getElementById("filterInput2").onclick = () => (filterLogical(document.getElementById("pm10Box2").value, "pm10", "1", app));
+   
 }
 
 function heatMap(app, part, mapNum)
@@ -353,7 +390,13 @@ function updateAirData(app, mapNum)
                 if (mapNum == 1)
                 {
                     app.measures = [];
-                    for (var i =0; i< length;i++) {app.measures.push({ measurement : response.data.results[i]});}
+                    for (var i =0; i< length;i++) {
+                    		app.measures.push({ measurement : response.data.results[i]});
+
+
+
+                }
+                	console.log(app);
                     meas = app.measures;
                 }
                 else
@@ -362,7 +405,7 @@ function updateAirData(app, mapNum)
                     for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
                     meas = app.measure2s;
                 }
-                convertData(app);
+                convertData(app, mapNum);
                 sortData(app, mapNum, [], [], meas);
                 getRadius(app, mapNum);
                 addMarkers(app, mapNum);
@@ -717,134 +760,180 @@ function iterationCopy(input)
     return target;
 }
 
-function filterTable(logical, parameter, mapNum){
+function filterTable(logical, parameter, mapNum, app){
+
     if(logical === "no"){
-        var parameter = parameter;
+    	
+    	
         if(mapNum == 2){
             parameter = "."+parameter+"2";
         }else{
             parameter = "."+parameter;
         }
-        console.log(parameter);
-        $(document).ready(function(){
+        
+    	if($(parameter).css('display') != "none"){
+    		$(document).ready(function(){
             $(parameter).hide();
-        });
-    }else{
-    }
-}
+        	});
+    	}else{
+    		$(document).ready(function(){
+            $(parameter).show();
+    		});
+		}
+	}
 
+}
 function filterLogical(input, paramter, mapNum){
 
-}
-function setColor(app, mapNum){
-    console.log("in set color");
-    
-    if(mapNum ==2){
+	if(mapNum == 2){
+        var parameter = "."+parameter+"2";
         var holder = app.measure2s;
     }else{
+        var parameter = "."+parameter;
         var holder = app.measures;
     }
-    for(var i = 0; i<holder.length;i++){
-    
-        if(holder[i].measurement.parameter == "pm10"){
-            
-            if(holder[i].measurement.value <= 54){
-                holder[i].measurement.safety = "green"; 
-            }else if(holder[i].measurement.value <= 154){
-                holder[i].measurement.safety = "yellow";
-            }else if(holder[i].measurement.value <= 254){
-                holder[i].measurement.safety = "orange";
-            }else if(holder[i].measurement.value <= 354){
-                holder[i].measurement.safety = "red";
-            }else if(holder[i].measurement.value <= 454){
-                holder[i].measurement.safety = "purple";
-            }else {
-                holder[i].measurement.safety = "maroon";
-            }
-        }else if(holder[i].measurement.parameter == "so2"){
-            
-            if(holder[i].measurement.value <= 91.7){
-                holder[i].measurement.safety = "green"; 
-            }else if(holder[i].measurement.value <= 196.5){
-                holder[i].measurement.safety = "yellow";
-            }else if(holder[i].measurement.value <= 484.7){
-                holder[i].measurement.safety = "orange";
-            }else if(holder[i].measurement.value <= 796.48){
-                holder[i].measurement.safety = "red";
-            }else if(holder[i].measurement.value <= 1582.48){
-                holder[i].measurement.safety = "purple";
-            }else{
-                holder[i].measurement.safety = "maroon";
-            }
-        }else if(holder[i].measurement.parameter == "o3"){
-            
-            if(holder[i].measurement.value <= 108){
-                holder[i].measurement.safety = "green"; 
-            }else if(holder[i].measurement.value <= 140){
-                holder[i].measurement.safety = "yellow";
-            }else if(holder[i].measurement.value <= 170){
-                holder[i].measurement.safety = "orange";
-            }else if(holder[i].measurement.value <= 210){
-                holder[i].measurement.safety = "red";
-            }else if(holder[i].measurement.value <= 400){
-                holder[i].measurement.safety = "purple";
-            }else{
-                holder[i].measurement.safety = "maroon";
-            }
-        }else if(holder[i].measurement.parameter == "pm25"){
-            
-            if(holder[i].measurement.value <= 12){
-                holder[i].measurement.safety = "green"; 
-            }else if(holder[i].measurement.value <= 34.5){
-                holder[i].measurement.safety = "yellow";
-            }else if(holder[i].measurement.value <= 55.5){
-                holder[i].measurement.safety = "orange";
-            }else if(holder[i].measurement.value <= 150.4){
-                holder[i].measurement.safety = "red";
-            }else if(holder[i].measurement.value <= 250.4){
-                holder[i].measurement.safety = "purple";
-            }else{
-                holder[i].measurement.safety = "maroon";
-            }
-        }else if(holder[i].measurement.parameter == "no2"){
-            
-            if(holder[i].measurement.value <= 99.64){
-                holder[i].measurement.safety = "green"; 
-            }else if(holder[i].measurement.value <= 188){
-                holder[i].measurement.safety = "yellow";
-            }else if(holder[i].measurement.value <= 676.8){
-                holder[i].measurement.safety = "orange";
-            }else if(holder[i].measurement.value <= 1220.12){
-                holder[i].measurement.safety = "red";
-            }else if(holder[i].measurement.value <= 2348.12){
-                holder[i].measurement.safety = "purple";
-            }else{
-                holder[i].measurement.safety = "maroon";
-            }
-        }else if(holder[i].measurement.parameter == "co"){
-            console.log("in co");
-            console.log(holder[i].measurement.value);
-        	if(holder[i].measurement.value <= 5.1){
-        		holder[i].measurement.safety = "green";
-        	}else if(holder[i].measurement.safety <= 10.9){
-        		holder[i].measurement.safety = "yellow";
-        	}
-        }
-    }
+
+     try{
+     	for(var i = 0; i<holder.length; i++){
+     		console.log(holder[i].measurement.parameter+input);
+     	}
+     }catch(err){
+
+     }
+
 }
+
+function setColor(app, mapNum){
+    
+    
+    if(mapNum == 2){
+    	app.colors2 = [];
+    	var colors = app.colors2;
+    	var holder = app.measure2s;
+    }else{
+       	app.colors1 = [];
+        var colors = app.colors1;
+        var holder = app.measures;
+  	}
+
+   
+   
+   
+    for(var i = 0; i<holder.length;i++){
+   			var updates = {}; 	
+       
+            
+            if(holder[i].measurement.pm10 <= 54){
+                updates.pm10 = "green";
+            }else if(holder[i].measurement.pm10 <= 154){
+                updates.pm10 = "yellow";
+            }else if(holder[i].measurement.pm10 <= 254){
+                updates.pm10 =  "orange";
+            }else if(holder[i].measurement.pm10 <= 354){
+                updates.pm10 =  "red";
+            }else if(holder[i].measurement.pm10 <= 454){
+               updates.pm10 = "purple";
+            }else if(holder[i].measurement.pm10 > 454){
+                updates.pm10 = "maroon";
+            }
+
+            if(holder[i].measurement.so2  <= 91.7){
+                updates.so2 = "green";
+            }else if(holder[i].measurement.so2 <= 196.5){
+                updates.so2 = "yellow";
+            }else if(holder[i].measurement.so2 <= 484.7){
+                updates.so2 =  "orange";
+            }else if(holder[i].measurement.so2 <= 796.48){
+                updates.so2 =  "red";
+            }else if(holder[i].measurement.so2 <= 1582.48){
+               updates.so2= "purple";
+            }else if(holder[i].measurement.so2 > 1582.48) {
+                updates.so2 = "maroon";
+            }
+
+
+            if(holder[i].measurement.o3 <= 108){
+                updates.o3= "green";
+            }else if(holder[i].measurement.o3 <= 140){
+                updates.o3 = "yellow";
+            }else if(holder[i].measurement.o3 <= 170){
+                updates.o3 =  "orange";
+            }else if(holder[i].measurement.o3 <= 210){
+                updates.o3 =  "red";
+            }else if(holder[i].measurement.o3 <= 400){
+               updates.o3= "purple";
+            }else if(holder[i].measurement.o3 > 400){
+                updates.o3= "maroon";
+            }
+
+            if(holder[i].measurement.pm25 <= 12){
+                updates.pm25 = "green";
+            }else if(holder[i].measurement.pm25  <= 35.4){
+                updates.pm25  = "yellow";
+            }else if(holder[i].measurement.pm25  <= 55.4){
+                updates.pm25  =  "orange";
+            }else if(holder[i].measurement.pm25  <= 150.4){
+                updates.pm25  =  "red";
+            }else if(holder[i].measurement.pm25  <= 250.4){
+               updates.pm25  = "purple";
+            }else if(holder[i].measurement.pm25 > 250.4){
+                updates.pm25  = "maroon";
+            }
+
+            if(holder[i].measurement.no2 <= 99.64){
+                updates.no2 = "green";
+            }else if(holder[i].measurement.no2 <= 188){
+                updates.no2 = "yellow";
+            }else if(holder[i].measurement.no2 <= 676.8){
+                updates.no2 =  "orange";
+            }else if(holder[i].measurement.no2<= 1220.12){
+                updates.no2 =  "red";
+            }else if(holder[i].measurement.no2 <= 2348.12){
+               updates.no2 = "purple";
+            }else if(holder[i].measurement.no2 > 2348.12){
+                updates.no2 = "maroon";
+            }
+
+            if(holder[i].measurement.co <= 5.1){
+                updates.co  = "green";
+            }else if(holder[i].measurement.co  <= 10.9){
+                updates.co  = "yellow";
+            }else if(holder[i].measurement.co  <= 14.4){
+                updates.co =  "orange";
+            }else if(holder[i].measurement.co <= 17.8){
+                updates.co  =  "red";
+            }else if(holder[i].measurement.co  <= 35.2){
+               updates.co  = "purple";
+            }else if(holder[i].measurement.co > 35.2){
+                updates.co  = "maroon";
+            }
+
+
+
+
+
+
+
+
+
+        colors.push({safety : updates})    
+        }
+    
+    }
+
 
 function addBanner(app, mapNum){
 	if(mapNum ==2){
-        var holder = app.measure2s;
+        var holder = app.colors2;
         var maxColor = '';
     	for(var i=0; i<holder.length;i++){
-    		if(holder[i].measurement.safety=="maroon"){
+    		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
     			maxColor = "maroon";
-        	}else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){
+        	}else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){
         		maxColor = "purple";
-        	}else if(holder[i].measurement.safety=="red" && maxColor != "purple"){
+        	}else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){
         		maxColor = "red";
-        	}else if(holder[i].measurement.safety=="orange" && maxColor != "red"){
+        	}else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){
         		maxColor = "orange";
         	}else{
 
@@ -852,6 +941,7 @@ function addBanner(app, mapNum){
     
     	if(maxColor != ''){
     		var banner = "."+maxColor+"_"+"banner2";
+    		console.log(banner);
     		$(document).ready(function(){
     		
     		$(".maroon_banner2").hide();
@@ -868,21 +958,21 @@ function addBanner(app, mapNum){
     	}
     	}
     }else{
-    var holder = app.measures;
+    var holder = app.colors1;
     var maxColor = '';
     console.log(app);
     for(var i=0; i<holder.length;i++){
-    	if(holder[i].measurement.safety=="maroon"){
-    		maxColor = "maroon";
-        }else if(holder[i].measurement.safety=="purple" && maxColor != "maroon"){
-        	maxColor = "purple";
-        }else if(holder[i].measurement.safety=="red" && maxColor != "purple"){
-        	maxColor = "red";
-        }else if(holder[i].measurement.safety=="orange" && maxColor != "red"){
-        	maxColor = "orange";
-        }else{
+    	if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
+    			maxColor = "maroon";
+        	}else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){
+        		maxColor = "purple";
+        	}else if(holder[i].safety.pm10=="red"|holder[i].safety.so2=="red"|holder[i].safety.o3=="red"|holder[i].safety.pm25=="red"|holder[i].safety.no2=="red"|holder[i].safety.co=="red" && maxColor != "purple"){
+        		maxColor = "red";
+        	}else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){
+        		maxColor = "orange";
+        	}else{
 
-        }
+        	}
     
     if(maxColor != ''){
     	var banner = "."+maxColor+"_"+"banner";
@@ -917,7 +1007,7 @@ function convertData(app, mapNum){
 	}
 
 	for(var i = 0; i<holder.length; i++){
-		console.log(holder[i].measurement.value);
+		
 		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
 			holder[i].measurement.unit = "µg/m³";
