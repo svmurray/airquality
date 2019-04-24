@@ -155,15 +155,15 @@
                         <td><button id="filterco">Remove CO</button></td>
                     </tr>
                     <tr>
-                        <th colspan="6">Logical Filters</th>
+                        <th colspan="6">Logical Filters (Form: [param] [&lt;/&gt;] [value]. Spaces are necessary. &lt; and &gt; are only valid operators.)</th>
                     </tr>
                     <tr>
-                        <td><input id="pm10Box" type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input id="in1" type="text"value="i.e pm10 < 30" size="8"></td>
+                        <td><input id="in2" type="text"value="i.e so2 < 30" size="8"></td>
+                        <td><input id="in3" type="text"value="i.e o3 < 30" size="8"></td>
+                        <td><input id="in4" type="text"value="i.e pm25 < 30" size="8"></td>
+                        <td><input id="in5" type="text"value="i.e so2 < 30" size="8"></td>
+                        <td><input id="in6" type="text"value="i.e co < 30" size="8"></td>
                     </tr>
                     <tr>
                         <td colspan="6"><button id="filterInput">Filter With Input</button></td>
@@ -211,7 +211,6 @@
         	        </tr>
         	        <tr>
             	        <th>Location</th>
-            	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th class = "pm10">pm10</th>
             	        <th class = "so2">so2</th>
@@ -230,11 +229,7 @@
                             co: measure.measurement.parameter === 'co'
                         }">
         	            <td>{{ measure.measurement.location }}</td>
-        	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
-
-        	            
-
         	            <td class="pm10" v-bind:class="{
                             green: colors1[index].safety.pm10 === 'green',
                             yellow: colors1[index].safety.pm10 === 'yellow',
@@ -275,8 +270,7 @@
                             purple: colors1[index].safety.no2 === 'purple',
                             maroon: colors1[index].safety.no2 === 'maroon'
                         }">{{ measure.measurement.no2 }}</td>
-
-<!-- NEW -->        	<td class="co" v-bind:class="{
+                    	<td class="co" v-bind:class="{
                             green: colors1[index].safety.co === 'green',
                             yellow: colors1[index].safety.co === 'yellow',
                             orange: colors1[index].safety.co === 'orange',
@@ -334,15 +328,15 @@
 
                     </tr>
                     <tr>
-                        <th colspan="6">Logical Filters</th>
+                        <th colspan="6">Logical Filters (Form: [param] [&lt;/&gt;] [value]. Spaces are necessary. &lt; and &gt; are only valid operators.)</th>
                     </tr>
                     <tr>
-                        <td><input id="pm10Box2" type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-                        <td><input type="text"value="i.e PM10 < 30" size="8"></td>
-<!-- NEW -->            <td><input type="text"value="i.e PM10 < 30" size="8"></td>
+                        <td><input id="in7" type="text"value="i.e pm10 < 30" size="8"></td>
+                        <td><input id="in8" type="text"value="i.e so2 < 30" size="8"></td>
+                        <td><input id="in9" type="text"value="i.e o3 < 30" size="8"></td>
+                        <td><input id="in10" type="text"value="i.e pm25 < 30" size="8"></td>
+                        <td><input id="in11" type="text"value="i.e so2 < 30" size="8"></td>
+                        <td><input id="in12" type="text"value="i.e co < 30" size="8"></td>
                     </tr>
                     <tr>
                         <td colspan="6"><button id="filterInput2">Filter With Input</button></td>
@@ -389,16 +383,13 @@
         	        </tr>
         	        <tr>
             	        <th>Location</th>
-            	        <th>Parameter</th>
             	        <th>Local Time</th>
-
-            	        
             	        <th class = "pm102">pm10</th>
                         <th class = "so22">so2</th>
                         <th class ="o32">o3</th>
                         <th class ="pm252">pm25</th>
                         <th class ="no22">no2</th>
-<!-- NEW -->            <th class ="co2">co</th>
+                    <th class ="co2">co</th>
                     </tr>
                     <tr v-for="(measure2, index) in measures" v-bind:class="{
                             pm102: measure2.measurement.parameter === 'pm10',
@@ -409,7 +400,6 @@
                             co2: measure2.measurement.parameter === 'co'
                         }">
         	            <td>{{ measure2.measurement.location }}</td>
-        	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
 
         	            <td class="pm102" v-bind:class="{
@@ -452,7 +442,7 @@
                             purple: colors2[index].safety.no2 === 'purple',
                             maroon: colors2[index].safety.no2 === 'maroon'
                         }">{{ measure2.measurement.no2 }}</td>
-<!-- NEW -->            <td class="co2" v-bind:class="{
+                        <td class="co2" v-bind:class="{
                             green: colors2[index].safety.co === 'green',
                             yellow: colors2[index].safety.co === 'yellow',
                             orange: colors2[index].safety.co === 'orange',
@@ -460,8 +450,6 @@
                             purple: colors2[index].safety.co === 'purple',
                             maroon: colors2[index].safety.co === 'maroon'
                         }">{{ measure2.measurement.co }}</td>
-
-
     	            </tr>
         	    </table>
     	    </div>

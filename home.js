@@ -26,6 +26,7 @@ window.onload = function()
         data: 
         {
 
+
             limit: 1000,
             latitude: "51.505",
             longitude: "-0.09",
@@ -197,7 +198,6 @@ window.onload = function()
             }
         }
     })
-    //console.log(date);
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -224,22 +224,43 @@ window.onload = function()
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
     updateAirData(app, 1);
     updateAirData(app, 2);
-    //console.log("onload finished");
-    document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
-    document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
-    document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
-    document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
-    document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
-    document.getElementById("filterco").onclick = () => (filterTable("no", "co", "1"));
-    document.getElementById("filterInput").onclick = () => (filterLogical(document.getElementById("pm10Box").value, "pm10", "1", app));
-    document.getElementById("filter2pm10").onclick = () => (filterTable("no", "pm10", "2"));
-    document.getElementById("filter2so2").onclick = () => (filterTable("no", "so2", "2"));
-    document.getElementById("filter2o3").onclick = () => (filterTable("no", "o3", "2"));
-    document.getElementById("filter2pm25").onclick = () => (filterTable("no", "pm25", "2"));
-    document.getElementById("filter2no2").onclick = () => (filterTable("no", "no2", "2"));
-    document.getElementById("filter2co").onclick = () => (filterTable("no", "co", "2"));
-    document.getElementById("filterInput2").onclick = () => (filterLogical(document.getElementById("pm10Box2").value, "pm10", "1", app));
-   
+    console.log("onload finished");
+    document.getElementById("filterInput").onclick = () => (getParams(app, 1));
+    document.getElementById("filterInput2").onclick = () => (getParams(app, 2));
+}
+
+function getParams(app, mapNum)
+{
+    var ps = '';
+    var valid = true;
+    for(var i=1+(mapNum-1)*6; i<=(mapNum*6); i++)
+    {
+        var str = document.getElementById("in"+i).value;
+        console.log(str.length);
+        if (str.length != 0 && !(str.indexOf('i.e') >=0))
+        {
+            var idx = str.indexOf(" ");
+            ps = ps + "&parameter[]=" + str.substring(0, idx);
+            if (str.indexOf(">") >=0)
+            {
+                ps=ps+"&value_from=" + str.substring(1+str.indexOf(" ", idx+1));
+            }
+            else if (str.indexOf("<") >=0)
+            {
+                ps=ps+"&value_to=" + str.substring(1+str.indexOf(" ", idx+1));
+            }
+            else
+            {
+                window.alert("Please Enter Valid Filter");
+                valid = false;
+            }
+        }
+    }
+    if (valid)
+    {
+        updateAirData(app, mapNum, ps);
+        console.log(ps);
+    }
 }
 
 function heatMap(app, part, mapNum)
@@ -297,9 +318,13 @@ function heatMap(app, part, mapNum)
         case 'no2':
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
             break;
+
     }
     //console.log(pointArray);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     var heat = L.heatLayer(pointArray, {'gradient': gradient, 'radius': 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   }).addTo(map);
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+ 
 }
 
 function myRound(value) 
@@ -308,11 +333,17 @@ function myRound(value)
     else {return Math.round(value)/100;}
 }
 
-function updateAirData(app, mapNum)
+function updateAirData(app, mapNum, paramString)
 {
     var url;
     if (mapNum == 1) {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude+"&date_from="+app.startDate1+"&date_to="+app.endDate1;}
     else {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2+"&date_from="+app.startDate2+"&date_to="+app.endDate2;}
+    
+    if(paramString != undefined)
+    {
+        url = url + paramString;
+        console.log(url);
+    }
 
     axios
         .get(url)
@@ -325,23 +356,18 @@ function updateAirData(app, mapNum)
                 if (mapNum == 1)
                 {
                     app.measures = [];
-                    for (var i =0; i< length;i++) {
-                    		app.measures.push({ measurement : response.data.results[i]});
-
-
-
-                }
+                    for (var i =0; i< length;i++) {app.measures.push({ measurement : response.data.results[i]});}
                 	console.log(app);
-                    meas = app.measures;
+                convertData(app, mapNum);
+                sortData(app, mapNum, [], [], app.measures);
                 }
                 else
                 {
                     app.measure2s = [];
                     for (var i =0; i< length;i++) {app.measure2s.push({ measurement : response.data.results[i]});}
-                    meas = app.measure2s;
-                }
                 convertData(app, mapNum);
-                sortData(app, mapNum, [], [], meas);
+                sortData(app, mapNum, [], [], app.measure2s);
+                }
                 getRadius(app, mapNum);
                 addMarkers(app, mapNum);
                 setColor(app, mapNum);
@@ -499,7 +525,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
-                    holdMark[plsWorkIdx].measurement.no2 = meas[i].measurement.value;                    
+                    holdMark[plsWorkIdx].measurement.no2 = meas[i].measurement.value;
                     holdMark[plsWorkIdx].measurement.no2Count++;
                     if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
@@ -722,6 +748,7 @@ function filterLogical(input, paramter, mapNum){
 
 }
 
+
 function setColor(app, mapNum){
     
     
@@ -830,29 +857,16 @@ function setColor(app, mapNum){
             }else if(holder[i].measurement.co > 35.2){
                 updates.co  = "maroon";
             }
-
-
-
-
-
-
-
-
-
         colors.push({safety : updates})    
-
-
-        }
-    
+        }    
     }
-
-
 
 function addBanner(app, mapNum){
 	if(mapNum ==2){
         var holder = app.colors2;
         var maxColor = '';
     	for(var i=0; i<holder.length;i++){
+
     		if(holder[i].safety.pm10=="maroon"|holder[i].safety.so2=="maroon"|holder[i].safety.o3=="maroon"|holder[i].safety.pm25=="maroon"|holder[i].safety.no2=="maroon"|holder[i].safety.co=="maroon"){
     			maxColor = "maroon";
         	}else if(holder[i].safety.pm10=="purple"|holder[i].safety.so2=="purple"|holder[i].safety.o3=="purple"|holder[i].safety.pm25=="purple"|holder[i].safety.no2=="purple"|holder[i].safety.co=="purple" && maxColor != "maroon"){
@@ -861,11 +875,12 @@ function addBanner(app, mapNum){
         		maxColor = "red";
         	}else if(holder[i].safety.pm10=="orange"|holder[i].safety.so2=="orange"|holder[i].safety.o3=="orange"|holder[i].safety.pm25=="orange"|holder[i].safety.no2=="orange"|holder[i].safety.co=="orange" && maxColor != "red"){
         		maxColor = "orange";
-        	}else{
-
-        	}
+        	}else{}
         }
     
+
+    		
+
     	if(maxColor != ''){
     		var banner = "."+maxColor+"_"+"banner2";
     		console.log(banner);
@@ -929,7 +944,6 @@ function convertData(app, mapNum){
 	if(mapNum == 2){var holder = app.measure2s;}
 	else{var holder = app.measures;}
 	for(var i = 0; i<holder.length; i++){
-
 		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
 			holder[i].measurement.unit = "µg/m³";
