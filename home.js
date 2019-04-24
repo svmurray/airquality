@@ -25,7 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-            limit: 1000,
+            limit: 100,
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -202,6 +202,41 @@ window.onload = function()
     document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
     document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
     document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
+    document.getElementById("filterInput").onclick = () => (getParams(app, 1));
+}
+
+function getParams(app, mapNum)
+{
+    var ps = '';
+    var valid = true;
+    for(var i=1; i<=(mapNum*6); i++)
+    {
+        var str = document.getElementById("in"+i).value;
+        console.log(str.length);
+        if (str.length != 0 && !(str.indexOf('i.e') >=0))
+        {
+            var idx = str.indexOf(" ");
+            ps = ps + "&parameter[]=" + str.substring(0, idx);
+            if (str.indexOf(">") >=0)
+            {
+                ps=ps+"&value_from=" + str.substring(1+str.indexOf(" ", idx+1));
+            }
+            else if (str.indexOf("<") >=0)
+            {
+                ps=ps+"&value_to=" + str.substring(1+str.indexOf(" ", idx+1));
+            }
+            else
+            {
+                window.alert("Please Enter Valid Filter");
+                valid = false;
+            }
+        }
+    }
+    if (valid)
+    {
+        updateAirData(app, mapNum, ps);
+        console.log(ps);
+    }
 }
 
 function heatMap(app, part, mapNum)
@@ -270,11 +305,16 @@ function myRound(value)
     else {return Math.round(value)/100;}
 }
 
-function updateAirData(app, mapNum)
+function updateAirData(app, mapNum, paramString)
 {
     var url;
     if (mapNum == 1) {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "1")+"&coordinates="+app.latitude+","+app.longitude+"&date_from="+app.startDate1+"&date_to="+app.endDate1;}
     else {url = "https://api.openaq.org/v1/measurements?limit="+app.limit+"&order_by=location&radius="+getRadius(app, "2")+"&coordinates="+app.latitude2+","+app.longitude2+"&date_from="+app.startDate2+"&date_to="+app.endDate2;}
+    
+    if(paramString != undefined)
+    {
+        url = url + paramString;
+    }
 
     axios
         .get(url)
@@ -455,7 +495,7 @@ function sortData(app, mapNum, hold, holdMark, meas)
                     if (maxes.pm25 < meas[i].measurement.value) {maxes.pm25 = meas[i].measurement.value;}
                     break;
                 case "no2":
-                    holdMark[plsWorkIdx].measurement.no2 = meas[i].measurement.value;                    
+                    holdMark[plsWorkIdx].measurement.no2 = meas[i].measurement.value;
                     holdMark[plsWorkIdx].measurement.no2Count++;
                     if (maxes.no2 < meas[i].measurement.value) {maxes.no2 = meas[i].measurement.value;}
                     break;
