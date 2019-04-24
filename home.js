@@ -232,12 +232,12 @@ window.onload = function()
     document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1", app));
     document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1", app));
     document.getElementById("filterco").onclick = () => (filterTable("no", "co", "1", app));
-    document.getElementById("filterpm102").onclick = () => (filterTable("no", "pm10", "2", app));
-    document.getElementById("filterso22").onclick = () => (filterTable("no", "so2", "2", app));
-    document.getElementById("filtero32").onclick = () => (filterTable("no", "o3", "2", app));
-    document.getElementById("filterpm252").onclick = () => (filterTable("no", "pm25", "2", app));
-    document.getElementById("filterno22").onclick = () => (filterTable("no", "no2", "2", app));
-    document.getElementById("filterco2").onclick = () => (filterTable("no", "co", "2", app));
+    document.getElementById("filter2pm10").onclick = () => (filterTable("no", "pm10", "2", app));
+    document.getElementById("filter2so2").onclick = () => (filterTable("no", "so2", "2", app));
+    document.getElementById("filter2o3").onclick = () => (filterTable("no", "o3", "2", app));
+    document.getElementById("filter2pm25").onclick = () => (filterTable("no", "pm25", "2", app));
+    document.getElementById("filter2no2").onclick = () => (filterTable("no", "no2", "2", app));
+    document.getElementById("filter2co").onclick = () => (filterTable("no", "co", "2", app));
 }
 
 function getParams(app, mapNum)
