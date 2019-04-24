@@ -303,16 +303,16 @@ function heatMap(app, part, mapNum)
             for (var i=0; i<avgs.length; i++) {{if (avgs[i].measurement.pm10 > 0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm10/avgs[i].measurement.pm10Count)/relMax.pm10]);}}}
             break;
         case 'pm25':
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm25/avgs[i].measurement.pm25Count)/relMax.pm25]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.pm25 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.pm25/avgs[i].measurement.pm25Count)/relMax.pm25]);}}
             break;
         case 'so2':
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.so2/avgs[i].measurement.so2Count)/relMax.so2]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.so2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.so2/avgs[i].measurement.so2Count)/relMax.so2]);}}
             break;
         case 'co':
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.coCount/avgs[i].measurement.coCount)/relMax.co]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.co >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.coCount/avgs[i].measurement.coCount)/relMax.co]);}}
             break;
         case 'o3':
-            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.longitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.o3/avgs[i].measurement.o3Count)/relMax.o3]);}}
+            for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.o3 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.o3/avgs[i].measurement.o3Count)/relMax.o3]);}}
             break;
         case 'no2':
             for (var i=0; i<avgs.length; i++){if(avgs[i].measurement.no2 >0){pointArray.push([avgs[i].measurement.coordinates.latitude, avgs[i].measurement.coordinates.longitude, (avgs[i].measurement.no2/avgs[i].measurement.no2Count)/relMax.no2]);}}
