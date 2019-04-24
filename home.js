@@ -25,12 +25,7 @@ window.onload = function()
         el: "#vueApp", 
         data: 
         {
-<<<<<<< HEAD
             limit: 100,
-=======
-
-            limit: 10000,
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
             latitude: "51.505",
             longitude: "-0.09",
             latitude2: "51.505",
@@ -228,7 +223,6 @@ window.onload = function()
     document.getElementById("FSButton2").onclick = () => (makeFullScreen("FSButton2"));
     updateAirData(app, 1);
     updateAirData(app, 2);
-<<<<<<< HEAD
     console.log("onload finished");
 //    document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
 //    document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
@@ -278,24 +272,6 @@ function getParams(app, mapNum)
         updateAirData(app, mapNum, ps);
         console.log(ps);
     }
-=======
-    //console.log("onload finished");
-    document.getElementById("filterpm10").onclick = () => (filterTable("no", "pm10", "1"));
-    document.getElementById("filterso2").onclick = () => (filterTable("no", "so2", "1"));
-    document.getElementById("filtero3").onclick = () => (filterTable("no", "o3", "1"));
-    document.getElementById("filterpm25").onclick = () => (filterTable("no", "pm25", "1"));
-    document.getElementById("filterno2").onclick = () => (filterTable("no", "no2", "1"));
-    document.getElementById("filterco").onclick = () => (filterTable("no", "co", "1"));
-    document.getElementById("filterInput").onclick = () => (filterLogical(document.getElementById("pm10Box").value, "pm10", "1", app));
-    document.getElementById("filter2pm10").onclick = () => (filterTable("no", "pm10", "2"));
-    document.getElementById("filter2so2").onclick = () => (filterTable("no", "so2", "2"));
-    document.getElementById("filter2o3").onclick = () => (filterTable("no", "o3", "2"));
-    document.getElementById("filter2pm25").onclick = () => (filterTable("no", "pm25", "2"));
-    document.getElementById("filter2no2").onclick = () => (filterTable("no", "no2", "2"));
-    document.getElementById("filter2co").onclick = () => (filterTable("no", "co", "2"));
-    document.getElementById("filterInput2").onclick = () => (filterLogical(document.getElementById("pm10Box2").value, "pm10", "1", app));
-   
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
 }
 
 function heatMap(app, part, mapNum)
@@ -751,12 +727,6 @@ function iterationCopy(input)
 function filterTable(logical, parameter, mapNum, app){
 
     if(logical === "no"){
-<<<<<<< HEAD
-=======
-
-    	
-    	
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
         if(mapNum == 2){
             parameter = "."+parameter+"2";
         }else{
@@ -773,37 +743,6 @@ function filterTable(logical, parameter, mapNum, app){
     		});
 		}
 	}
-
-}
-function filterLogical(input, paramter, mapNum){
-
-<<<<<<< HEAD
-	if(mapNum == 2){
-        var parameter = "."+parameter+"2";
-        var holder = app.measure2s;
-    }else{
-        var parameter = "."+parameter;
-        var holder = app.measures;
-    }
-=======
-
-        var parameter = parameter;
-        if(mapNum == 2){parameter = "."+parameter+"2";}
-        else{parameter = "."+parameter;}
-//        console.log(parameter);
-        $(document).ready(function(){$(parameter).hide();});
-    
-  
-
-
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
-     try{
-     	for(var i = 0; i<holder.length; i++){
-     		console.log(holder[i].measurement.parameter+input);
-     	}
-     }catch(err){
-
-     }
 
 }
 
@@ -1007,19 +946,11 @@ function addBanner(app, mapNum){
     }
 }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
 
 function convertData(app, mapNum){
 	if(mapNum == 2){var holder = app.measure2s;}
 	else{var holder = app.measures;}
 	for(var i = 0; i<holder.length; i++){
-<<<<<<< HEAD
-=======
-
->>>>>>> b7ff408b8a88b20e7253fd294599e1e0dd3b8e55
 		if(holder[i].measurement.parameter == "co" && holder[i].measurement.unit == "ppm"){
 			holder[i].measurement.value = myRound(holder[i].measurement.value * .0409 * 28.01);
 			holder[i].measurement.unit = "µg/m³";
