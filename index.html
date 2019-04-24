@@ -211,7 +211,6 @@
         	        </tr>
         	        <tr>
             	        <th>Location</th>
-            	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th class = "pm10">pm10</th>
             	        <th class = "so2">so2</th>
@@ -230,7 +229,6 @@
                             co: measure.measurement.parameter === 'co'
                         }">
         	            <td>{{ measure.measurement.location }}</td>
-        	            <td>{{ measure.measurement.parameter }}</td>
         	            <td>{{ measure.measurement.date.local }}</td>
         	            <td class="pm10" v-bind:class="{
                             green: colors1[index].safety.pm10 === 'green',
@@ -371,7 +369,6 @@
         	        </tr>
         	        <tr>
             	        <th>Location</th>
-            	        <th>Parameter</th>
             	        <th>Local Time</th>
             	        <th class = "pm102">pm10</th>
                         <th class = "so22">so2</th>
@@ -389,10 +386,7 @@
                             co2: measure2.measurement.parameter === 'co'
                         }">
         	            <td>{{ measure2.measurement.location }}</td>
-        	            <td>{{ measure2.measurement.parameter }}</td>
         	            <td>{{ measure2.measurement.date.local }}</td>
-        	            <td>
-                        {{ measure2.measurement.value }}</td>
         	            <td class="pm102" v-bind:class="{
                             green: colors2[index].safety.pm10 === 'green',
                             yellow: colors2[index].safety.pm10 === 'yellow',
